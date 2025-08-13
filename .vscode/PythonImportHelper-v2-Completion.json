@@ -1,0 +1,600 @@
+[
+    {
+        "label": "csv",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "csv",
+        "description": "csv",
+        "detail": "csv",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Query",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Database",
+        "importPath": "app.db_utils",
+        "description": "app.db_utils",
+        "isExtraImport": true,
+        "detail": "app.db_utils",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
+        "isExtraImport": true,
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "endpoints",
+        "importPath": "app.api",
+        "description": "app.api",
+        "isExtraImport": true,
+        "detail": "app.api",
+        "documentation": {}
+    },
+    {
+        "label": "shutil",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "shutil",
+        "description": "shutil",
+        "detail": "shutil",
+        "documentation": {}
+    },
+    {
+        "label": "read_latest_csv_value",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def read_latest_csv_value(filename, value_index=1):\n\tpath = os.path.join(os.path.dirname(__file__), '..', '..', 'data_collectors', filename)\n\tpath = os.path.abspath(path)\n\tif not os.path.exists(path):\n\t\treturn None\n\ttry:\n\t\twith open(path, 'r', encoding='utf-8') as f:\n\t\t\trows = list(csv.reader(f))\n\t\t\tif not rows:\n\t\t\t\treturn None",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_population_db",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_population_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM population ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"population\": row[1]}\n\treturn {\"population\": None}\n@router.get(\"/co2/db\")\ndef get_co2_db():",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_co2_db",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_co2_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM co2_emissions ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"co2_emissions_kt\": row[1]}\n\treturn {\"co2_emissions_kt\": None}\n@router.get(\"/deforestation/db\")\ndef get_deforestation_db():",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_deforestation_db",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_deforestation_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM deforestation ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"forest_area_km2\": row[1]}\n\treturn {\"forest_area_km2\": None}\n@router.get(\"/temperature/db\")\ndef get_temperature_db():",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_temperature_db",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_temperature_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, year, value FROM global_temperature ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"year\": row[1], \"global_temperature_c\": row[2]}\n\treturn {\"global_temperature_c\": None}\n@router.get(\"/smartphones/db\")\ndef get_smartphones_db():",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_smartphones_db",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_smartphones_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM smartphones ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"smartphones_estimated\": row[1]}\n\treturn {\"smartphones_estimated\": None}\n@router.get(\"/internet_data/db\")\ndef get_internet_data_db():",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_internet_data_db",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_internet_data_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM internet_data ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"internet_data_volume_eb_per_day\": row[1]}\n\treturn {\"internet_data_volume_eb_per_day\": None}\n@router.get(\"/species_extinction/db\")\ndef get_species_extinction_db():",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_species_extinction_db",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_species_extinction_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM species_extinction ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"extinct_species_estimated\": row[1]}\n\treturn {\"extinct_species_estimated\": None}\n# Endpoints históricos\n@router.get(\"/population/history\")",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_population_history",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_population_history(\n    start_date: Optional[str] = Query(None),\n    end_date: Optional[str] = Query(None),\n    min_value: Optional[int] = Query(None),\n    max_value: Optional[int] = Query(None),\n    min_year: Optional[int] = Query(None),\n    max_year: Optional[int] = Query(None),\n    country: Optional[str] = Query(None)\n):\n    db = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_co2_history",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_co2_history(\n    start_date: Optional[str] = Query(None),\n    end_date: Optional[str] = Query(None),\n    min_value: Optional[float] = Query(None),\n    max_value: Optional[float] = Query(None),\n    min_year: Optional[int] = Query(None),\n    max_year: Optional[int] = Query(None),\n    country: Optional[str] = Query(None)\n):\n    db = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_deforestation_history",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_deforestation_history(\n    start_date: Optional[str] = Query(None),\n    end_date: Optional[str] = Query(None),\n    min_value: Optional[float] = Query(None),\n    max_value: Optional[float] = Query(None),\n    min_year: Optional[int] = Query(None),\n    max_year: Optional[int] = Query(None),\n    country: Optional[str] = Query(None)\n):\n    db = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_temperature_history",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_temperature_history(\n    start_date: Optional[str] = Query(None),\n    end_date: Optional[str] = Query(None),\n    min_value: Optional[float] = Query(None),\n    max_value: Optional[float] = Query(None),\n    min_year: Optional[int] = Query(None),\n    max_year: Optional[int] = Query(None),\n    country: Optional[str] = Query(None)\n):\n    db = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_smartphones_history",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_smartphones_history(\n    start_date: Optional[str] = Query(None),\n    end_date: Optional[str] = Query(None),\n    min_value: Optional[int] = Query(None),\n    max_value: Optional[int] = Query(None),\n    min_year: Optional[int] = Query(None),\n    max_year: Optional[int] = Query(None),\n    country: Optional[str] = Query(None)\n):\n    db = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_internet_data_history",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_internet_data_history(\n    start_date: Optional[str] = Query(None),\n    end_date: Optional[str] = Query(None),\n    min_value: Optional[float] = Query(None),\n    max_value: Optional[float] = Query(None),\n    min_year: Optional[int] = Query(None),\n    max_year: Optional[int] = Query(None),\n    country: Optional[str] = Query(None)\n):\n    db = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "get_species_extinction_history",
+        "kind": 2,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "def get_species_extinction_history(\n    start_date: Optional[str] = Query(None),\n    end_date: Optional[str] = Query(None),\n    min_value: Optional[int] = Query(None),\n    max_value: Optional[int] = Query(None),\n    min_year: Optional[int] = Query(None),\n    max_year: Optional[int] = Query(None),\n    country: Optional[str] = Query(None)\n):\n    db = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "router = APIRouter()\ndef read_latest_csv_value(filename, value_index=1):\n\tpath = os.path.join(os.path.dirname(__file__), '..', '..', 'data_collectors', filename)\n\tpath = os.path.abspath(path)\n\tif not os.path.exists(path):\n\t\treturn None\n\ttry:\n\t\twith open(path, 'r', encoding='utf-8') as f:\n\t\t\trows = list(csv.reader(f))\n\t\t\tif not rows:",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tpath",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tpath = os.path.join(os.path.dirname(__file__), '..', '..', 'data_collectors', filename)\n\tpath = os.path.abspath(path)\n\tif not os.path.exists(path):\n\t\treturn None\n\ttry:\n\t\twith open(path, 'r', encoding='utf-8') as f:\n\t\t\trows = list(csv.reader(f))\n\t\t\tif not rows:\n\t\t\t\treturn None\n\t\t\tlast_row = rows[-1]",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tpath",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tpath = os.path.abspath(path)\n\tif not os.path.exists(path):\n\t\treturn None\n\ttry:\n\t\twith open(path, 'r', encoding='utf-8') as f:\n\t\t\trows = list(csv.reader(f))\n\t\t\tif not rows:\n\t\t\t\treturn None\n\t\t\tlast_row = rows[-1]\n\t\t\treturn last_row[value_index]",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\t\t\trows",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\t\t\trows = list(csv.reader(f))\n\t\t\tif not rows:\n\t\t\t\treturn None\n\t\t\tlast_row = rows[-1]\n\t\t\treturn last_row[value_index]\n\texcept Exception:\n\t\treturn None\n@router.get(\"/population/db\")\ndef get_population_db():\n\tdb = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\t\t\tlast_row",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\t\t\tlast_row = rows[-1]\n\t\t\treturn last_row[value_index]\n\texcept Exception:\n\t\treturn None\n@router.get(\"/population/db\")\ndef get_population_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM population ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tdb",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM population ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"population\": row[1]}\n\treturn {\"population\": None}\n@router.get(\"/co2/db\")\ndef get_co2_db():\n\tdb = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\trow",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"population\": row[1]}\n\treturn {\"population\": None}\n@router.get(\"/co2/db\")\ndef get_co2_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM co2_emissions ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tdb",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM co2_emissions ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"co2_emissions_kt\": row[1]}\n\treturn {\"co2_emissions_kt\": None}\n@router.get(\"/deforestation/db\")\ndef get_deforestation_db():\n\tdb = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\trow",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"co2_emissions_kt\": row[1]}\n\treturn {\"co2_emissions_kt\": None}\n@router.get(\"/deforestation/db\")\ndef get_deforestation_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM deforestation ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tdb",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM deforestation ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"forest_area_km2\": row[1]}\n\treturn {\"forest_area_km2\": None}\n@router.get(\"/temperature/db\")\ndef get_temperature_db():\n\tdb = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\trow",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"forest_area_km2\": row[1]}\n\treturn {\"forest_area_km2\": None}\n@router.get(\"/temperature/db\")\ndef get_temperature_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, year, value FROM global_temperature ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tdb",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, year, value FROM global_temperature ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"year\": row[1], \"global_temperature_c\": row[2]}\n\treturn {\"global_temperature_c\": None}\n@router.get(\"/smartphones/db\")\ndef get_smartphones_db():\n\tdb = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\trow",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"year\": row[1], \"global_temperature_c\": row[2]}\n\treturn {\"global_temperature_c\": None}\n@router.get(\"/smartphones/db\")\ndef get_smartphones_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM smartphones ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tdb",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM smartphones ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"smartphones_estimated\": row[1]}\n\treturn {\"smartphones_estimated\": None}\n@router.get(\"/internet_data/db\")\ndef get_internet_data_db():\n\tdb = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\trow",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"smartphones_estimated\": row[1]}\n\treturn {\"smartphones_estimated\": None}\n@router.get(\"/internet_data/db\")\ndef get_internet_data_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM internet_data ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tdb",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM internet_data ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"internet_data_volume_eb_per_day\": row[1]}\n\treturn {\"internet_data_volume_eb_per_day\": None}\n@router.get(\"/species_extinction/db\")\ndef get_species_extinction_db():\n\tdb = Database()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\trow",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"internet_data_volume_eb_per_day\": row[1]}\n\treturn {\"internet_data_volume_eb_per_day\": None}\n@router.get(\"/species_extinction/db\")\ndef get_species_extinction_db():\n\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM species_extinction ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\tdb",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\tdb = Database()\n\tdb.cursor.execute(\"SELECT date, value FROM species_extinction ORDER BY id DESC LIMIT 1\")\n\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"extinct_species_estimated\": row[1]}\n\treturn {\"extinct_species_estimated\": None}\n# Endpoints históricos\n@router.get(\"/population/history\")\ndef get_population_history(",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "\trow",
+        "kind": 5,
+        "importPath": "backend.app.api.endpoints",
+        "description": "backend.app.api.endpoints",
+        "peekOfCode": "\trow = db.cursor.fetchone()\n\tdb.close()\n\tif row:\n\t\treturn {\"date\": row[0], \"extinct_species_estimated\": row[1]}\n\treturn {\"extinct_species_estimated\": None}\n# Endpoints históricos\n@router.get(\"/population/history\")\ndef get_population_history(\n    start_date: Optional[str] = Query(None),\n    end_date: Optional[str] = Query(None),",
+        "detail": "backend.app.api.endpoints",
+        "documentation": {}
+    },
+    {
+        "label": "fetch_co2_emissions",
+        "kind": 2,
+        "importPath": "backend.app.data_collectors.co2_emissions_collector",
+        "description": "backend.app.data_collectors.co2_emissions_collector",
+        "peekOfCode": "def fetch_co2_emissions():\n    url = \"https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv\"\n    response = requests.get(url)\n    response.raise_for_status()\n    lines = response.text.splitlines()\n    reader = csv.DictReader(lines)\n    valid_rows = []\n    for row in reader:\n        if row['country'] == 'World' and row.get('co2'):\n            try:",
+        "detail": "backend.app.data_collectors.co2_emissions_collector",
+        "documentation": {}
+    },
+    {
+        "label": "fetch_deforestation",
+        "kind": 2,
+        "importPath": "backend.app.data_collectors.deforestation_collector",
+        "description": "backend.app.data_collectors.deforestation_collector",
+        "peekOfCode": "def fetch_deforestation():\n    url = \"https://api.worldbank.org/v2/country/WLD/indicator/AG.LND.FRST.K2?format=json&per_page=100\"\n    response = requests.get(url)\n    response.raise_for_status()\n    data = response.json()\n    # Procurar o valor mais recente disponível\n    try:\n        for item in data[1]:\n            value = item.get('value')\n            if value is not None:",
+        "detail": "backend.app.data_collectors.deforestation_collector",
+        "documentation": {}
+    },
+    {
+        "label": "fetch_global_temperature",
+        "kind": 2,
+        "importPath": "backend.app.data_collectors.global_temperature_collector",
+        "description": "backend.app.data_collectors.global_temperature_collector",
+        "peekOfCode": "def fetch_global_temperature():\n    # NASA GISTEMP: dados anuais disponíveis em CSV\n    url = \"https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv\"\n    response = requests.get(url)\n    response.raise_for_status()\n    lines = response.text.splitlines()\n    # Procurar a última linha com ano e valor\n    for line in reversed(lines):\n        parts = line.split(',')\n        if len(parts) > 1 and parts[0].strip().isdigit():",
+        "detail": "backend.app.data_collectors.global_temperature_collector",
+        "documentation": {}
+    },
+    {
+        "label": "get_estimated_internet_data",
+        "kind": 2,
+        "importPath": "backend.app.data_collectors.internet_data_collector",
+        "description": "backend.app.data_collectors.internet_data_collector",
+        "peekOfCode": "def get_estimated_internet_data():\n    # Valor estimado para 2025: 400 exabytes/dia (atualize conforme novas fontes)\n    return 400  # Exabytes por dia\nif __name__ == \"__main__\":\n    data_volume = get_estimated_internet_data()\n    print(f\"Volume de dados gerados na internet por dia: {data_volume} EB\")\n    with open(\"internet_data_volume.csv\", \"a\", newline=\"\", encoding=\"utf-8\") as csvfile:\n        writer = csv.writer(csvfile)\n        writer.writerow([datetime.now().isoformat(), data_volume])\n    print(\"Dado salvo em internet_data_volume.csv\")",
+        "detail": "backend.app.data_collectors.internet_data_collector",
+        "documentation": {}
+    },
+    {
+        "label": "fetch_world_population",
+        "kind": 2,
+        "importPath": "backend.app.data_collectors.population_collector",
+        "description": "backend.app.data_collectors.population_collector",
+        "peekOfCode": "def fetch_world_population():\n    # Usando a API do World Bank para buscar a população mundial mais recente\n    url = \"https://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=json\"\n    # Alternativamente, para obter o dado mais recente diretamente:\n    url_latest = \"https://api.worldbank.org/v2/country/WLD/indicator/SP.POP.TOTL?format=json&per_page=1&date=2022:2025\"\n    response = requests.get(url_latest)\n    response.raise_for_status()\n    data = response.json()\n    # O valor está em data[1][0]['value']\n    try:",
+        "detail": "backend.app.data_collectors.population_collector",
+        "documentation": {}
+    },
+    {
+        "label": "get_estimated_smartphones",
+        "kind": 2,
+        "importPath": "backend.app.data_collectors.smartphones_collector",
+        "description": "backend.app.data_collectors.smartphones_collector",
+        "peekOfCode": "def get_estimated_smartphones():\n    # Valor estimado para 2025 (atualize conforme novas fontes)\n    return 6800000000  # 6,8 bilhões\nif __name__ == \"__main__\":\n    smartphones = get_estimated_smartphones()\n    print(f\"Smartphones ativos estimados: {smartphones}\")\n    with open(\"smartphones_data.csv\", \"a\", newline=\"\", encoding=\"utf-8\") as csvfile:\n        writer = csv.writer(csvfile)\n        writer.writerow([datetime.now().isoformat(), smartphones])\n    print(\"Dado salvo em smartphones_data.csv\")",
+        "detail": "backend.app.data_collectors.smartphones_collector",
+        "documentation": {}
+    },
+    {
+        "label": "get_estimated_extinct_species",
+        "kind": 2,
+        "importPath": "backend.app.data_collectors.species_extinction_collector",
+        "description": "backend.app.data_collectors.species_extinction_collector",
+        "peekOfCode": "def get_estimated_extinct_species():\n    # Valor estimado para 2025 (atualize conforme novas fontes)\n    return 900  # Exemplo: 900 espécies extintas conhecidas\nif __name__ == \"__main__\":\n    extinct_species = get_estimated_extinct_species()\n    print(f\"Espécies extintas estimadas: {extinct_species}\")\n    with open(\"species_extinction_data.csv\", \"a\", newline=\"\", encoding=\"utf-8\") as csvfile:\n        writer = csv.writer(csvfile)\n        writer.writerow([datetime.now().isoformat(), extinct_species])\n    print(\"Dado salvo em species_extinction_data.csv\")",
+        "detail": "backend.app.data_collectors.species_extinction_collector",
+        "documentation": {}
+    },
+    {
+        "label": "Database",
+        "kind": 6,
+        "importPath": "backend.app.db_utils",
+        "description": "backend.app.db_utils",
+        "peekOfCode": "class Database:\n    def __init__(self, db_path=DB_PATH):\n        self.db_path = str(db_path)\n        self.conn = sqlite3.connect(self.db_path)\n        self.cursor = self.conn.cursor()\n    def insert_population(self, date, value, year=None, country=None):\n        self.cursor.execute(\n            \"INSERT INTO population (date, value, year, country) VALUES (?, ?, ?, ?)\", (date, value, year, country)\n        )\n        self.conn.commit()",
+        "detail": "backend.app.db_utils",
+        "documentation": {}
+    },
+    {
+        "label": "DB_PATH",
+        "kind": 5,
+        "importPath": "backend.app.db_utils",
+        "description": "backend.app.db_utils",
+        "peekOfCode": "DB_PATH = Path(__file__).parent.parent.parent / \"database\" / \"world_data.db\"\nclass Database:\n    def __init__(self, db_path=DB_PATH):\n        self.db_path = str(db_path)\n        self.conn = sqlite3.connect(self.db_path)\n        self.cursor = self.conn.cursor()\n    def insert_population(self, date, value, year=None, country=None):\n        self.cursor.execute(\n            \"INSERT INTO population (date, value, year, country) VALUES (?, ?, ?, ?)\", (date, value, year, country)\n        )",
+        "detail": "backend.app.db_utils",
+        "documentation": {}
+    },
+    {
+        "label": "read_root",
+        "kind": 2,
+        "importPath": "backend.app.main",
+        "description": "backend.app.main",
+        "peekOfCode": "def read_root():\n    return {\"message\": \"World Data View API\"}",
+        "detail": "backend.app.main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "backend.app.main",
+        "description": "backend.app.main",
+        "peekOfCode": "app = FastAPI()\napp.include_router(endpoints.router, prefix=\"/api\")\n@app.get(\"/\")\ndef read_root():\n    return {\"message\": \"World Data View API\"}",
+        "detail": "backend.app.main",
+        "documentation": {}
+    },
+    {
+        "label": "copy_csv_files",
+        "kind": 2,
+        "importPath": "copy_csv_to_frontend",
+        "description": "copy_csv_to_frontend",
+        "peekOfCode": "def copy_csv_files():\n    os.makedirs(FRONTEND_PUBLIC_DIR, exist_ok=True)\n    for filename in CSV_FILES:\n        src = os.path.join(BACKEND_CSV_DIR, filename)\n        dst = os.path.join(FRONTEND_PUBLIC_DIR, filename)\n        if os.path.exists(src):\n            shutil.copy2(src, dst)\n            print(f\"Copiado: {filename}\")\n        else:\n            print(f\"Arquivo não encontrado: {filename}\")",
+        "detail": "copy_csv_to_frontend",
+        "documentation": {}
+    },
+    {
+        "label": "BACKEND_CSV_DIR",
+        "kind": 5,
+        "importPath": "copy_csv_to_frontend",
+        "description": "copy_csv_to_frontend",
+        "peekOfCode": "BACKEND_CSV_DIR = os.path.join('backend', 'app', 'data_collectors')\nFRONTEND_PUBLIC_DIR = os.path.join('frontend', 'public')\nCSV_FILES = [\n    'population_data.csv',\n    'co2_emissions_data.csv',\n    'deforestation_data.csv',\n    'global_temperature_data.csv',\n    'smartphones_data.csv',\n    'internet_data_volume.csv',\n    'species_extinction_data.csv',",
+        "detail": "copy_csv_to_frontend",
+        "documentation": {}
+    },
+    {
+        "label": "FRONTEND_PUBLIC_DIR",
+        "kind": 5,
+        "importPath": "copy_csv_to_frontend",
+        "description": "copy_csv_to_frontend",
+        "peekOfCode": "FRONTEND_PUBLIC_DIR = os.path.join('frontend', 'public')\nCSV_FILES = [\n    'population_data.csv',\n    'co2_emissions_data.csv',\n    'deforestation_data.csv',\n    'global_temperature_data.csv',\n    'smartphones_data.csv',\n    'internet_data_volume.csv',\n    'species_extinction_data.csv',\n]",
+        "detail": "copy_csv_to_frontend",
+        "documentation": {}
+    },
+    {
+        "label": "CSV_FILES",
+        "kind": 5,
+        "importPath": "copy_csv_to_frontend",
+        "description": "copy_csv_to_frontend",
+        "peekOfCode": "CSV_FILES = [\n    'population_data.csv',\n    'co2_emissions_data.csv',\n    'deforestation_data.csv',\n    'global_temperature_data.csv',\n    'smartphones_data.csv',\n    'internet_data_volume.csv',\n    'species_extinction_data.csv',\n]\ndef copy_csv_files():",
+        "detail": "copy_csv_to_frontend",
+        "documentation": {}
+    }
+]
