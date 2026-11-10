@@ -9,7 +9,7 @@ uma requisição por segundo), o que escala melhor e funciona offline após o pr
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
 
@@ -43,13 +43,13 @@ def _is_demo(session: Session, *slugs: str) -> bool:
 
 def _mid_year(year: int) -> datetime:
     """As séries de população são de 1º de julho (meio do ano)."""
-    return datetime(year, 7, 1, tzinfo=timezone.utc)
+    return datetime(year, 7, 1, tzinfo=UTC)
 
 
 def _start_of(period: str, now: datetime) -> datetime:
     if period == "day":
         return now.replace(hour=0, minute=0, second=0, microsecond=0)
-    return datetime(now.year, 1, 1, tzinfo=timezone.utc)
+    return datetime(now.year, 1, 1, tzinfo=UTC)
 
 
 def _population_rate(points: list[Point]) -> tuple[float, int, float] | None:
@@ -64,7 +64,7 @@ def _population_rate(points: list[Point]) -> tuple[float, int, float] | None:
 
 
 def build_counters(session: Session, now: datetime | None = None) -> list[Counter]:
-    now = now or datetime.now(timezone.utc)
+    now = now or datetime.now(UTC)
     counters: list[Counter] = []
 
     pop_points = latest_points(session, "population", WORLD, 2)

@@ -6,7 +6,7 @@ import csv
 import io
 import re
 from collections.abc import Iterator
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
@@ -296,7 +296,7 @@ def live(db: DB, cache: Cache) -> schemas.LiveOut:
     """Taxas por segundo para o navegador contar localmente. Veja docs/api.md."""
 
     def build() -> schemas.LiveOut:
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         counters = live_service.build_counters(db, now)
         return schemas.LiveOut(
             as_of=now,
@@ -316,4 +316,4 @@ def fact_of_the_day(db: DB, cache: Cache) -> schemas.FactOut | None:
             date=day, text=fact.text, indicator=fact.indicator, is_estimate=fact.is_estimate, is_demo=fact.is_demo
         )
 
-    return cache.get_or_set(("fact", datetime.now(timezone.utc).date()), build)
+    return cache.get_or_set(("fact", datetime.now(UTC).date()), build)

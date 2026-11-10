@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -15,7 +15,7 @@ def counters_by_id(session_factory, now):
 
 def test_population_counter_is_exact_at_the_anchor_date(seeded):
     # Último ponto: 2024 (8,16 bi), anterior: 2023 (8,09 bi). Âncora: 1º/jul/2024.
-    anchor = datetime(2024, 7, 1, tzinfo=timezone.utc)
+    anchor = datetime(2024, 7, 1, tzinfo=UTC)
     pop = counters_by_id(seeded, anchor)["population"]
 
     assert pop.base_value == pytest.approx(8.16e9)
@@ -25,15 +25,15 @@ def test_population_counter_is_exact_at_the_anchor_date(seeded):
 
 
 def test_population_counter_extrapolates_forward(seeded):
-    anchor = datetime(2024, 7, 1, tzinfo=timezone.utc)
-    later = datetime(2024, 7, 1, 0, 16, 40, tzinfo=timezone.utc)  # +1000 s
+    anchor = datetime(2024, 7, 1, tzinfo=UTC)
+    later = datetime(2024, 7, 1, 0, 16, 40, tzinfo=UTC)  # +1000 s
     a = counters_by_id(seeded, anchor)["population"]
     b = counters_by_id(seeded, later)["population"]
     assert b.base_value - a.base_value == pytest.approx(a.rate_per_second * 1000)
 
 
 def test_births_and_deaths_use_rates_and_reset_daily(seeded):
-    now = datetime(2025, 3, 10, 12, 0, 0, tzinfo=timezone.utc)  # meio-dia UTC
+    now = datetime(2025, 3, 10, 12, 0, 0, tzinfo=UTC)  # meio-dia UTC
     c = counters_by_id(seeded, now)
     pop_now = c["population"].base_value
 
@@ -44,7 +44,7 @@ def test_births_and_deaths_use_rates_and_reset_daily(seeded):
 
 
 def test_year_counters_start_on_january_first(seeded):
-    now = datetime(2025, 1, 1, 0, 0, 10, tzinfo=timezone.utc)  # 10 s depois da virada
+    now = datetime(2025, 1, 1, 0, 0, 10, tzinfo=UTC)  # 10 s depois da virada
     c = counters_by_id(seeded, now)
 
     co2_per_second = 36000 * 1_000_000 / SECONDS_PER_YEAR  # 2023: 36.000 Mt
@@ -57,7 +57,7 @@ def test_year_counters_start_on_january_first(seeded):
 
 
 def test_counters_degrade_gracefully_without_data(session_factory):
-    assert counters_by_id(session_factory, datetime(2025, 1, 1, tzinfo=timezone.utc)) == {}
+    assert counters_by_id(session_factory, datetime(2025, 1, 1, tzinfo=UTC)) == {}
 
 
 def test_counters_skip_births_when_rate_missing(session_factory):
@@ -68,7 +68,7 @@ def test_counters_skip_births_when_rate_missing(session_factory):
     with session_factory() as session:
         persist_batch(session, CollectedBatch(observations=rows))
         session.commit()
-    c = counters_by_id(session_factory, datetime(2025, 1, 1, tzinfo=timezone.utc))
+    c = counters_by_id(session_factory, datetime(2025, 1, 1, tzinfo=UTC))
     assert set(c) == {"population"}
 
 
@@ -116,7 +116,7 @@ def test_counters_flag_demo_inputs(session_factory):
         session.commit()
     seed_demo(session_factory)  # preenche birth_rate/death_rate/co2/... com dados DEMO
 
-    c = counters_by_id(session_factory, datetime(2025, 3, 10, tzinfo=timezone.utc))
+    c = counters_by_id(session_factory, datetime(2025, 3, 10, tzinfo=UTC))
     assert c["population"].is_demo is False  # população é real
     assert c["births_today"].is_demo is True  # misturou taxa DEMO com população real
     assert c["co2_year"].is_demo is True

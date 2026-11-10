@@ -9,7 +9,7 @@ Rode ``python -m app.cli collect`` para substituí-los pelos dados reais.
 from __future__ import annotations
 
 import math
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
@@ -51,6 +51,6 @@ def seed_demo(session_factory: sessionmaker[Session]) -> int:
             if has_data is not None:
                 continue
             rows.extend(ObservationRow(slug, WORLD, y, float(curve(y)), SOURCE) for y in range(start, end + 1))
-        count = upsert_observations(session, rows, datetime.now(timezone.utc))
+        count = upsert_observations(session, rows, datetime.now(UTC))
         session.commit()
     return count

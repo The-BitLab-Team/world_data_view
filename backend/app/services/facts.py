@@ -7,7 +7,7 @@ sempre refletem a última atualização. Um fato por dia, escolhido de forma det
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 
 from sqlalchemy.orm import Session
 
@@ -159,7 +159,7 @@ _GENERATORS = (
 
 
 def fact_of_the_day(session: Session, today: date | None = None) -> tuple[date, Fact | None]:
-    today = today or datetime.now(timezone.utc).date()
+    today = today or datetime.now(UTC).date()
     facts = [fact for generator in _GENERATORS if (fact := generator(session)) is not None]
     if not facts:
         return today, None

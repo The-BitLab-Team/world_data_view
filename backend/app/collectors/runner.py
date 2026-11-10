@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Callable, Iterable
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import delete, select
 from sqlalchemy.dialects import postgresql, sqlite
@@ -45,7 +45,7 @@ def _insert_fn(session: Session):
 def upsert_observations(session: Session, rows: Iterable, fetched_at: datetime | None = None) -> int:
     """Insere ou atualiza observações pela chave (indicador, país, ano)."""
     insert = _insert_fn(session)
-    fetched_at = fetched_at or datetime.now(timezone.utc)
+    fetched_at = fetched_at or datetime.now(UTC)
     values = [
         {
             "indicator": r.indicator,
@@ -123,7 +123,7 @@ def run_collector(
     with session_factory() as session:
         run = session.get(CollectorRun, run_id)
         run.status, run.rows, run.message = status, rows, message
-        run.finished_at = datetime.now(timezone.utc)
+        run.finished_at = datetime.now(UTC)
         session.commit()
         session.refresh(run)
         log.info("Coletor %s: %s (%d linhas)", collector.name, status, rows)
