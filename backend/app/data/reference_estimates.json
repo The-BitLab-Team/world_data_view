@@ -1,0 +1,26 @@
+{
+  "_comment": "Valores de referência (estimativas) para indicadores sem API pública gratuita. Atualize este arquivo quando houver dado mais recente e preencha 'source' e 'note'. Valores migrados do projeto original: ainda precisam de uma fonte citável para cada número.",
+  "entries": [
+    {
+      "indicator": "smartphones",
+      "year": 2025,
+      "value": 6800000000,
+      "source": "Estimativa editorial (Statista, Newzoo, GSMA Intelligence)",
+      "note": "6,8 bilhões de smartphones em uso. Revisar contra um relatório citável."
+    },
+    {
+      "indicator": "internet_data_per_day",
+      "year": 2025,
+      "value": 400,
+      "source": "Estimativa editorial (Statista, IDC, Domo)",
+      "note": "Cerca de 400 exabytes por dia. Estimativas de mercado variam bastante entre fontes."
+    },
+    {
+      "indicator": "species_extinct",
+      "year": 2025,
+      "value": 900,
+      "source": "Estimativa editorial (IUCN Red List)",
+      "note": "Ordem de grandeza de espécies classificadas como extintas. Revisar contra o total atual da Lista Vermelha."
+    }
+  ]
+}
