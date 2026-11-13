@@ -9,9 +9,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  collect:
+  wikidata:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 40
     env:
       WDV_DATABASE_URL: sqlite:////tmp/live.db
     steps:
@@ -26,34 +26,27 @@ jobs:
         with:
           python-version: "3.13"
       - run: pip install -r code/backend/requirements.txt
-      - name: Fontes rápidas
+      - name: GeoNames (cria países e regiões)
         working-directory: code/backend
         continue-on-error: true
-        run: ../../results/probe/step.sh geonames owid gistemp reference
-      - name: IBGE
+        run: python -m app.cli collect --only geonames 2>&1 | tail -5
+      - name: Wikidata
         working-directory: code/backend
         continue-on-error: true
-        run: ../../results/probe/step.sh ibge
-      - name: Banco Mundial
-        working-directory: code/backend
-        continue-on-error: true
-        run: ../../results/probe/step.sh worldbank
-      - name: Agregados
-        working-directory: code/backend
-        continue-on-error: true
-        run: ../../results/probe/step.sh aggregates
-      - name: Relatório do banco coletado
-        if: always()
-        working-directory: code/backend
-        env:
-          PYTHONPATH: .
         run: |
-          python ../../results/probe/report.py 2>&1 | tee ../../results/backend/tests/fixtures/live/REPORT.txt
+          mkdir -p ../../results/backend/tests/fixtures/live
+          start=$(date +%s)
+          python -m app.cli collect --only wikidata 2>&1 | tee ../../results/backend/tests/fixtures/live/WIKIDATA.log
+          echo "### wikidata duração: $(( $(date +%s) - start ))s" | tee -a ../../results/backend/tests/fixtures/live/WIKIDATA.log
+      - name: Amostras e relatório
+        if: always()
+        working-directory: .
+        run: python results/probe/wikidata_sample.py 2>&1 | tee results/backend/tests/fixtures/live/WIKIDATA_REPORT.txt
       - name: Publica o resultado na própria branch
         if: always()
         working-directory: results
         run: |
           git config user.name verify-bot && git config user.email verify-bot@users.noreply.github.com
           git add -f backend/tests/fixtures/live
-          git commit -m "Resultado da coleta real" || echo "nada a commitar"
+          git commit -m "Resultado do Wikidata" || echo "nada a commitar"
           git push origin HEAD:tmp/verify-live-sources
