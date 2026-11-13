@@ -53,7 +53,7 @@ O banco resultante tem **249 países, 3.781 regiões, 71.177 cidades**, cerca de
 - **IBGE em paralelo.** Os ~60 pedidos municipais (um por ano e tabela) rodam 4 por vez; a fonte inteira leva menos de 2 minutos.
 - **Coletas interrompidas** ficam como "running" para sempre se o processo morrer; a próxima coleta as marca como erro depois de 6 horas.
 
-Para repetir a verificação no seu ambiente:
+O passo a passo para repetir a verificação num runner real está em [verificacao-real.md](verificacao-real.md). Para repetir no seu ambiente, se ele alcança as fontes:
 
 ```bash
 cd backend
