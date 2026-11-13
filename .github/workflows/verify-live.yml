@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      WDV_DATABASE_URL: sqlite:////tmp/live.db
+      WDV_DATABASE_URL: sqlite:////tmp/all.db
       PYTHONUNBUFFERED: "1"
     steps:
       - uses: actions/checkout@v4
@@ -19,22 +19,20 @@ jobs:
         with:
           python-version: "3.13"
       - run: pip install -r backend/requirements.txt
-      - name: Alcance de rede (curl)
+      - name: collect completo (banco novo)
+        working-directory: backend
+        env:
+          WDV_DATABASE_URL: sqlite:////tmp/all.db
         run: |
-          for u in https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv "https://api.worldbank.org/v2/country/WLD/indicator/SP.DYN.CBRT.IN?format=json&per_page=3" "https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv"; do
-            r=$(curl -s -o /dev/null -m 25 -w "%{http_code} conn=%{time_connect}s total=%{time_total}s bytes=%{size_download}" "$u" || echo "curl_exit=$?")
-            echo "$u -> $r" >> /tmp/net.log
-          done
-          cat /tmp/net.log
-      - name: owid
+          s=$(date +%s)
+          (timeout --signal=INT --kill-after=10 200 python -m app.cli collect > /tmp/all1.log 2>&1; echo "exit=$? tempo=$(( $(date +%s) - s ))s" >> /tmp/all1.log) || true
+      - name: collect completo (segunda vez, mesmo banco)
         working-directory: backend
-        run: (timeout --signal=INT --kill-after=10 150 python -m app.cli collect --only owid > /tmp/owid.log 2>&1; echo "exit=$?" >> /tmp/owid.log) || true
-      - name: worldbank
-        working-directory: backend
-        run: (timeout --signal=INT --kill-after=10 240 python -m app.cli collect --only worldbank > /tmp/worldbank.log 2>&1; echo "exit=$?" >> /tmp/worldbank.log) || true
-      - name: gistemp
-        working-directory: backend
-        run: (timeout --signal=INT --kill-after=10 120 python -m app.cli collect --only gistemp > /tmp/gistemp.log 2>&1; echo "exit=$?" >> /tmp/gistemp.log) || true
+        env:
+          WDV_DATABASE_URL: sqlite:////tmp/all.db
+        run: |
+          s=$(date +%s)
+          (timeout --signal=INT --kill-after=10 200 python -m app.cli collect > /tmp/all2.log 2>&1; echo "exit=$? tempo=$(( $(date +%s) - s ))s" >> /tmp/all2.log) || true
       - name: Relatório
         if: always()
         working-directory: backend
@@ -45,11 +43,10 @@ jobs:
           def tail(path, n=22):
               try: return "\n".join(open(path, encoding="utf-8", errors="replace").read().splitlines()[-n:])
               except FileNotFoundError: return "(sem log)"
-          print("::notice title=REDE::" + enc(tail("/tmp/net.log")))
-          for name in ("owid", "worldbank", "gistemp"):
-              print(f"::notice title=LOG-{name}::" + enc(tail(f"/tmp/{name}.log")))
-          if os.path.exists("/tmp/live.db"):
-              db = sqlite3.connect("/tmp/live.db")
+          for name in ("all1", "all2"):
+              print(f"::notice title=LOG-{name}::" + enc(tail(f"/tmp/{name}.log", 40)))
+          if os.path.exists("/tmp/all.db"):
+              db = sqlite3.connect("/tmp/all.db")
               rows = db.execute("select indicator, source, count(*), min(year), max(year) from observations where country='WLD' group by indicator, source order by indicator").fetchall()
               lines = []
               for ind, src, n, y0, y1 in rows:
