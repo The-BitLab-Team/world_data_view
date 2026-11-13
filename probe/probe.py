@@ -1,18 +1,15 @@
-"""Sonda temporária v4: tabelas do SIDRA, tamanho do GeoNames e amostras do Banco Mundial."""
-import io
+"""Sonda temporária v5: tabelas do SIDRA em nível de município (nascimentos, PIB, censo)."""
 import json
 import os
-import statistics
 import time
 import urllib.request
-import zipfile
 from concurrent.futures import ThreadPoolExecutor
 
 OUT = "backend/tests/fixtures/live"
 os.makedirs(OUT, exist_ok=True)
 REPORT = os.path.join(OUT, "REPORT.txt")
 open(REPORT, "w").close()
-UA = {"User-Agent": "WorldDataView-probe/0.4 (+https://github.com/The-BitLab-Team/world_data_view)"}
+UA = {"User-Agent": "WorldDataView-probe/0.5 (+https://github.com/The-BitLab-Team/world_data_view)"}
 
 
 def note(*a):
@@ -22,119 +19,60 @@ def note(*a):
         fh.write(line + "\n")
 
 
-def get(url, timeout=30, quiet=False):
+def get(path, timeout=120):
     t = time.time()
+    url = "https://apisidra.ibge.gov.br/values/" + path
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout) as r:
-        data = r.read()
-    if not quiet:
-        note(f"GET {url[:120]} -> {len(data)} B em {time.time() - t:.1f}s")
-    return data
+        raw = r.read()
+    return json.loads(raw), time.time() - t, len(raw)
 
 
 def save(name, data):
-    mode = "wb" if isinstance(data, bytes) else "w"
-    kwargs = {} if mode == "wb" else {"encoding": "utf-8"}
-    with open(os.path.join(OUT, name), mode, **kwargs) as f:
-        f.write(data)
+    with open(os.path.join(OUT, name), "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False)
 
 
-def step(label, fn):
-    note(f"\n=== {label}")
+JOINVILLE = "4209102"
+CASES = [
+    ("censo2022_n6", "t/4714/n6/all/v/93,6318/p/2022"),
+    ("nascidos_n6_2024", "t/2609/n6/all/v/217/p/2024"),
+    ("nascidos_n3_todos", "t/2609/n3/all/v/217/p/all"),
+    ("nascidos_n1_todos", "t/2609/n1/all/v/217/p/all"),
+    ("pib_n3_todos", "t/5938/n3/all/v/37/p/all"),
+    ("pib_n6_ultimo", "t/5938/n6/all/v/37/p/last"),
+    ("pib_n1_todos", "t/5938/n1/all/v/37/p/all"),
+    ("censo2010_n6", "t/202/n6/all/v/93/p/2010/c1/0/c2/0"),
+    ("contagem2007_n6", "t/793/n6/all/v/93/p/2007"),
+    ("pib_variaveis_n6", "t/5938/n6/4209102/v/all/p/last"),
+]
+
+
+def run(case):
+    name, path = case
     try:
-        fn()
+        data, dt, size = get(path)
     except Exception as exc:  # noqa: BLE001
-        note(f"FALHOU: {type(exc).__name__}: {exc}")
-
-
-# ---------------------------------------------------------------- SIDRA: descobrir variáveis
-SIDRA_TABLES = [4714, 9514, 5938, 2609, 2612, 1301, 6784, 7358, 9606, 5434, 6579]
-
-
-def sidra_table(t):
+        return [f"[{name}] {path} -> ERRO {type(exc).__name__}: {str(exc)[:120]}"]
     out = []
-    for level in ("n1/all", "n3/all"):
-        url = f"https://apisidra.ibge.gov.br/values/t/{t}/{level}/v/all/p/last"
-        try:
-            data = json.loads(get(url, timeout=40, quiet=True))
-        except Exception as exc:  # noqa: BLE001
-            out.append(f"  [{t}] {level}: ERRO {type(exc).__name__} {str(exc)[:80]}")
-            continue
-        if not data or not isinstance(data, list) or "D1C" not in data[0]:
-            out.append(f"  [{t}] {level}: resposta inesperada {str(data)[:200]}")
-            continue
-        rows = data[1:]
-        variaveis = {}
-        for r in rows:
-            variaveis.setdefault((r["D2C"], r["D2N"], r["MN"]), []).append(r["V"])
-        periodos = sorted({r.get("D3C", "?") for r in rows})
-        out.append(f"  [{t}] {level}: {len(rows)} linhas | cabeçalho: {[v for k, v in data[0].items() if k.startswith('D')]} | períodos: {periodos[:6]}")
-        for (code, name, unit), vals in list(variaveis.items())[:14]:
-            out.append(f"      v{code} {name} ({unit}) ex: {vals[0]}")
-        if level == "n3/all":
-            save(f"ibge_sidra_{t}_estados_amostra.json", json.dumps(data[:12], ensure_ascii=False))
+    if not isinstance(data, list) or len(data) < 2:
+        return [f"[{name}] resposta inesperada: {str(data)[:200]}"]
+    rows = data[1:]
+    bad = sorted({r["V"] for r in rows if not r["V"].replace(".", "").replace("-", "").isdigit()})[:6]
+    years = sorted({r.get("D3C", "?") for r in rows})
+    out.append(f"[{name}] {path} -> {len(rows)} linhas, {size} B, {dt:.1f}s | períodos {years[:4]}..{years[-3:]} | V não numéricos: {bad}")
+    out.append(f"    cabeçalho: {[v for k, v in data[0].items() if k.startswith('D')]}")
+    out.append(f"    exemplo: {json.dumps(rows[0], ensure_ascii=False)[:260]}")
+    jo = [r for r in rows if r.get("D1C") == JOINVILLE]
+    if jo:
+        out.append(f"    Joinville: {json.dumps(jo[:3], ensure_ascii=False)[:360]}")
+    vars_ = sorted({(r["D2C"], r["D2N"][:70], r["MN"]) for r in rows})
+    if len(vars_) > 1:
+        out.append(f"    variáveis: {vars_[:50]}")
+    save(f"ibge_{name}.json", [data[0]] + rows[:8] + jo[:3])
     return out
 
 
-def sidra_scan():
-    with ThreadPoolExecutor(6) as ex:
-        for lines in ex.map(sidra_table, SIDRA_TABLES):
-            for ln in lines:
-                note(ln)
-
-
-# ---------------------------------------------------------------- GeoNames: tamanhos
-def geonames_sizes():
-    for name in ("cities15000", "cities5000"):
-        t = time.time()
-        raw = get(f"https://download.geonames.org/export/dump/{name}.zip", timeout=60)
-        with zipfile.ZipFile(io.BytesIO(raw)) as z:
-            txt = z.read(f"{name}.txt").decode("utf-8")
-        lines = txt.splitlines()
-        pops = [int(l.split("\t")[14]) for l in lines]
-        note(f"{name}: zip {len(raw)} B | linhas {len(lines)} | txt {len(txt)} B | pop mediana {int(statistics.median(pops))} | países {len({l.split(chr(9))[8] for l in lines})} | {time.time() - t:.1f}s")
-        if name == "cities5000":
-            br = [l for l in lines if l.split("\t")[8] == "BR"]
-            note("cidades BR em cities5000:", len(br))
-            sem_admin1 = sum(1 for l in lines if not l.split("\t")[10])
-            note("sem admin1:", sem_admin1)
-            save("geonames_cities5000_sample.txt", "\n".join(lines[:200]) + "\n")
-
-
-# ---------------------------------------------------------------- Banco Mundial
-def worldbank():
-    for code in ("SP.DYN.LE00.FE.IN", "SP.DYN.LE00.MA.IN", "SP.RUR.TOTL.ZS"):
-        try:
-            d = json.loads(get(f"https://api.worldbank.org/v2/country/all/indicator/{code}?format=json&per_page=1000&mrnev=1", timeout=60, quiet=True))
-            note(f"{code}: {len(d[1])} registros | exemplo {json.dumps(d[1][0], ensure_ascii=False)[:200]}")
-        except Exception as exc:  # noqa: BLE001
-            note(f"{code}: ERRO {type(exc).__name__}")
-    # formato de linha de dados com agregados e nulos
-    d = json.loads(get("https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD?format=json&per_page=5000&page=1", timeout=90))
-    note("cabeçalho:", d[0])
-    rows = d[1]
-    note("amostra:", json.dumps(rows[0], ensure_ascii=False))
-    save("worldbank_all_countries_sample.json", json.dumps([d[0], rows[:6] + [r for r in rows if r["countryiso3code"] == "WLD"][:6] + [r for r in rows if r["value"] is None][:3]], ensure_ascii=False))
-    note("com valor nulo:", sum(1 for r in rows if r["value"] is None), "de", len(rows))
-    note("iso3 vazio:", sorted({r["country"]["value"] for r in rows if not r["countryiso3code"]})[:8])
-    # data= no bulk trava?
-    t = time.time()
-    try:
-        d2 = json.loads(get("https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=1000&date=2020:2023", timeout=40, quiet=True))
-        note(f"date=2020:2023: ok em {time.time() - t:.1f}s, {len(d2[1])} registros, páginas {d2[0]['pages']}")
-    except Exception as exc:  # noqa: BLE001
-        note(f"date=2020:2023: FALHOU em {time.time() - t:.1f}s {type(exc).__name__}")
-    # todas as páginas de um indicador: tempo total
-    t = time.time()
-    n = 0
-    page, pages = 1, 1
-    while page <= pages:
-        dd = json.loads(get(f"https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json&per_page=5000&page={page}", timeout=60, quiet=True))
-        pages = dd[0]["pages"]
-        n += len(dd[1])
-        page += 1
-    note(f"SP.POP.TOTL todas as páginas: {n} registros em {time.time() - t:.1f}s")
-
-
-step("SIDRA: variáveis de cada tabela", sidra_scan)
-step("GeoNames: tamanhos", geonames_sizes)
-step("Banco Mundial", worldbank)
+with ThreadPoolExecutor(4) as ex:
+    for lines in ex.map(run, CASES):
+        for ln in lines:
+            note(ln)
