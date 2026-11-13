@@ -1,44 +1,118 @@
 
-=== IBGE SIDRA
-GET https://apisidra.ibge.gov.br/values/t/6579/n1/all/v/9324/p/all -> 5932 B em 0.5s
-ibge_sidra_6579_brasil_todos_anos.json: 23 linhas | cabeçalho: {"NC": "Nível Territorial (Código)", "NN": "Nível Territorial", "MC": "Unidade de Medida (Código)", "MN": "Unidade de Medida", "V": "Valor", "D1C": "Brasil (Código)", "D1N": "Brasil", "D2C": "Variável (Código)", "D2N": "Variável", "D3C": "Ano (Código)", "D3N": "Ano"}
-   exemplo: {"NC": "1", "NN": "Brasil", "MC": "45", "MN": "Pessoas", "V": "172385826", "D1C": "1", "D1N": "Brasil", "D2C": "9324", "D2N": "População residente estimada", "D3C": "2001", "D3N": "2001"}
-anos em 6579 (Brasil): ['2001', '2002', '2003', '2004', '2005', '2006', '2008', '2009', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2024', '2025', '2026']
-GET https://apisidra.ibge.gov.br/values/t/6579/n3/all/v/9324/p/last%203 -> 22483 B em 0.2s
-ibge_sidra_6579_estados_ultimos3.json: 82 linhas | cabeçalho: {"NC": "Nível Territorial (Código)", "NN": "Nível Territorial", "MC": "Unidade de Medida (Código)", "MN": "Unidade de Medida", "V": "Valor", "D1C": "Unidade da Federação (Código)", "D1N": "Unidade da Federação", "D2C": "Variável (Código)", "D2N": "Variável", "D3C": "Ano (Código)", "D3N": "Ano"}
-   exemplo: {"NC": "3", "NN": "Unidade da Federação", "MC": "45", "MN": "Pessoas", "V": "1746227", "D1C": "11", "D1N": "Rondônia", "D2C": "9324", "D2N": "População residente estimada", "D3C": "2024", "D3N": "2024"}
-ultimo ano: 2026
-GET https://apisidra.ibge.gov.br/values/t/6579/n6/all/v/9324/p/2026 -> 1508656 B em 0.8s
-municipios no ultimo ano: 5571
-Joaçaba (4209102): [{"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "673980", "D1C": "4209102", "D1N": "Joinville - SC", "D2C": "9324", "D2N": "População residente estimada", "D3C": "2026", "D3N": "2026"}]
-valores nao numericos: []
-GET https://apisidra.ibge.gov.br/values/t/6579/n6/in%20n3%2042/v/9324/p/last%203 -> 239162 B em 0.8s
-SC municipios 3 anos: 885 linhas em 0.8s
-GET https://apisidra.ibge.gov.br/values/t/6579/n3/all/v/9324/p/2026 -> 7745 B em 0.2s
-estados: 27 | exemplo: [{"NC": "3", "NN": "Unidade da Federação", "MC": "45", "MN": "Pessoas", "V": "1757338", "D1C": "11", "D1N": "Rondônia", "D2C": "9324", "D2N": "População residente estimada", "D3C": "2026", "D3N": "2026"}, {"NC": "3", "NN": "Unidade da Federação", "MC": "45", "MN": "Pessoas", "V": "887794", "D1C": "1
+=== SIDRA: variáveis de cada tabela
+  [4714] n1/all: 3 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2022']
+      v93 População residente (Pessoas) ex: 203080756
+      v6318 Área da unidade territorial (Quilômetros quadrados) ex: 8510417.771
+      v614 Densidade demográfica (Habitante por quilômetro quadrado) ex: 23.86
+  [4714] n3/all: 81 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2022']
+      v93 População residente (Pessoas) ex: 1581196
+      v6318 Área da unidade territorial (Quilômetros quadrados) ex: 237754.172
+      v614 Densidade demográfica (Habitante por quilômetro quadrado) ex: 6.65
+  [9514] n1/all: 2 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Forma de declaração da idade (Código)', 'Forma de declaração da idade', 'Idade (Código)', 'Idade'] | períodos: ['2022']
+      v93 População residente (Pessoas) ex: 203080756
+      v1000093 População residente - percentual do total geral (Percentual) ex: 100.00
+  [9514] n3/all: 54 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Forma de declaração da idade (Código)', 'Forma de declaração da idade', 'Idade (Código)', 'Idade'] | períodos: ['2022']
+      v93 População residente (Pessoas) ex: 1581196
+      v1000093 População residente - percentual do total geral (Percentual) ex: 100.00
+  [5938] n1/all: 46 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2023']
+      v37 Produto Interno Bruto a preços correntes (Mil Reais) ex: 10943345439
+      v553 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes da microrregião geográfica (%) ex: -
+      v552 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes da mesorregião geográfica (%) ex: -
+      v497 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes da unidade da federação (%) ex: -
+      v530 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes da grande região (%) ex: -
+      v496 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes do Brasil (%) ex: 100.00
+      v543 Impostos, líquidos de subsídios, sobre produtos a preços correntes () ex: ...
+      v571 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes da microrregião geográfica () ex: ...
+      v570 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes da mesorregião geográfica () ex: ...
+      v545 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes da unidade da federação () ex: ...
+      v551 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes da grande região () ex: ...
+      v544 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes do Brasil () ex: ...
+      v498 Valor adicionado bruto a preços correntes total () ex: ...
+      v555 Participação do valor adicionado bruto a preços correntes total no valor adicionado bruto a preços correntes total da microrregião geográfica () ex: ...
+  [5938] n3/all: 1242 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2023']
+      v37 Produto Interno Bruto a preços correntes (Mil Reais) ex: 76456179
+      v553 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes da microrregião geográfica (%) ex: -
+      v552 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes da mesorregião geográfica (%) ex: -
+      v497 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes da unidade da federação (%) ex: -
+      v530 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes da grande região (%) ex: 12.01
+      v496 Participação do produto interno bruto a preços correntes no produto interno bruto a preços correntes do Brasil (%) ex: 0.70
+      v543 Impostos, líquidos de subsídios, sobre produtos a preços correntes () ex: ...
+      v571 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes da microrregião geográfica () ex: ...
+      v570 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes da mesorregião geográfica () ex: ...
+      v545 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes da unidade da federação () ex: ...
+      v551 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes da grande região () ex: ...
+      v544 Participação dos impostos, líquidos de subsídios, sobre produtos a preços correntes nos impostos, líquidos de subsídios, sobre produtos a preços correntes do Brasil () ex: ...
+      v498 Valor adicionado bruto a preços correntes total () ex: ...
+      v555 Participação do valor adicionado bruto a preços correntes total no valor adicionado bruto a preços correntes total da microrregião geográfica () ex: ...
+  [2609] n1/all: 2 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Ano de nascimento (Código)', 'Ano de nascimento', 'Idade da mãe na ocasião do parto (Código)', 'Idade da mãe na ocasião do parto'] | períodos: ['2024']
+      v217 Nascidos vivos registrados no ano (Pessoas) ex: 2421079
+      v1000217 Nascidos vivos registrados no ano - percentual do total geral (Percentual) ex: 100.00
+  [2609] n3/all: 54 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Ano de nascimento (Código)', 'Ano de nascimento', 'Idade da mãe na ocasião do parto (Código)', 'Idade da mãe na ocasião do parto'] | períodos: ['2024']
+      v217 Nascidos vivos registrados no ano (Pessoas) ex: 21952
+      v1000217 Nascidos vivos registrados no ano - percentual do total geral (Percentual) ex: 100.00
+  [2612] n1/all: 2 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Mês do nascimento (Código)', 'Mês do nascimento', 'Local do nascimento (Código)', 'Local do nascimento', 'Número de nascidos por parto (Código)', 'Número de nascidos por parto', 'Idade da mãe na ocasião do parto (Código)', 'Idade da mãe na ocasião do parto'] | períodos: ['2024']
+      v218 Nascidos vivos ocorridos no ano (Pessoas) ex: 2370945
+      v1000218 Nascidos vivos ocorridos no ano - percentual do total geral (Percentual) ex: 100.00
+  [2612] n3/all: 54 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Mês do nascimento (Código)', 'Mês do nascimento', 'Local do nascimento (Código)', 'Local do nascimento', 'Número de nascidos por parto (Código)', 'Número de nascidos por parto', 'Idade da mãe na ocasião do parto (Código)', 'Idade da mãe na ocasião do parto'] | períodos: ['2024']
+      v218 Nascidos vivos ocorridos no ano (Pessoas) ex: 21783
+      v1000218 Nascidos vivos ocorridos no ano - percentual do total geral (Percentual) ex: 100.00
+  [1301] n1/all: 2 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2010']
+      v615 Área total das unidades territoriais (Quilômetros quadrados) ex: 8502728.3
+      v616 Densidade demográfica da unidade territorial (Habitante por quilômetro quadrado) ex: 22.43
+  [1301] n3/all: 54 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2010']
+      v615 Área total das unidades territoriais (Quilômetros quadrados) ex: 237590.9
+      v616 Densidade demográfica da unidade territorial (Habitante por quilômetro quadrado) ex: 6.58
+  [6784] n1/all: 8 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2024']
+      v9808 PIB - valores correntes (Milhões de Reais) ex: 11779251
+      v9809 PIB - preços do ano anterior (Milhões de Reais) ex: 11317532
+      v9810 PIB - variação em volume (%) ex: 3.4
+      v9811 PIB - deflator - variação anual (%) ex: 4.1
+      v93 População residente (Mil pessoas) ex: 212583
+      v9812 PIB per capita - valores correntes (Reais) ex: 55410.12
+      v9813 PIB per capita - preços do ano anterior (Reais) ex: 53238.18
+      v9814 PIB per capita - variação em volume (%) ex: 3.0
+  [6784] n3/all: ERRO HTTPError HTTP Error 400: Bad Request
+  [7358] n1/all: 1 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Idade (Código)', 'Idade', 'Ano (Código)', 'Ano'] | períodos: ['2018']
+      v606 População (Pessoas) ex: ..
+  [7358] n3/all: 27 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Idade (Código)', 'Idade', 'Ano (Código)', 'Ano'] | períodos: ['2018']
+      v606 População (Pessoas) ex: ..
+  [9606] n1/all: 2 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Cor ou raça (Código)', 'Cor ou raça', 'Idade (Código)', 'Idade'] | períodos: ['2022']
+      v93 População residente (Pessoas) ex: 203080756
+      v1000093 População residente - percentual do total geral (Percentual) ex: 100.00
+  [9606] n3/all: 54 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Cor ou raça (Código)', 'Cor ou raça', 'Idade (Código)', 'Idade'] | períodos: ['2022']
+      v93 População residente (Pessoas) ex: 1581196
+      v1000093 População residente - percentual do total geral (Percentual) ex: 100.00
+  [5434] n1/all: 4 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Trimestre (Código)', 'Trimestre', 'Grupamentos de atividades no trabalho principal - PNADC (Código)', 'Grupamentos de atividades no trabalho principal - PNADC'] | períodos: ['202602']
+      v4090 Pessoas de 14 anos ou mais de idade ocupadas na semana de referência (Mil pessoas) ex: 103057
+      v4091 Coeficiente de variação - Pessoas de 14 anos ou mais de idade ocupadas na semana de referência (%) ex: 0.2
+      v4108 Distribuição percentual das pessoas de 14 anos ou mais de idade ocupadas na semana de referência (%) ex: 100.0
+      v4109 Coeficiente de variação - Distribuição percentual das pessoas de 14 anos ou mais de idade ocupadas na semana de referência (%) ex: -
+  [5434] n3/all: 108 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Trimestre (Código)', 'Trimestre', 'Grupamentos de atividades no trabalho principal - PNADC (Código)', 'Grupamentos de atividades no trabalho principal - PNADC'] | períodos: ['202602']
+      v4090 Pessoas de 14 anos ou mais de idade ocupadas na semana de referência (Mil pessoas) ex: 823
+      v4091 Coeficiente de variação - Pessoas de 14 anos ou mais de idade ocupadas na semana de referência (%) ex: 1.9
+      v4108 Distribuição percentual das pessoas de 14 anos ou mais de idade ocupadas na semana de referência (%) ex: 100.0
+      v4109 Coeficiente de variação - Distribuição percentual das pessoas de 14 anos ou mais de idade ocupadas na semana de referência (%) ex: -
+  [6579] n1/all: 1 linhas | cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2026']
+      v9324 População residente estimada (Pessoas) ex: 214211951
+  [6579] n3/all: 27 linhas | cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano'] | períodos: ['2026']
+      v9324 População residente estimada (Pessoas) ex: 1757338
+
+=== GeoNames: tamanhos
+GET https://download.geonames.org/export/dump/cities15000.zip -> 3367526 B em 1.2s
+cities15000: zip 3367526 B | linhas 34215 | txt 7192681 B | pop mediana 34772 | países 244 | 1.4s
+GET https://download.geonames.org/export/dump/cities5000.zip -> 5727005 B em 1.1s
+cities5000: zip 5727005 B | linhas 70030 | txt 13211113 B | pop mediana 14521 | países 245 | 1.4s
+cidades BR em cities5000: 4422
+sem admin1: 51
 
 === Banco Mundial
-GET https://api.worldbank.org/v2/country?format=json&per_page=400 -> 113954 B em 0.1s
-paises (WB): {'page': 1, 'pages': 1, 'per_page': '400', 'total': 296} | exemplo: {"id": "ABW", "iso2Code": "AW", "name": "Aruba", "region": {"id": "LCN", "iso2code": "ZJ", "value": "Latin America & Caribbean "}, "adminregion": {"id": "", "iso2code": "", "value": ""}, "incomeLevel": {"id": "HIC", "iso2code": "XD", "value": "High income"}, "lendingType": {"id": "LNX", "iso2code": "XX", "value": "Not classified"}, "capitalCity": "Oranjestad", "longitude": "-70.0167", "latitude": "12.5167"}
-reais: 217 | agregados: 79 | exemplos agregados: ['AFE', 'AFR', 'AFW', 'ARB', 'BEA', 'BEC', 'BHI', 'BLA', 'BMN', 'BSS', 'CAA', 'CEA']
-NE.EXP.GNFS.ZS         paises=194 mediana_ano=2025 0s | Exports of goods and services (% of GDP)
-SE.PRM.CMPT.ZS         paises=198 mediana_ano=2024 0s | Primary completion rate, total (% of relevant age group)
-AG.LND.TOTL.K2         paises=216 mediana_ano=2024 0s | Land area (sq. km)
-ER.PTD.TOTL.ZS         paises=213 mediana_ano=2025 0s | Terrestrial and marine protected areas (% of total territorial area)
-SL.TLF.CACT.FE.ZS      paises=187 mediana_ano=2025 0s | Labor force participation rate, female (% of female population ages 15
-SG.GEN.PARL.ZS         paises=193 mediana_ano=2025 0s | Proportion of seats held by women in national parliaments (%)
-SP.DYN.AMRT.FE         paises=217 mediana_ano=2024 0s | Mortality rate, adult, female (per 1,000 female adults)
-SL.TLF.TOTL.IN         paises=187 mediana_ano=2025 0s | Labor force, total
-IP.JRN.ARTC.SC         paises=197 mediana_ano=2023 0s | Scientific and technical journal articles
-SI.POV.NAHC            paises=161 mediana_ano=2021 0s | Poverty headcount ratio at national poverty lines (% of population)
-SP.DYN.LE00.FE.IN      ERRO TimeoutError: The read operation timed out
-SP.DYN.LE00.MA.IN      ERRO TimeoutError: The read operation timed out
-NY.GDP.MKTP.PP.CD      paises=203 mediana_ano=2025 0s | GDP, PPP (current international $)
-SP.RUR.TOTL.ZS         ERRO TimeoutError: The read operation timed out
-GET https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=500&page=1 -> 123140 B em 0.1s
-per_page=500: 0.1s | cabeçalho {'page': 1, 'pages': 36, 'per_page': 500, 'total': 17556, 'sourceid': '2', 'lastupdated': '2026-11-11'} | registros 500
-GET https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=1000&page=1 -> 250428 B em 0.1s
-per_page=1000: 0.1s | cabeçalho {'page': 1, 'pages': 18, 'per_page': 1000, 'total': 17556, 'sourceid': '2', 'lastupdated': '2026-11-11'} | registros 1000
-GET https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=5000&page=1 -> 1191980 B em 0.1s
-per_page=5000: 0.1s | cabeçalho {'page': 1, 'pages': 4, 'per_page': 5000, 'total': 17556, 'sourceid': '2', 'lastupdated': '2026-11-11'} | registros 5000
-FALHOU: TimeoutError: The read operation timed out
+SP.DYN.LE00.FE.IN: 265 registros | exemplo {"indicator": {"id": "SP.DYN.LE00.FE.IN", "value": "Life expectancy at birth, female (years)"}, "country": {"id": "ZH", "value": "Africa Eastern and Southern"}, "countryiso3code": "AFE", "date": "2024
+SP.DYN.LE00.MA.IN: 265 registros | exemplo {"indicator": {"id": "SP.DYN.LE00.MA.IN", "value": "Life expectancy at birth, male (years)"}, "country": {"id": "ZH", "value": "Africa Eastern and Southern"}, "countryiso3code": "AFE", "date": "2024",
+SP.RUR.TOTL.ZS: 265 registros | exemplo {"indicator": {"id": "SP.RUR.TOTL.ZS", "value": "Rural population (% of total population)"}, "country": {"id": "ZH", "value": "Africa Eastern and Southern"}, "countryiso3code": "AFE", "date": "2025", 
+GET https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD?format=json&per_page=5000&page=1 -> 1090280 B em 0.1s
+cabeçalho: {'page': 1, 'pages': 4, 'per_page': 5000, 'total': 17556, 'sourceid': '2', 'lastupdated': '2026-11-11'}
+amostra: {"indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"}, "country": {"id": "ZH", "value": "Africa Eastern and Southern"}, "countryiso3code": "AFE", "date": "2025", "value": 1358694050872.54, "unit": "", "obs_status": "", "decimal": 0}
+com valor nulo: 509 de 5000
+iso3 vazio: ['High income', 'Low income', 'Lower middle income', 'Not classified', 'Upper middle income']
+date=2020:2023: ok em 0.1s, 1000 registros, páginas 2
+SP.POP.TOTL todas as páginas: 17556 registros em 0.6s
