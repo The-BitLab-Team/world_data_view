@@ -123,6 +123,20 @@ def test_worldbank_countries_exclude_aggregates():
     assert aruba.info == {"capital": "Oranjestad", "income_level": "HIC", "wb_region": "LCN"}
 
 
+def test_worldbank_countries_without_iso_code_get_a_continent():
+    # Ilhas do Canal (CHI) existem no Banco Mundial, mas não no GeoNames: sem pai ficariam soltas.
+    payload = [
+        {"page": 1, "pages": 1, "per_page": 400, "total": 2},
+        [
+            {"id": "CHI", "iso2Code": "JG", "name": "Channel Islands", "region": {"id": "ECS"}, "incomeLevel": {"id": "HIC"}, "capitalCity": ""},
+            {"id": "BRA", "iso2Code": "BR", "name": "Brazil", "region": {"id": "LCN"}, "incomeLevel": {"id": "UMC"}, "capitalCity": "Brasilia"},
+        ],
+    ]
+    by_id = {p.id: p for p in parse_countries(payload)}
+    assert by_id["CHI"].parent_id == "CON-EU"
+    assert by_id["BRA"].parent_id is None  # o continente do Brasil vem do GeoNames
+
+
 def test_worldbank_page_keeps_only_known_places_and_skips_nulls():
     payload = fixture_json("worldbank_all_countries_sample.json")
     rows, pages = parse_indicator_page(payload, "gdp", {"WLD"})

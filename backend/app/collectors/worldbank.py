@@ -28,7 +28,7 @@ from app.collectors.base import (
     map_ordered,
 )
 from app.indicators import WB_INDICATORS
-from app.places import KIND_COUNTRY, WORLD
+from app.places import KIND_COUNTRY, WORLD, continent_id
 
 COUNTRIES_URL = "https://api.worldbank.org/v2/country"
 INDICATOR_URL = "https://api.worldbank.org/v2/country/all/indicator/{code}"
@@ -37,6 +37,11 @@ SOURCE = "WorldBank"
 PAGE_SIZE = 5000
 
 log = logging.getLogger(__name__)
+
+
+# Entidades que o Banco Mundial trata como "país" e o GeoNames não tem (não são códigos ISO 3166).
+# Sem continente, ficariam fora da árvore de navegação e dos agregados. Ilhas do Canal = Jersey + Guernsey.
+WB_ONLY_COUNTRIES: dict[str, str] = {"CHI": continent_id("EU")}
 
 
 def _check_payload(payload: Any, what: str) -> list:
@@ -71,6 +76,7 @@ def parse_countries(payload: Any) -> list[PlaceRow]:
                 id=iso3,
                 kind=KIND_COUNTRY,
                 name=item.get("name") or iso3,
+                parent_id=WB_ONLY_COUNTRIES.get(iso3),
                 country_id=iso3,
                 iso2=(item.get("iso2Code") or None),
                 info={k: v for k, v in info.items() if v},
