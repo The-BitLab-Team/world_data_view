@@ -80,3 +80,17 @@ try:
     print("amostra WB países:", json.dumps(data[1][0], ensure_ascii=False))
 except Exception as exc:  # noqa: BLE001
     print("amostra WB falhou:", type(exc).__name__, exc)
+
+print("\n== agregação dos indicadores novos (linhas WLD da fonte x derivadas; continentes com dado)")
+try:
+    from app.indicators import _INDICATORS
+    for it in _INDICATORS:
+        if not it.wb_code:
+            continue
+        wld = q("SELECT source, year FROM observations WHERE indicator=? AND place='WLD' ORDER BY year DESC LIMIT 1", it.slug)
+        cont = q("SELECT count(DISTINCT place) FROM observations WHERE indicator=? AND place LIKE 'CON-%'", it.slug)[0][0]
+        paises = q("SELECT count(DISTINCT place) FROM observations WHERE indicator=? AND length(place)=3", it.slug)[0][0]
+        w = f"{wld[0][1]} {'derivado' if str(wld[0][0]).startswith('Derivado') else 'fonte'}" if wld else "sem mundo"
+        print(f"{it.slug:<32} agg={str(it.agg):<8} países={paises:>3} continentes={cont} mundo={w}")
+except Exception as exc:  # noqa: BLE001
+    print("falha no relatório de agregação:", type(exc).__name__, exc)

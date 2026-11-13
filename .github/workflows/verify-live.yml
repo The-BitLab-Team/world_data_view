@@ -9,23 +9,51 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
+  collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
+    env:
+      WDV_DATABASE_URL: sqlite:////tmp/live.db
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: results
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/mais-indicadores
+          path: code
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - name: Valida os códigos no arquivo em massa do Banco Mundial
+      - run: pip install -r code/backend/requirements.txt
+      - name: Fontes rápidas
+        working-directory: code/backend
         continue-on-error: true
+        run: ../../results/probe/step.sh geonames owid gistemp reference
+      - name: IBGE
+        working-directory: code/backend
+        continue-on-error: true
+        run: ../../results/probe/step.sh ibge
+      - name: Banco Mundial
+        working-directory: code/backend
+        continue-on-error: true
+        run: ../../results/probe/step.sh worldbank
+      - name: Agregados
+        working-directory: code/backend
+        continue-on-error: true
+        run: ../../results/probe/step.sh aggregates
+      - name: Relatório do banco coletado
+        if: always()
+        working-directory: code/backend
+        env:
+          PYTHONPATH: .
         run: |
-          mkdir -p out
-          python probe/wb_validate.py probe/candidates.json out/wb_candidates.json 2>&1 | tee out/wb_candidates.log
+          python ../../results/probe/report.py 2>&1 | tee ../../results/backend/tests/fixtures/live/REPORT.txt
       - name: Publica o resultado na própria branch
         if: always()
+        working-directory: results
         run: |
           git config user.name verify-bot && git config user.email verify-bot@users.noreply.github.com
-          git add -f out
-          git commit -m "Resultado da validação dos códigos" || echo "nada a commitar"
+          git add -f backend/tests/fixtures/live
+          git commit -m "Resultado da coleta real" || echo "nada a commitar"
           git push origin HEAD:tmp/verify-live-sources
