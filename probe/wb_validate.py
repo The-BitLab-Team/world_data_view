@@ -24,7 +24,11 @@ def analyse(item):
     try:
         data = fetch(code)
         zf = zipfile.ZipFile(io.BytesIO(data))
-        name = next(n for n in zf.namelist() if n.startswith(f"API_{code}_DS2") and n.endswith(".csv"))
+        names = zf.namelist()
+        cands = [n for n in names if n.startswith("API_") and n.endswith(".csv")]
+        if not cands:
+            raise RuntimeError(f"sem CSV de dados; arquivos={names} bytes={len(data)}")
+        name = cands[0]
         text = zf.read(name).decode("utf-8-sig").splitlines()
         rows = list(csv.reader(text[4:]))
         header = rows[0]
