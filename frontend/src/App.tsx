@@ -1,31 +1,38 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "./api/client";
 import { CategorySection } from "./components/CategorySection";
-import { FilterBar, MAX_ENTITIES } from "./components/FilterBar";
+import { FilterBar } from "./components/FilterBar";
 import { LiveSection } from "./components/LiveSection";
 import { Notices } from "./components/Notices";
-import { Footer, Header } from "./components/SiteChrome";
+import { PlacePage } from "./components/PlacePage";
+import { PlacesExplorer } from "./components/PlacesExplorer";
+import { Footer, Header, SectionNav } from "./components/SiteChrome";
 import { useAsync } from "./hooks/useAsync";
+import { useComparison } from "./hooks/useComparison";
+import { useHashRoute } from "./hooks/useHashRoute";
 import { useTheme } from "./hooks/useTheme";
-import { assignSlots } from "./lib/chartMath";
 import { WORLD } from "./lib/countries";
+import { HOME_HREF } from "./lib/places";
 
 const BLURBS: Record<string, string> = {
-  populacao: "Quantas pessoas somos e quão rápido esse número muda.",
+  populacao: "Quantas pessoas somos, quantas nascem e morrem e como a população se distribui.",
+  economia: "Produção, renda, preços, comércio e trabalho.",
+  saude: "Expectativa de vida, mortalidade, vacinação e acesso a saneamento.",
+  educacao: "Escolaridade, alfabetização e pesquisa científica.",
+  energia: "Eletricidade, fontes de energia e infraestrutura.",
   planeta: "Clima, emissões de carbono e cobertura florestal.",
   tecnologia: "Aparelhos e dados. Aqui os números são estimativas, não medições.",
   cultura: "Livros, filmes e línguas.",
-  social: "Pobreza extrema e educação.",
+  social: "Pobreza, desigualdade e acesso a serviços básicos.",
 };
 
-const SLOT_COLORS = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)"];
 const REFRESH_LIVE_MS = 10 * 60 * 1000;
 
 export default function App() {
   const { theme, toggle } = useTheme();
+  const route = useHashRoute();
   const [startYear, setStartYear] = useState<number | null>(null);
-  const [entities, setEntities] = useState<string[]>([WORLD]);
-  const [slots, setSlots] = useState<Record<string, number>>({ [WORLD]: 0 });
+  const comparison = useComparison([WORLD]);
 
   // Recarrega os contadores de tempos em tempos: pega dados novos sem o usuário recarregar a página.
   const [liveTick, setLiveTick] = useState(0);
@@ -43,29 +50,6 @@ export default function App() {
 
   const apiDown = Boolean(indicators.error && !indicators.data);
 
-  const updateEntities = useCallback((next: string[]) => {
-    setEntities(next);
-    setSlots((current) => assignSlots(current, next, MAX_ENTITIES));
-  }, []);
-
-  const addEntity = useCallback(
-    (code: string) => {
-      if (entities.includes(code) || entities.length >= MAX_ENTITIES) return;
-      updateEntities([...entities, code]);
-    },
-    [entities, updateEntities],
-  );
-
-  const removeEntity = useCallback(
-    (code: string) => {
-      if (entities.length > 1) updateEntities(entities.filter((c) => c !== code));
-    },
-    [entities, updateEntities],
-  );
-
-  // A cor segue a entidade: quem sai não repinta quem fica.
-  const colorOf = useCallback((code: string) => SLOT_COLORS[slots[code] ?? 0], [slots]);
-
   const visible = useMemo(() => {
     const all = indicators.data ?? [];
     return (categories.data ?? [])
@@ -73,37 +57,56 @@ export default function App() {
       .filter((group) => group.items.length > 0);
   }, [categories.data, indicators.data]);
 
+  // Trocar de página leva ao topo, como numa navegação comum (links de âncora da página inicial não passam por aqui).
+  const routeKey = route.page === "place" ? route.id : "home";
+  useEffect(() => {
+    if (routeKey !== "home") window.scrollTo(0, 0);
+  }, [routeKey]);
+
+  const addToDashboard = useCallback(
+    (id: string, name: string) => {
+      comparison.add(id, name);
+      window.location.hash = HOME_HREF;
+    },
+    [comparison],
+  );
+
   return (
     <div id="top">
-      <Header categories={visible.map((v) => v.category)} theme={theme} onToggleTheme={toggle}>
-        <FilterBar
-          startYear={startYear}
-          onStartYear={setStartYear}
-          entities={entities}
-          colorOf={colorOf}
-          countries={countries.data ?? []}
-          onAdd={addEntity}
-          onRemove={removeEntity}
-        />
+      <Header countries={countries.data ?? []} theme={theme} onToggleTheme={toggle}>
+        {route.page === "home" && (
+          <FilterBar startYear={startYear} onStartYear={setStartYear} comparison={comparison} countries={countries.data ?? []} />
+        )}
       </Header>
 
       <main className="mx-auto max-w-6xl px-4 sm:px-6">
         <Notices apiDown={apiDown} status={status.data} indicators={indicators.data ?? []} />
 
-        <LiveSection live={live.data} fact={fact.data} loading={live.loading && !live.data} />
-
-        {visible.map(({ category, items }) => (
-          <CategorySection
-            key={category.id}
-            category={category}
-            blurb={BLURBS[category.id] ?? ""}
-            indicators={items}
-            startYear={startYear}
-            entities={entities}
-            colorOf={colorOf}
-            onPickCountry={addEntity}
+        {route.page === "place" ? (
+          <PlacePage
+            id={route.id}
+            indicators={indicators.data ?? []}
+            categories={categories.data ?? []}
+            countries={countries.data ?? []}
+            onAddToDashboard={addToDashboard}
           />
-        ))}
+        ) : (
+          <>
+            <LiveSection live={live.data} fact={fact.data} loading={live.loading && !live.data} />
+            <SectionNav categories={visible.map((v) => v.category)} />
+            <PlacesExplorer />
+            {visible.map(({ category, items }) => (
+              <CategorySection
+                key={category.id}
+                category={category}
+                blurb={BLURBS[category.id] ?? ""}
+                indicators={items}
+                startYear={startYear}
+                comparison={comparison}
+              />
+            ))}
+          </>
+        )}
       </main>
 
       <Footer indicators={indicators.data ?? []} />
