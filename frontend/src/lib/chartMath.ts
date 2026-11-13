@@ -94,3 +94,20 @@ export function tableRows(series: { points: Point[] }[]): TableRow[] {
     .reverse()
     .map((year) => ({ year, cells: lookup.map((m) => m.get(year) ?? null) }));
 }
+
+/**
+ * Marcas do eixo Y sem rótulos repetidos. Em séries de variação pequena (8,31 mi a 8,35 mi) os rótulos
+ * compactos de marcas vizinhas coincidem ("8,3 mi", "8,3 mi"); então pedimos menos marcas até ficarem distintas.
+ */
+export function distinctTicks(
+  ticksFor: (count: number) => number[],
+  format: (value: number) => string,
+  preferred = 5,
+): number[] {
+  let ticks = ticksFor(preferred);
+  for (let count = preferred; count >= 2; count--) {
+    ticks = ticksFor(count);
+    if (new Set(ticks.map(format)).size === ticks.length) return ticks;
+  }
+  return ticks;
+}
