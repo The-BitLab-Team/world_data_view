@@ -155,3 +155,14 @@ INFO Agregados: ok (10120 linhas)
 aggregates  ok          10120 linhas  
 pico de memória: 93252 KB
 ### aggregates duração: 3s (saída 0)
+### geonames owid gistemp reference (início 17:46:21Z)
+INFO Coletor geonames: ok (0 linhas, 16 s)
+INFO Coletor owid: ok (89722 linhas, 8 s)
+INFO Coletor gistemp: ok (146 linhas, 0 s)
+INFO Coletor reference: ok (3 linhas, 0 s)
+geonames    ok              0 linhas  
+owid        ok          89722 linhas  
+gistemp     ok            146 linhas  
+reference   ok              3 linhas  
+pico de memória: 208856 KB
+### geonames owid gistemp reference duração: 27s (saída 0)
