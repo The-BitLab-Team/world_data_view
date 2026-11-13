@@ -9,52 +9,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  collect:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
-    env:
-      WDV_DATABASE_URL: sqlite:////tmp/live.db
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: results
-      - uses: actions/checkout@v4
-        with:
-          ref: feat/lugares-e-metricas
-          path: code
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - name: Dependências
-        run: pip install -r code/backend/requirements.txt
-      - name: Fontes rápidas (GeoNames, OWID, NASA, referência)
-        working-directory: code/backend
+      - name: Valida os códigos no arquivo em massa do Banco Mundial
         continue-on-error: true
-        run: ../../results/probe/step.sh geonames owid gistemp reference
-      - name: IBGE
-        working-directory: code/backend
-        continue-on-error: true
-        run: ../../results/probe/step.sh ibge
-      - name: Banco Mundial
-        working-directory: code/backend
-        continue-on-error: true
-        run: ../../results/probe/step.sh worldbank
-      - name: Agregados
-        working-directory: code/backend
-        continue-on-error: true
-        run: ../../results/probe/step.sh aggregates
-      - name: Relatório do banco coletado
-        if: always()
-        working-directory: code/backend
-        env:
-          PYTHONPATH: .
-        run: python ../../results/probe/report.py | tee ../../results/backend/tests/fixtures/live/REPORT.txt
-      - name: Publica os resultados na própria branch
-        if: always()
-        working-directory: results
         run: |
-          git config user.name "probe-bot"
-          git config user.email "probe-bot@users.noreply.github.com"
-          git add -f backend/tests/fixtures/live
-          git commit -m "Resultados da coleta real" || echo "nada a commitar"
+          mkdir -p out
+          python probe/wb_validate.py probe/candidates.json out/wb_candidates.json 2>&1 | tee out/wb_candidates.log
+      - name: Publica o resultado na própria branch
+        if: always()
+        run: |
+          git config user.name verify-bot && git config user.email verify-bot@users.noreply.github.com
+          git add -f out
+          git commit -m "Resultado da validação dos códigos" || echo "nada a commitar"
           git push origin HEAD:tmp/verify-live-sources
