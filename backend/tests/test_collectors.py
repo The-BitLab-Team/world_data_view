@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import io
 import json
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -20,6 +22,7 @@ from app.collectors.runner import collect_all, persist_batch, run_collector, ups
 from app.collectors.worldbank import (
     WorldBankCollector,
     derive_net_change,
+    parse_bulk_zip,
     parse_countries,
     parse_indicator_page,
 )
@@ -348,3 +351,72 @@ def test_demo_rows_never_replace_other_demo_or_real_rows(session_factory):
         session.commit()
         sources = set(session.scalars(select(Observation.source)).all())
     assert sources == {"World Bank", "DEMO"}  # persistir demo não apaga dado real
+
+
+# ----------------------------------------------------------- Banco Mundial: download em massa
+def bulk_zip(csv_name: str = "worldbank_bulk_birth_rate_sample.csv", member: str = "API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv") -> bytes:
+    """Zip no formato do download em massa (amostra real, reduzida a poucas linhas)."""
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr("Metadata_Indicator_API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv", "\"INDICATOR_CODE\",\"INDICATOR_NAME\",\n")
+        archive.writestr(member, fixture_text(csv_name))
+        archive.writestr("Metadata_Country_API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv", "\"Country Code\",\"Region\",\n")
+    return buffer.getvalue()
+
+
+def test_worldbank_bulk_keeps_countries_and_world_and_drops_aggregates_and_empty_cells():
+    rows = parse_bulk_zip(bulk_zip(), "birth_rate", "SP.DYN.CBRT.IN", {"ABW", "AFG", "BRA", "WLD"})
+    by_key = {(r.place, r.year): r.value for r in rows}
+
+    assert by_key[("BRA", 1960)] == 43.85 and by_key[("BRA", 2024)] == 12.133
+    assert by_key[("WLD", 1961)] == 31.2341888501891
+    assert {r.place for r in rows} == {"ABW", "AFG", "BRA", "WLD"}  # EMU (agregado) e INX (sem dados) ficam de fora
+    assert all(r.indicator == "birth_rate" and r.source == "WorldBank" for r in rows)
+    # a coluna de 2025 existe no arquivo, mas vem vazia: não vira zero nem ponto
+    assert not [r for r in rows if r.year == 2025]
+    assert len([r for r in rows if r.place == "BRA"]) == 65
+
+
+def test_worldbank_bulk_rejects_files_that_are_not_what_it_expects():
+    with pytest.raises(CollectorError, match="zip válido"):
+        parse_bulk_zip("<html>manutenção</html>".encode(), "birth_rate", "SP.DYN.CBRT.IN", {"BRA"})
+
+    only_metadata = io.BytesIO()
+    with zipfile.ZipFile(only_metadata, "w") as archive:
+        archive.writestr("Metadata_Country_API_X.csv", "x")
+    with pytest.raises(CollectorError, match="CSV de dados"):
+        parse_bulk_zip(only_metadata.getvalue(), "birth_rate", "SP.DYN.CBRT.IN", {"BRA"})
+
+    no_header = io.BytesIO()
+    with zipfile.ZipFile(no_header, "w") as archive:
+        archive.writestr("API_SP.DYN.CBRT.IN_DS2.csv", '"Data Source","World Development Indicators",\n')
+    with pytest.raises(CollectorError, match="cabeçalho"):
+        parse_bulk_zip(no_header.getvalue(), "birth_rate", "SP.DYN.CBRT.IN", {"BRA"})
+
+
+def test_worldbank_bulk_ignores_rows_of_another_indicator():
+    rows = parse_bulk_zip(bulk_zip(), "death_rate", "SP.DYN.CDRT.IN", {"BRA", "WLD"})
+    assert rows == []
+
+
+def test_worldbank_collector_prefers_the_bulk_download_over_the_paged_api():
+    http = _wb_http(bytes_by_code={"SP.DYN.CBRT.IN": bulk_zip()})
+    batch = WorldBankCollector().collect(http)
+
+    birth = {(o.place, o.year): o.value for o in batch.observations if o.indicator == "birth_rate"}
+    assert birth[("WLD", 1960)] == 31.9992347613352 and ("AFG", 2024) in birth
+    # o indicador veio do zip: a API paginada nem foi consultada para ele
+    assert not [u for u in http.calls if "country/all/indicator/SP.DYN.CBRT.IN" in u]
+    assert any("downloadformat=csv" in u and "SP.DYN.CBRT.IN" in u for u in http.calls)
+
+
+def test_worldbank_collector_falls_back_to_the_paged_api_when_the_bulk_download_fails(caplog):
+    http = _wb_http()  # sem zip simulado: o download em massa de todos os indicadores falha
+    with caplog.at_level("WARNING"):
+        batch = WorldBankCollector().collect(http)
+
+    forest = {(o.place, o.year) for o in batch.observations if o.indicator == "forest_area"}
+    assert ("WLD", 2021) in forest  # veio pela API paginada
+    assert "usando a API paginada" in caplog.text
+    forest_calls = [u for u in http.calls if "AG.LND.FRST.K2" in u]
+    assert "downloadformat=csv" in forest_calls[0]  # o download em massa vem primeiro

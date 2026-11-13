@@ -10,9 +10,12 @@ Docs: https://datahelpdesk.worldbank.org/knowledgebase/articles/889392
 
 from __future__ import annotations
 
+import csv
+import io
 import logging
 import math
 import time
+import zipfile
 from typing import Any, ClassVar
 
 from app.collectors.base import (
@@ -29,6 +32,7 @@ from app.places import KIND_COUNTRY, WORLD
 
 COUNTRIES_URL = "https://api.worldbank.org/v2/country"
 INDICATOR_URL = "https://api.worldbank.org/v2/country/all/indicator/{code}"
+BULK_URL = "https://api.worldbank.org/v2/en/indicator/{code}?downloadformat=csv"
 SOURCE = "WorldBank"
 PAGE_SIZE = 5000
 
@@ -116,6 +120,48 @@ def derive_net_change(forest_rows: list[ObservationRow]) -> list[ObservationRow]
     return derived
 
 
+def parse_bulk_zip(data: bytes, slug: str, code: str, allowed: set[str]) -> list[ObservationRow]:
+    """Interpreta o zip do download em massa: ``API_{código}_DS2_en_csv_v2_*.csv`` dentro dele.
+
+    O CSV começa com um preâmbulo (fonte e data de atualização), seguido do cabeçalho
+    ``"Country Name","Country Code","Indicator Name","Indicator Code","1960",...`` e de uma linha
+    por país ou agregado, com células vazias onde não há dado.
+    """
+    try:
+        archive = zipfile.ZipFile(io.BytesIO(data))
+    except zipfile.BadZipFile as exc:
+        raise CollectorError(f"Banco Mundial: o download de {slug} não é um zip válido.") from exc
+    names = [n for n in archive.namelist() if n.startswith("API_") and n.endswith(".csv")]
+    if len(names) != 1:
+        raise CollectorError(f"Banco Mundial: o zip de {slug} não tem o CSV de dados esperado ({archive.namelist()}).")
+    lines = archive.read(names[0]).decode("utf-8-sig").splitlines()
+    start = next((i for i, line in enumerate(lines) if line.startswith('"Country Name"')), None)
+    if start is None:
+        raise CollectorError(f"Banco Mundial: o CSV de {slug} não tem o cabeçalho de dados.")
+    reader = csv.reader(lines[start:])
+    header = next(reader)
+    year_columns = [(i, int(name)) for i, name in enumerate(header) if name.strip().isdigit()]
+    if len(header) < 5 or header[1] != "Country Code" or not year_columns:
+        raise CollectorError(f"Banco Mundial: cabeçalho inesperado no CSV de {slug}.")
+
+    rows: list[ObservationRow] = []
+    for record in reader:
+        if len(record) < 5 or record[1].strip().upper() not in allowed or record[3].strip() != code:
+            continue
+        place = record[1].strip().upper()
+        for index, year in year_columns:
+            cell = record[index].strip() if index < len(record) else ""
+            if not cell:
+                continue
+            try:
+                number = float(cell)
+            except ValueError:
+                continue
+            if math.isfinite(number):
+                rows.append(ObservationRow(slug, place, year, number, SOURCE))
+    return rows
+
+
 class WorldBankCollector(Collector):
     name: ClassVar[str] = "worldbank"
     indicators: ClassVar[tuple[str, ...]] = (*WB_INDICATORS, "forest_net_change")
@@ -148,10 +194,23 @@ class WorldBankCollector(Collector):
             raise CollectorError("Banco Mundial: nenhum indicador pôde ser coletado. " + " | ".join(batch.warnings))
         return batch
 
-    @staticmethod
-    def _fetch_indicator(http: HttpClientLike, slug: str, code: str, allowed: set[str]) -> list[ObservationRow]:
-        url = INDICATOR_URL.format(code=code)
+    @classmethod
+    def _fetch_indicator(cls, http: HttpClientLike, slug: str, code: str, allowed: set[str]) -> list[ObservationRow]:
         started = time.monotonic()
+        try:
+            rows = parse_bulk_zip(http.get_bytes(BULK_URL.format(code=code)), slug, code, allowed)
+            how = "download em massa"
+        except CollectorError as exc:
+            log.warning("Banco Mundial %s: download em massa falhou (%s); usando a API paginada", slug, exc)
+            rows = cls._fetch_paged(http, slug, code, allowed)
+            how = "API paginada"
+        # Visível no log de uma coleta longa: mostra até onde ela chegou e quais indicadores são lentos.
+        log.info("Banco Mundial %s: %d linhas por %s (%.0f s)", slug, len(rows), how, time.monotonic() - started)
+        return rows
+
+    @staticmethod
+    def _fetch_paged(http: HttpClientLike, slug: str, code: str, allowed: set[str]) -> list[ObservationRow]:
+        url = INDICATOR_URL.format(code=code)
         rows: list[ObservationRow] = []
         page, pages = 1, 1
         while page <= pages:
@@ -159,6 +218,4 @@ class WorldBankCollector(Collector):
             page_rows, pages = parse_indicator_page(payload, slug, allowed)
             rows.extend(page_rows)
             page += 1
-        # Visível no log de uma coleta longa: mostra até onde ela chegou e quais fontes são lentas.
-        log.info("Banco Mundial %s: %d linhas em %d páginas (%.0f s)", slug, len(rows), pages, time.monotonic() - started)
         return rows
