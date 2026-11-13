@@ -9,6 +9,7 @@ import zipfile
 
 OUT = "backend/tests/fixtures/live"
 os.makedirs(OUT, exist_ok=True)
+open(os.path.join(OUT, "REPORT.txt"), "w").close()
 UA = {"User-Agent": "WorldDataView-probe/0.2 (+https://github.com/The-BitLab-Team/world_data_view)"}
 rep = []
 
@@ -76,52 +77,33 @@ def geonames():
     note("exemplo linha:", lines[0][:400])
 
 
-# ---------------------------------------------------------------- IBGE
-def ibge_reach():
-    for url in (
-        "https://servicodados.ibge.gov.br/api/v1/localidades/estados",
-        "https://apisidra.ibge.gov.br/values/t/6579/n1/all/v/9324/p/last",
-        "https://ftp.ibge.gov.br/Estimativas_de_Populacao/",
-        "https://www.ibge.gov.br/",
-    ):
-        t = time.time()
-        try:
-            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=25) as r:
-                body = r.read(300)
-                note(f"IBGE ok {r.status} {time.time() - t:.1f}s {url} :: {body[:80]!r}")
-        except Exception as exc:  # noqa: BLE001
-            note(f"IBGE FALHOU {time.time() - t:.1f}s {url} :: {type(exc).__name__}: {exc}")
-
-
-def ibge():
-    est = get("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
-    save("ibge_estados.json", est)
-    ej = json.loads(est)
-    note("estados:", len(ej), "| exemplo:", json.dumps(ej[0], ensure_ascii=False)[:400])
-
-    mun = json.loads(get("https://servicodados.ibge.gov.br/api/v1/localidades/municipios"))
-    note("municipios:", len(mun))
-    jo = [m for m in mun if m["nome"] == "Joaçaba"]
-    note("Joaçaba:", json.dumps(jo, ensure_ascii=False)[:600])
-    save("ibge_municipios_sample.json", json.dumps(mun[:10] + jo, ensure_ascii=False))
-
+# ---------------------------------------------------------------- IBGE (só SIDRA)
+def sidra_probe():
     def sidra(path, name, cut=None):
-        data = json.loads(get("https://apisidra.ibge.gov.br/values/" + path))
-        note(f"{name}: {len(data)} linhas | cabeçalho:", json.dumps(data[0], ensure_ascii=False)[:420])
-        note("   exemplo:", json.dumps(data[1], ensure_ascii=False)[:300])
+        data = json.loads(get("https://apisidra.ibge.gov.br/values/" + path, timeout=90))
+        note(f"{name}: {len(data)} linhas | cabeçalho:", json.dumps(data[0], ensure_ascii=False)[:520])
+        note("   exemplo:", json.dumps(data[1], ensure_ascii=False)[:320])
         save(name, json.dumps(data if cut is None else data[:cut], ensure_ascii=False))
         return data
 
     nat = sidra("t/6579/n1/all/v/9324/p/all", "ibge_sidra_6579_brasil_todos_anos.json")
-    note("anos em 6579 (Brasil):", [r["D3N"] for r in nat[1:]])
+    note("anos em 6579 (Brasil):", [r["D3C"] for r in nat[1:]])
     sidra("t/6579/n3/all/v/9324/p/last%203", "ibge_sidra_6579_estados_ultimos3.json")
     last = max(r["D3C"] for r in nat[1:])
     note("ultimo ano:", last)
-    sidra(f"t/6579/n6/all/v/9324/p/{last}", "ibge_sidra_6579_municipios_ultimo_ano.json", cut=40)
-    full = json.loads(get(f"https://apisidra.ibge.gov.br/values/t/6579/n6/all/v/9324/p/{last}"))
+    full = json.loads(get(f"https://apisidra.ibge.gov.br/values/t/6579/n6/all/v/9324/p/{last}", timeout=120))
     note("municipios no ultimo ano:", len(full) - 1)
-    jo2 = [r for r in full if r.get("D1C") == "4209102"]
-    note("Joaçaba (4209102) no SIDRA:", json.dumps(jo2, ensure_ascii=False)[:300])
+    jo = [r for r in full if r.get("D1C") == "4209102"]
+    note("Joaçaba (4209102):", json.dumps(jo, ensure_ascii=False)[:300])
+    note("valores nao numericos:", sorted({r["V"] for r in full[1:] if not r["V"].replace(".", "").isdigit()})[:10])
+    save("ibge_sidra_6579_municipios_ultimo_ano.json", json.dumps(full[:30] + jo, ensure_ascii=False))
+    # varios anos de uma vez para municipios de SC (n6 in n3 42)?
+    t = time.time()
+    two = json.loads(get("https://apisidra.ibge.gov.br/values/t/6579/n6/in%20n3%2042/v/9324/p/last%203", timeout=90))
+    note("SC municipios 3 anos:", len(two) - 1, "linhas em", f"{time.time() - t:.1f}s")
+    # nomes oficiais por n3 (estados)
+    st = json.loads(get("https://apisidra.ibge.gov.br/values/t/6579/n3/all/v/9324/p/" + last, timeout=60))
+    note("estados:", len(st) - 1, "| exemplo:", json.dumps(st[1:3], ensure_ascii=False)[:300])
 
 
 # ---------------------------------------------------------------- Banco Mundial
@@ -146,9 +128,9 @@ def worldbank():
     note("reais:", len(countries), "| agregados:", len(aggs), "| exemplos agregados:", sorted(aggs)[:12])
     save("worldbank_country_meta_sample.json", json.dumps([head, rows[:30]], ensure_ascii=False))
 
-    from concurrent.futures import ThreadPoolExecutor
-
-    def probe_code(code):
+    pending = "NE.EXP.GNFS.ZS SE.PRM.CMPT.ZS AG.LND.TOTL.K2 ER.PTD.TOTL.ZS SL.TLF.CACT.FE.ZS SG.GEN.PARL.ZS SP.DYN.AMRT.FE SL.TLF.TOTL.IN IP.JRN.ARTC.SC SI.POV.NAHC SP.DYN.LE00.FE.IN SP.DYN.LE00.MA.IN NY.GDP.MKTP.PP.CD SP.RUR.TOTL.ZS".split()
+    table = []
+    for code in pending:
         try:
             url = f"https://api.worldbank.org/v2/country/all/indicator/{code}?format=json&per_page=1000&mrnev=1"
             t = time.time()
@@ -156,25 +138,28 @@ def worldbank():
                 data = json.loads(r.read())
             dt = time.time() - t
             if not isinstance(data, list) or len(data) < 2 or not data[1]:
-                return f"{code:<22} SEM DADOS ({str(data)[:120]})"
+                table.append(f"{code:<22} SEM DADOS ({str(data)[:100]})")
+                continue
             recs = [r for r in data[1] if r["countryiso3code"] in countries and r["value"] is not None]
             years = [int(r["date"]) for r in recs]
-            name = data[1][0]["indicator"]["value"]
-            med = int(statistics.median(years)) if years else "-"
-            return f"{code:<22} paises={len(recs):>3} mediana_ano={med} {dt:.0f}s | {name[:80]}"
+            table.append(f"{code:<22} paises={len(recs):>3} mediana_ano={int(statistics.median(years)) if years else '-'} {dt:.0f}s | {data[1][0]['indicator']['value'][:70]}")
         except Exception as exc:  # noqa: BLE001
-            return f"{code:<22} ERRO {type(exc).__name__}: {str(exc)[:100]}"
-
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        table = list(pool.map(probe_code, CANDIDATES))
+            table.append(f"{code:<22} ERRO {type(exc).__name__}: {str(exc)[:80]}")
     note("\n".join(table))
 
-    url = "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=20000&date=2020:2023"
-    full = json.loads(get(url))
+    for pp in (500, 1000, 5000):
+        t = time.time()
+        try:
+            u = f"https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page={pp}&page=1"
+            d = json.loads(get(u, timeout=120))
+            note(f"per_page={pp}: {time.time() - t:.1f}s | cabeçalho {d[0]} | registros {len(d[1])}")
+        except Exception as exc:  # noqa: BLE001
+            note(f"per_page={pp}: FALHOU {time.time() - t:.1f}s {type(exc).__name__}")
+    url = "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=1000&date=2020:2023"
+    full = json.loads(get(url, timeout=120))
     note("formato completo: cabeçalho", full[0], "| registros:", len(full[1]), "| exemplo:", json.dumps(full[1][0], ensure_ascii=False))
     save("worldbank_all_countries_sample.json", json.dumps([full[0], full[1][:30]], ensure_ascii=False))
 
 
-step("IBGE alcance", ibge_reach)
-step("IBGE", ibge)
+step("IBGE SIDRA", sidra_probe)
 step("Banco Mundial", worldbank)
