@@ -1,0 +1,11 @@
+### geonames owid gistemp reference (início 15:41:04Z)
+INFO Coletor geonames: ok (0 linhas, 18 s)
+INFO Coletor owid: ok (89722 linhas, 10 s)
+INFO Coletor gistemp: ok (146 linhas, 1 s)
+INFO Coletor reference: ok (3 linhas, 0 s)
+geonames    ok              0 linhas  
+owid        ok          89722 linhas  
+gistemp     ok            146 linhas  
+reference   ok              3 linhas  
+pico de memória: 209124 KB
+### geonames owid gistemp reference duração: 30s (saída 0)
