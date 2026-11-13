@@ -1,0 +1,3754 @@
+[
+ {
+  "slug": "birth_rate",
+  "code": "SP.DYN.CBRT.IN",
+  "ok": true,
+  "name": "Birth rate, crude (per 1,000 people)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "16.2730070969907"
+  ],
+  "BRA": [
+   2024,
+   "12.133"
+  ],
+  "USA": [
+   2024,
+   "10.6"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "death_rate",
+  "code": "SP.DYN.CDRT.IN",
+  "ok": true,
+  "name": "Death rate, crude (per 1,000 people)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "7.55065418868631"
+  ],
+  "BRA": [
+   2024,
+   "7.068"
+  ],
+  "USA": [
+   2024,
+   "9"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "fertility_rate",
+  "code": "SP.DYN.TFRT.IN",
+  "ok": true,
+  "name": "Fertility rate, total (births per woman)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "2.18831256131236"
+  ],
+  "BRA": [
+   2024,
+   "1.614"
+  ],
+  "USA": [
+   2024,
+   "1.6265"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "life_expectancy",
+  "code": "SP.DYN.LE00.IN",
+  "ok": true,
+  "name": "Life expectancy at birth, total (years)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "73.4818184164654"
+  ],
+  "BRA": [
+   2024,
+   "76.023"
+  ],
+  "USA": [
+   2024,
+   "78.890243902439"
+  ],
+  "secs": 0.2
+ },
+ {
+  "slug": "life_expectancy_female",
+  "code": "SP.DYN.LE00.FE.IN",
+  "ok": true,
+  "name": "Life expectancy at birth, female (years)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "75.972582912013"
+  ],
+  "BRA": [
+   2024,
+   "79.145"
+  ],
+  "USA": [
+   2024,
+   "81.4"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "life_expectancy_male",
+  "code": "SP.DYN.LE00.MA.IN",
+  "ok": true,
+  "name": "Life expectancy at birth, male (years)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "71.1155013160915"
+  ],
+  "BRA": [
+   2024,
+   "72.95"
+  ],
+  "USA": [
+   2024,
+   "76.5"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "population_growth",
+  "code": "SP.POP.GROW",
+  "ok": true,
+  "name": "Population growth (annual %)",
+  "entities": 265,
+  "first_year": 1961,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "0.911303701154864"
+  ],
+  "BRA": [
+   2025,
+   "0.383150642409967"
+  ],
+  "USA": [
+   2025,
+   "0.522468081877868"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "population_0_14",
+  "code": "SP.POP.0014.TO.ZS",
+  "ok": true,
+  "name": "Population ages 0-14 (% of total population)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "24.4090574609901"
+  ],
+  "BRA": [
+   2025,
+   "19.3866212827208"
+  ],
+  "USA": [
+   2025,
+   "17.0990415161586"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "population_65_plus",
+  "code": "SP.POP.65UP.TO.ZS",
+  "ok": true,
+  "name": "Population ages 65 and above (% of total population)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "10.4024323858589"
+  ],
+  "BRA": [
+   2025,
+   "11.4803394567154"
+  ],
+  "USA": [
+   2025,
+   "18.387224828496"
+  ],
+  "secs": 0.6
+ },
+ {
+  "slug": "urban_population",
+  "code": "SP.URB.TOTL.IN.ZS",
+  "ok": true,
+  "name": "Urban population (% of total population)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "57.8251158115221"
+  ],
+  "BRA": [
+   2025,
+   "88.1772996487898"
+  ],
+  "USA": [
+   2025,
+   "80.1921733027869"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "rural_population",
+  "code": "SP.RUR.TOTL.ZS",
+  "ok": true,
+  "name": "Rural population (% of total population)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "42.1748841884779"
+  ],
+  "BRA": [
+   2025,
+   "11.8227003512102"
+  ],
+  "USA": [
+   2025,
+   "19.8078266972131"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "population_density",
+  "code": "EN.POP.DNST",
+  "ok": true,
+  "name": "Population density (people per sq. km of land area)",
+  "entities": 264,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "62.1354378370614"
+  ],
+  "BRA": [
+   2024,
+   "25.3643242396035"
+  ],
+  "USA": [
+   2024,
+   "37.1693654604249"
+  ],
+  "secs": 0.2
+ },
+ {
+  "slug": "net_migration",
+  "code": "SM.POP.NETM",
+  "ok": true,
+  "name": "Net migration",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "0"
+  ],
+  "BRA": [
+   2025,
+   "-217283"
+  ],
+  "USA": [
+   2025,
+   "1230663"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "migrant_stock",
+  "code": "SM.POP.TOTL",
+  "ok": true,
+  "name": "International migrant stock, total",
+  "entities": 263,
+  "first_year": 1990,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "303397238"
+  ],
+  "BRA": [
+   2024,
+   "1406299"
+  ],
+  "USA": [
+   2024,
+   "52375047"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "migrant_stock_pct",
+  "code": "SM.POP.TOTL.ZS",
+  "ok": true,
+  "name": "International migrant stock (% of population)",
+  "entities": 264,
+  "first_year": 1990,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "3.72971116199373"
+  ],
+  "BRA": [
+   2024,
+   "0.7"
+  ],
+  "USA": [
+   2024,
+   "15.2"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "population_15_64",
+  "code": "SP.POP.1564.TO.ZS",
+  "ok": true,
+  "name": "Population ages 15-64 (% of total population)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "65.1885102261843"
+  ],
+  "BRA": [
+   2025,
+   "69.1330392605638"
+  ],
+  "USA": [
+   2025,
+   "64.5137336553454"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "age_dependency",
+  "code": "SP.POP.DPND",
+  "ok": true,
+  "name": "Age dependency ratio (% of working-age population)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "54.4612615249733"
+  ],
+  "BRA": [
+   2025,
+   "44.6486379446561"
+  ],
+  "USA": [
+   2025,
+   "55.0057553311598"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "female_population_pct",
+  "code": "SP.POP.TOTL.FE.ZS",
+  "ok": true,
+  "name": "Population, female (% of total population)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "49.7326471139279"
+  ],
+  "BRA": [
+   2025,
+   "50.8217540232206"
+  ],
+  "USA": [
+   2025,
+   "49.7526684892276"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "urban_population_total",
+  "code": "SP.URB.TOTL",
+  "ok": true,
+  "name": "Urban population",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "4750578960"
+  ],
+  "BRA": [
+   2025,
+   "187652232"
+  ],
+  "USA": [
+   2025,
+   "274084705"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "adolescent_fertility",
+  "code": "SP.ADO.TFRT",
+  "ok": true,
+  "name": "Adolescent fertility rate (births per 1,000 women ages 15-19)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "38.3388122362191"
+  ],
+  "BRA": [
+   2024,
+   "41.459"
+  ],
+  "USA": [
+   2024,
+   "12.412"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "contraceptive_prevalence",
+  "code": "SP.DYN.CONU.ZS",
+  "ok": true,
+  "name": "Contraceptive prevalence, any method (% of married women ages 15-49)",
+  "entities": 225,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2010,
+  "WLD": [
+   2010,
+   "55.8860178344822"
+  ],
+  "BRA": [
+   2013,
+   "80.2004995714604"
+  ],
+  "USA": [
+   2019,
+   "73.9"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "gdp",
+  "code": "NY.GDP.MKTP.CD",
+  "ok": true,
+  "name": "GDP (current US$)",
+  "entities": 262,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "118350166039396"
+  ],
+  "BRA": [
+   2025,
+   "2279920092492.13"
+  ],
+  "USA": [
+   2025,
+   "30769700000000"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "gdp_per_capita",
+  "code": "NY.GDP.PCAP.CD",
+  "ok": true,
+  "name": "GDP per capita (current US$)",
+  "entities": 262,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "14405.8484595528"
+  ],
+  "BRA": [
+   2025,
+   "10713.2856869511"
+  ],
+  "USA": [
+   2025,
+   "90026.5163005744"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "gdp_growth",
+  "code": "NY.GDP.MKTP.KD.ZG",
+  "ok": true,
+  "name": "GDP growth (annual %)",
+  "entities": 262,
+  "first_year": 1961,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "2.92127318539153"
+  ],
+  "BRA": [
+   2025,
+   "2.2857464902475"
+  ],
+  "USA": [
+   2025,
+   "2.16138195623856"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "gdp_ppp",
+  "code": "NY.GDP.MKTP.PP.CD",
+  "ok": true,
+  "name": "GDP, PPP (current international $)",
+  "entities": 251,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "211167158659272"
+  ],
+  "BRA": [
+   2025,
+   "4986894750790.25"
+  ],
+  "USA": [
+   2025,
+   "30769700000000"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "gdp_per_capita_ppp",
+  "code": "NY.GDP.PCAP.PP.CD",
+  "ok": true,
+  "name": "GDP per capita, PPP (current international $)",
+  "entities": 251,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "25703.7416091769"
+  ],
+  "BRA": [
+   2025,
+   "23433.2897595431"
+  ],
+  "USA": [
+   2025,
+   "90026.5163005744"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "inflation",
+  "code": "FP.CPI.TOTL.ZG",
+  "ok": true,
+  "name": "Inflation, consumer prices (annual %)",
+  "entities": 241,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "3.04141321556539"
+  ],
+  "BRA": [
+   2025,
+   "5.01675279604836"
+  ],
+  "USA": [
+   2024,
+   "2.94952520485207"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "unemployment",
+  "code": "SL.UEM.TOTL.ZS",
+  "ok": true,
+  "name": "Unemployment, total (% of total labor force) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1991,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "4.7913330740211"
+  ],
+  "BRA": [
+   2025,
+   "5.97"
+  ],
+  "USA": [
+   2025,
+   "4.198"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "labor_force",
+  "code": "SL.TLF.TOTL.IN",
+  "ok": true,
+  "name": "Labor force, total",
+  "entities": 235,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "3736625386"
+  ],
+  "BRA": [
+   2025,
+   "108318282"
+  ],
+  "USA": [
+   2025,
+   "174833917"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "female_labor_participation",
+  "code": "SL.TLF.CACT.FE.ZS",
+  "ok": true,
+  "name": "Labor force participation rate, female (% of female population ages 15+) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "48.9389342355134"
+  ],
+  "BRA": [
+   2025,
+   "53.411"
+  ],
+  "USA": [
+   2025,
+   "56.343"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "exports_gdp",
+  "code": "NE.EXP.GNFS.ZS",
+  "ok": true,
+  "name": "Exports of goods and services (% of GDP)",
+  "entities": 239,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "29.4807508820933"
+  ],
+  "BRA": [
+   2025,
+   "17.8207228961707"
+  ],
+  "USA": [
+   2024,
+   "10.97469647515"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "imports_gdp",
+  "code": "NE.IMP.GNFS.ZS",
+  "ok": true,
+  "name": "Imports of goods and services (% of GDP)",
+  "entities": 240,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "28.4991941096844"
+  ],
+  "BRA": [
+   2025,
+   "17.4707593653367"
+  ],
+  "USA": [
+   2024,
+   "14.0413208226783"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "government_debt",
+  "code": "GC.DOD.TOTL.GD.ZS",
+  "ok": true,
+  "name": "Central government debt, total (% of GDP)",
+  "entities": 120,
+  "first_year": 1970,
+  "last_year": 2024,
+  "last_year_well_covered": 2021,
+  "WLD": null,
+  "BRA": [
+   2024,
+   "81.8554431191023"
+  ],
+  "USA": [
+   2024,
+   "115.788609964778"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "military_spending",
+  "code": "MS.MIL.XPND.GD.ZS",
+  "ok": true,
+  "name": "Military expenditure (% of GDP)",
+  "entities": 213,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "2.47893026852095"
+  ],
+  "BRA": [
+   2025,
+   "1.0544932096"
+  ],
+  "USA": [
+   2025,
+   "3.1173079811"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "gni_per_capita",
+  "code": "NY.GNP.PCAP.CD",
+  "ok": true,
+  "name": "GNI per capita, Atlas method (current US$)",
+  "entities": 255,
+  "first_year": 1962,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "14243.5387817409"
+  ],
+  "BRA": [
+   2025,
+   "10550"
+  ],
+  "USA": [
+   2025,
+   "88810"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "agriculture_value_added",
+  "code": "NV.AGR.TOTL.ZS",
+  "ok": true,
+  "name": "Agriculture, forestry, and fishing, value added (% of GDP)",
+  "entities": 254,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "4.01004595954566"
+  ],
+  "BRA": [
+   2025,
+   "6.08621695565171"
+  ],
+  "USA": [
+   2021,
+   "0.942961672907101"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "industry_value_added",
+  "code": "NV.IND.TOTL.ZS",
+  "ok": true,
+  "name": "Industry (including construction), value added (% of GDP)",
+  "entities": 256,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "24.9841960395829"
+  ],
+  "BRA": [
+   2025,
+   "20.1499461312909"
+  ],
+  "USA": [
+   2021,
+   "17.5751653495616"
+  ],
+  "secs": 0.9
+ },
+ {
+  "slug": "services_value_added",
+  "code": "NV.SRV.TOTL.ZS",
+  "ok": true,
+  "name": "Services, value added (% of GDP)",
+  "entities": 253,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2024,
+   "63.3018068599679"
+  ],
+  "BRA": [
+   2025,
+   "59.7388368058983"
+  ],
+  "USA": [
+   2021,
+   "76.2563816410471"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "trade_gdp",
+  "code": "NE.TRD.GNFS.ZS",
+  "ok": true,
+  "name": "Trade (% of GDP)",
+  "entities": 239,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "68.4920790757033"
+  ],
+  "BRA": [
+   2025,
+   "35.2914822615074"
+  ],
+  "USA": [
+   2024,
+   "25.0160172978284"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "current_account_gdp",
+  "code": "BN.CAB.XOKA.GD.ZS",
+  "ok": true,
+  "name": "Current account balance (% of GDP)",
+  "entities": 200,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": null,
+  "BRA": [
+   2025,
+   "-2.92630139201733"
+  ],
+  "USA": [
+   2025,
+   "-3.8254126624569"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "investment_gdp",
+  "code": "NE.GDI.TOTL.ZS",
+  "ok": true,
+  "name": "Gross capital formation (% of GDP)",
+  "entities": 230,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2024,
+   "26.2876909759521"
+  ],
+  "BRA": [
+   2025,
+   "17.0759965150742"
+  ],
+  "USA": [
+   2024,
+   "21.5325967668865"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "savings_gdp",
+  "code": "NY.GNS.ICTR.ZS",
+  "ok": true,
+  "name": "Gross savings (% of GDP)",
+  "entities": 223,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2024,
+   "26.0482377571145"
+  ],
+  "BRA": [
+   2025,
+   "14.4155934935691"
+  ],
+  "USA": [
+   2024,
+   "16.5919955049511"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "tax_revenue_gdp",
+  "code": "GC.TAX.TOTL.GD.ZS",
+  "ok": true,
+  "name": "Tax revenue (% of GDP)",
+  "entities": 198,
+  "first_year": 1972,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "13.8637485648282"
+  ],
+  "BRA": [
+   2024,
+   "15.4102340832552"
+  ],
+  "USA": [
+   2024,
+   "10.7694743667429"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "fdi_inflows_gdp",
+  "code": "BX.KLT.DINV.WD.GD.ZS",
+  "ok": true,
+  "name": "Foreign direct investment, net inflows (% of GDP)",
+  "entities": 251,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "1.4235365276155"
+  ],
+  "BRA": [
+   2025,
+   "3.40696865505948"
+  ],
+  "USA": [
+   2025,
+   "0.997793283652424"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "remittances_received",
+  "code": "BX.TRF.PWKR.CD.DT",
+  "ok": true,
+  "name": "Personal remittances, received (current US$)",
+  "entities": 246,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "925552766003.394"
+  ],
+  "BRA": [
+   2025,
+   "4758109116.62"
+  ],
+  "USA": [
+   2025,
+   "9345000000"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "reserves",
+  "code": "FI.RES.TOTL.CD",
+  "ok": true,
+  "name": "Total reserves (includes gold, current US$)",
+  "entities": 183,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": null,
+  "BRA": [
+   2025,
+   "358513128727.455"
+  ],
+  "USA": [
+   2025,
+   "1385447111476.7"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "youth_unemployment",
+  "code": "SL.UEM.1524.ZS",
+  "ok": true,
+  "name": "Unemployment, youth total (% of total labor force ages 15-24) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1991,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "13.4088192694713"
+  ],
+  "BRA": [
+   2025,
+   "13.981"
+  ],
+  "USA": [
+   2025,
+   "9.34"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "vulnerable_employment",
+  "code": "SL.EMP.VULN.ZS",
+  "ok": true,
+  "name": "Vulnerable employment, total (% of total employment) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1991,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "42.3766387750589"
+  ],
+  "BRA": [
+   2025,
+   "26.0849820869874"
+  ],
+  "USA": [
+   2025,
+   "3.80976956797991"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "employment_agriculture",
+  "code": "SL.AGR.EMPL.ZS",
+  "ok": true,
+  "name": "Employment in agriculture (% of total employment) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1991,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "25.7635776904224"
+  ],
+  "BRA": [
+   2025,
+   "7.62782592703127"
+  ],
+  "USA": [
+   2025,
+   "1.52494439217106"
+  ],
+  "secs": 1.0
+ },
+ {
+  "slug": "tourism_arrivals",
+  "code": "ST.INT.ARVL",
+  "ok": true,
+  "name": "International tourism, number of arrivals",
+  "entities": 250,
+  "first_year": 1995,
+  "last_year": 2020,
+  "last_year_well_covered": 2020,
+  "WLD": [
+   2019,
+   "2403074088.46029"
+  ],
+  "BRA": [
+   2019,
+   "6353000"
+  ],
+  "USA": [
+   2020,
+   "45037000"
+  ],
+  "secs": 0.8
+ },
+ {
+  "slug": "tourism_receipts",
+  "code": "ST.INT.RCPT.CD",
+  "ok": true,
+  "name": "International tourism, receipts (current US$)",
+  "entities": 240,
+  "first_year": 1995,
+  "last_year": 2020,
+  "last_year_well_covered": 2020,
+  "WLD": [
+   2019,
+   "1863068555520.54"
+  ],
+  "BRA": [
+   2020,
+   "3099000000"
+  ],
+  "USA": [
+   2020,
+   "84205000000"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "infant_mortality",
+  "code": "SP.DYN.IMRT.IN",
+  "ok": true,
+  "name": "Mortality rate, infant (per 1,000 live births)",
+  "entities": 244,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "27.7"
+  ],
+  "BRA": [
+   2024,
+   "12.3"
+  ],
+  "USA": [
+   2024,
+   "5.5"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "under5_mortality",
+  "code": "SH.DYN.MORT",
+  "ok": true,
+  "name": "Mortality rate, under-5 (per 1,000 live births)",
+  "entities": 244,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "37.4"
+  ],
+  "BRA": [
+   2024,
+   "14.2"
+  ],
+  "USA": [
+   2024,
+   "6.5"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "maternal_mortality",
+  "code": "SH.STA.MMRT",
+  "ok": true,
+  "name": "Maternal mortality ratio (modeled estimate, per 100,000 live births)",
+  "entities": 242,
+  "first_year": 1985,
+  "last_year": 2023,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "197"
+  ],
+  "BRA": [
+   2023,
+   "67"
+  ],
+  "USA": [
+   2023,
+   "17"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "health_spending_gdp",
+  "code": "SH.XPD.CHEX.GD.ZS",
+  "ok": true,
+  "name": "Current health expenditure (% of GDP)",
+  "entities": 241,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "10.0604465994699"
+  ],
+  "BRA": [
+   2023,
+   "9.73092747"
+  ],
+  "USA": [
+   2023,
+   "16.69414902"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "physicians",
+  "code": "SH.MED.PHYS.ZS",
+  "ok": true,
+  "name": "Physicians (per 1,000 people)",
+  "entities": 256,
+  "first_year": 1960,
+  "last_year": 2023,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2022,
+   "1.86093113170155"
+  ],
+  "BRA": [
+   2023,
+   "2.357"
+  ],
+  "USA": [
+   2022,
+   "3.681"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "hospital_beds",
+  "code": "SH.MED.BEDS.ZS",
+  "ok": true,
+  "name": "Hospital beds (per 1,000 people)",
+  "entities": 249,
+  "first_year": 1960,
+  "last_year": 2023,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2021,
+   "3.29430541419327"
+  ],
+  "BRA": [
+   2021,
+   "2.52"
+  ],
+  "USA": [
+   2022,
+   "2.68"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "measles_immunization",
+  "code": "SH.IMM.MEAS",
+  "ok": true,
+  "name": "Immunization, measles (% of children ages 12-23 months)",
+  "entities": 241,
+  "first_year": 1980,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "84.30290510832"
+  ],
+  "BRA": [
+   2024,
+   "93"
+  ],
+  "USA": [
+   2024,
+   "92"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "undernourishment",
+  "code": "SN.ITK.DEFC.ZS",
+  "ok": true,
+  "name": "Prevalence of undernourishment (% of population)",
+  "entities": 216,
+  "first_year": 2001,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "8.1"
+  ],
+  "BRA": [
+   2024,
+   "2.5"
+  ],
+  "USA": [
+   2024,
+   "2.5"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "water_basic",
+  "code": "SH.H2O.BASW.ZS",
+  "ok": true,
+  "name": "People using at least basic drinking water services (% of population)",
+  "entities": 262,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "91.4529231464627"
+  ],
+  "BRA": [
+   2024,
+   "99.9999987323028"
+  ],
+  "USA": [
+   2024,
+   "99.9804443465812"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "sanitation_basic",
+  "code": "SH.STA.BASS.ZS",
+  "ok": true,
+  "name": "People using at least basic sanitation services (% of population)",
+  "entities": 262,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "82.1611698828403"
+  ],
+  "BRA": [
+   2024,
+   "92.4012701604853"
+  ],
+  "USA": [
+   2024,
+   "99.6182734760609"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "hiv_prevalence",
+  "code": "SH.DYN.AIDS.ZS",
+  "ok": true,
+  "name": "Prevalence of HIV, total (% of population ages 15-49)",
+  "entities": 187,
+  "first_year": 1990,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "0.7"
+  ],
+  "BRA": [
+   2024,
+   "0.7"
+  ],
+  "USA": null,
+  "secs": 0.4
+ },
+ {
+  "slug": "tuberculosis_incidence",
+  "code": "SH.TBS.INCD",
+  "ok": true,
+  "name": "Incidence of tuberculosis (per 100,000 people)",
+  "entities": 227,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "131"
+  ],
+  "BRA": [
+   2024,
+   "49"
+  ],
+  "USA": [
+   2024,
+   "3.2"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "malaria_incidence",
+  "code": "SH.MLR.INCD.P3",
+  "ok": true,
+  "name": "Incidence of malaria (per 1,000 population at risk)",
+  "entities": 142,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "64.0410829840746"
+  ],
+  "BRA": [
+   2024,
+   "3.75"
+  ],
+  "USA": null,
+  "secs": 0.1
+ },
+ {
+  "slug": "stunting",
+  "code": "SH.STA.STNT.ZS",
+  "ok": true,
+  "name": "Prevalence of stunting, height for age (% of children under 5)",
+  "entities": 163,
+  "first_year": 1983,
+  "last_year": 2024,
+  "last_year_well_covered": 2014,
+  "WLD": null,
+  "BRA": [
+   2019,
+   "8"
+  ],
+  "USA": [
+   2022,
+   "3.8"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "neonatal_mortality",
+  "code": "SH.DYN.NMRT",
+  "ok": true,
+  "name": "Mortality rate, neonatal (per 1,000 live births)",
+  "entities": 244,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "17.2"
+  ],
+  "BRA": [
+   2024,
+   "7.1"
+  ],
+  "USA": [
+   2024,
+   "3.7"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "adult_mortality_female",
+  "code": "SP.DYN.AMRT.FE",
+  "ok": true,
+  "name": "Mortality rate, adult, female (per 1,000 female adults)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "112.659787079734"
+  ],
+  "BRA": [
+   2024,
+   "83.419"
+  ],
+  "USA": [
+   2023,
+   "82.423"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "adult_mortality_male",
+  "code": "SP.DYN.AMRT.MA",
+  "ok": true,
+  "name": "Mortality rate, adult, male (per 1,000 male adults)",
+  "entities": 265,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "175.959724057079"
+  ],
+  "BRA": [
+   2024,
+   "169.804"
+  ],
+  "USA": [
+   2023,
+   "146.888"
+  ],
+  "secs": 0.8
+ },
+ {
+  "slug": "ncd_mortality",
+  "code": "SH.DYN.NCOM.ZS",
+  "ok": true,
+  "name": "Mortality from CVD, cancer, diabetes or CRD between exact ages 30 and 70 (%)",
+  "entities": 233,
+  "first_year": 2000,
+  "last_year": 2021,
+  "last_year_well_covered": 2021,
+  "WLD": [
+   2021,
+   "18.286828600681"
+  ],
+  "BRA": [
+   2021,
+   "14.5"
+  ],
+  "USA": [
+   2021,
+   "13.7"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "dtp_immunization",
+  "code": "SH.IMM.IDPT",
+  "ok": true,
+  "name": "Immunization, DPT (% of children ages 12-23 months)",
+  "entities": 241,
+  "first_year": 1980,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "84.7805894211456"
+  ],
+  "BRA": [
+   2024,
+   "91"
+  ],
+  "USA": [
+   2024,
+   "94"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "skilled_birth_attendance",
+  "code": "SH.STA.BRTC.ZS",
+  "ok": true,
+  "name": "Births attended by skilled health staff (% of total)",
+  "entities": 254,
+  "first_year": 1980,
+  "last_year": 2022,
+  "last_year_well_covered": 2020,
+  "WLD": [
+   2019,
+   "83.271174289877"
+  ],
+  "BRA": [
+   2020,
+   "98.4"
+  ],
+  "USA": [
+   2020,
+   "99.1"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "road_deaths",
+  "code": "SH.STA.TRAF.P5",
+  "ok": true,
+  "name": "Mortality caused by road traffic injury (per 100,000 population)",
+  "entities": 238,
+  "first_year": 2000,
+  "last_year": 2019,
+  "last_year_well_covered": 2019,
+  "WLD": [
+   2019,
+   "16.7488856927408"
+  ],
+  "BRA": [
+   2019,
+   "16"
+  ],
+  "USA": [
+   2019,
+   "12.7"
+  ],
+  "secs": 0.6
+ },
+ {
+  "slug": "food_insecurity",
+  "code": "SN.ITK.MSFI.ZS",
+  "ok": true,
+  "name": "Prevalence of moderate or severe food insecurity in the population (%)",
+  "entities": 180,
+  "first_year": 2014,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "27.9879394"
+  ],
+  "BRA": [
+   2024,
+   "9.6"
+  ],
+  "USA": [
+   2024,
+   "10.7"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "health_spending_per_capita",
+  "code": "SH.XPD.CHEX.PC.CD",
+  "ok": true,
+  "name": "Current health expenditure per capita (current US$)",
+  "entities": 241,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "1317.2564716259"
+  ],
+  "BRA": [
+   2023,
+   "1009.83563232"
+  ],
+  "USA": [
+   2023,
+   "13473.19335938"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "water_safely_managed",
+  "code": "SH.H2O.SMDW.ZS",
+  "ok": true,
+  "name": "People using safely managed drinking water services (% of population)",
+  "entities": 179,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "73.6686144265244"
+  ],
+  "BRA": [
+   2024,
+   "88.6239660721414"
+  ],
+  "USA": [
+   2024,
+   "97.5676884437325"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "sanitation_safely_managed",
+  "code": "SH.STA.SMSS.ZS",
+  "ok": true,
+  "name": "People using safely managed sanitation services (% of population)",
+  "entities": 176,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "58.4951883486035"
+  ],
+  "BRA": [
+   2024,
+   "54.9560379092862"
+  ],
+  "USA": [
+   2024,
+   "97.0094700141013"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "adult_literacy",
+  "code": "SE.ADT.LITR.ZS",
+  "ok": true,
+  "name": "Literacy rate, adult total (% of people ages 15 and above)",
+  "entities": 211,
+  "first_year": 1970,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "87.7399978637695"
+  ],
+  "BRA": [
+   2024,
+   "94.7399978637695"
+  ],
+  "USA": null,
+  "secs": 0.1
+ },
+ {
+  "slug": "enrollment_primary",
+  "code": "SE.PRM.ENRR",
+  "ok": true,
+  "name": "School enrollment, primary (% gross)",
+  "entities": 254,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "102.159400939941"
+  ],
+  "BRA": [
+   2024,
+   "104.296913146973"
+  ],
+  "USA": [
+   2022,
+   "96.9717330932617"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "enrollment_secondary",
+  "code": "SE.SEC.ENRR",
+  "ok": true,
+  "name": "School enrollment, secondary (% gross)",
+  "entities": 253,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "77.2785720825195"
+  ],
+  "BRA": [
+   2024,
+   "104.144660949707"
+  ],
+  "USA": [
+   2022,
+   "97.4734878540039"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "enrollment_tertiary",
+  "code": "SE.TER.ENRR",
+  "ok": true,
+  "name": "School enrollment, tertiary (% gross)",
+  "entities": 248,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "43.6151390075684"
+  ],
+  "BRA": [
+   2024,
+   "69.7317733764648"
+  ],
+  "USA": [
+   2022,
+   "79.361930847168"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "primary_completion",
+  "code": "SE.PRM.CMPT.ZS",
+  "ok": true,
+  "name": "Primary completion rate, total (% of relevant age group)",
+  "entities": 243,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "88.0215835571289"
+  ],
+  "BRA": null,
+  "USA": [
+   2022,
+   "95.743522644043"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "education_spending_gdp",
+  "code": "SE.XPD.TOTL.GD.ZS",
+  "ok": true,
+  "name": "Government expenditure on education, total (% of GDP)",
+  "entities": 250,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "3.56927475138052"
+  ],
+  "BRA": [
+   2022,
+   "5.61920976638794"
+  ],
+  "USA": [
+   2021,
+   "5.42038011550903"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "rd_spending_gdp",
+  "code": "GB.XPD.RSDV.GD.ZS",
+  "ok": true,
+  "name": "Research and development expenditure (% of GDP)",
+  "entities": 196,
+  "first_year": 1996,
+  "last_year": 2024,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "2.59737836465431"
+  ],
+  "BRA": [
+   2023,
+   "1.1938"
+  ],
+  "USA": [
+   2023,
+   "3.44716"
+  ],
+  "secs": 0.7
+ },
+ {
+  "slug": "journal_articles",
+  "code": "IP.JRN.ARTC.SC",
+  "ok": true,
+  "name": "Scientific and technical journal articles",
+  "entities": 245,
+  "first_year": 1996,
+  "last_year": 2023,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "3271296.24439727"
+  ],
+  "BRA": [
+   2023,
+   "58292.04"
+  ],
+  "USA": [
+   2023,
+   "430843.27"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "youth_literacy",
+  "code": "SE.ADT.1524.LT.ZS",
+  "ok": true,
+  "name": "Literacy rate, youth total (% of people ages 15-24)",
+  "entities": 213,
+  "first_year": 1970,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "93.1100006103516"
+  ],
+  "BRA": [
+   2024,
+   "99.4599990844727"
+  ],
+  "USA": null,
+  "secs": 0.1
+ },
+ {
+  "slug": "lower_secondary_completion",
+  "code": "SE.SEC.CMPT.LO.ZS",
+  "ok": true,
+  "name": "Lower secondary completion rate, total (% of relevant age group)",
+  "entities": 242,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "77.8859405517578"
+  ],
+  "BRA": null,
+  "USA": [
+   2022,
+   "101.35814666748"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "children_out_of_school",
+  "code": "SE.PRM.UNER",
+  "ok": true,
+  "name": "Children out of school, primary",
+  "entities": 210,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": null,
+  "BRA": [
+   2024,
+   "316818"
+  ],
+  "USA": [
+   2022,
+   "965853"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "researchers_rd",
+  "code": "SP.POP.SCIE.RD.P6",
+  "ok": true,
+  "name": "Researchers in R&D (per million people)",
+  "entities": 176,
+  "first_year": 1996,
+  "last_year": 2024,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2020,
+   "1651.58516904719"
+  ],
+  "BRA": [
+   2014,
+   "903.20079"
+  ],
+  "USA": [
+   2022,
+   "4937.49441"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "patent_applications",
+  "code": "IP.PAT.RESD",
+  "ok": true,
+  "name": "Patent applications, residents",
+  "entities": 172,
+  "first_year": 1980,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "2702600"
+  ],
+  "BRA": [
+   2024,
+   "5752"
+  ],
+  "USA": [
+   2024,
+   "270295"
+  ],
+  "secs": 1.1
+ },
+ {
+  "slug": "electricity_access",
+  "code": "EG.ELC.ACCS.ZS",
+  "ok": true,
+  "name": "Access to electricity (% of population)",
+  "entities": 264,
+  "first_year": 1990,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "91.9264843853681"
+  ],
+  "BRA": [
+   2024,
+   "99.8"
+  ],
+  "USA": [
+   2024,
+   "100"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "renewable_energy_share",
+  "code": "EG.FEC.RNEW.ZS",
+  "ok": true,
+  "name": "Renewable energy consumption (% of total final energy consumption)",
+  "entities": 260,
+  "first_year": 1990,
+  "last_year": 2022,
+  "last_year_well_covered": 2022,
+  "WLD": [
+   2020,
+   "19.7355641050053"
+  ],
+  "BRA": [
+   2021,
+   "46.5"
+  ],
+  "USA": [
+   2021,
+   "10.9"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "renewable_electricity_share",
+  "code": "EG.ELC.RNEW.ZS",
+  "ok": true,
+  "name": "Renewable electricity output (% of total electricity output)",
+  "entities": 257,
+  "first_year": 1990,
+  "last_year": 2021,
+  "last_year_well_covered": 2021,
+  "WLD": [
+   2021,
+   "27.8380722078159"
+  ],
+  "BRA": [
+   2021,
+   "77.3753492178891"
+  ],
+  "USA": [
+   2021,
+   "20.2733089261925"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "energy_use_per_capita",
+  "code": "EG.USE.PCAP.KG.OE",
+  "ok": true,
+  "name": "Energy use (kg of oil equivalent per capita)",
+  "entities": 227,
+  "first_year": 1990,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "1892.15784328902"
+  ],
+  "BRA": [
+   2024,
+   "1528.21933899585"
+  ],
+  "USA": [
+   2024,
+   "6453.63383292778"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "electric_power_consumption",
+  "code": "EG.USE.ELEC.KH.PC",
+  "ok": true,
+  "name": "Electric power consumption (kWh per capita)",
+  "entities": 194,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2024,
+   "3708.45696996666"
+  ],
+  "BRA": [
+   2025,
+   "3138.17702497183"
+  ],
+  "USA": [
+   2025,
+   "13063.5600394666"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "fossil_energy_share",
+  "code": "EG.USE.COMM.FO.ZS",
+  "ok": true,
+  "name": "Fossil fuel energy consumption (% of total)",
+  "entities": 227,
+  "first_year": 1960,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "80.0586496363126"
+  ],
+  "BRA": [
+   2024,
+   "49.16"
+  ],
+  "USA": [
+   2024,
+   "80.93"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "clean_cooking_access",
+  "code": "EG.CFT.ACCS.ZS",
+  "ok": true,
+  "name": "Access to clean fuels and technologies for cooking (% of population)",
+  "entities": 240,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "75.424050565184"
+  ],
+  "BRA": [
+   2024,
+   "98"
+  ],
+  "USA": [
+   2024,
+   "100"
+  ],
+  "secs": 0.8
+ },
+ {
+  "slug": "energy_intensity",
+  "code": "EG.EGY.PRIM.PP.KD",
+  "ok": true,
+  "name": "Energy intensity level of primary energy (MJ/$2021 PPP GDP)",
+  "entities": 249,
+  "first_year": 2000,
+  "last_year": 2022,
+  "last_year_well_covered": 2022,
+  "WLD": [
+   2021,
+   "4.54490266105104"
+  ],
+  "BRA": [
+   2022,
+   "3.87"
+  ],
+  "USA": [
+   2022,
+   "4.17"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "energy_imports_net",
+  "code": "EG.IMP.CONS.ZS",
+  "ok": true,
+  "name": "Energy imports, net (% of energy use)",
+  "entities": 192,
+  "first_year": 1990,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "14.6089018827967"
+  ],
+  "BRA": [
+   2024,
+   "-10.8440412585642"
+  ],
+  "USA": [
+   2024,
+   "-9.78127421443322"
+  ],
+  "secs": 1.1
+ },
+ {
+  "slug": "air_passengers",
+  "code": "IS.AIR.PSGR",
+  "ok": true,
+  "name": "Air transport, passengers carried",
+  "entities": 233,
+  "first_year": 1970,
+  "last_year": 2023,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "4268984474.03796"
+  ],
+  "BRA": [
+   2023,
+   "95398485"
+  ],
+  "USA": [
+   2023,
+   "941557000"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "rail_lines",
+  "code": "IS.RRS.TOTL.KM",
+  "ok": true,
+  "name": "Rail lines (total route-km)",
+  "entities": 116,
+  "first_year": 1995,
+  "last_year": 2021,
+  "last_year_well_covered": 2021,
+  "WLD": null,
+  "BRA": [
+   2007,
+   "32622"
+  ],
+  "USA": [
+   2021,
+   "148553.34734"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "forest_area",
+  "code": "AG.LND.FRST.K2",
+  "ok": true,
+  "name": "Forest area (sq. km)",
+  "entities": 262,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2023,
+   "40349918.555"
+  ],
+  "BRA": [
+   2025,
+   "4860866.4"
+  ],
+  "USA": [
+   2025,
+   "3088950"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "forest_pct",
+  "code": "AG.LND.FRST.ZS",
+  "ok": true,
+  "name": "Forest area (% of land area)",
+  "entities": 262,
+  "first_year": 1990,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "31.0951828663057"
+  ],
+  "BRA": [
+   2024,
+   "58.5468405650061"
+  ],
+  "USA": [
+   2024,
+   "33.7764090858406"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "agricultural_land_pct",
+  "code": "AG.LND.AGRI.ZS",
+  "ok": true,
+  "name": "Agricultural land (% of land area)",
+  "entities": 258,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "36.9301461380685"
+  ],
+  "BRA": [
+   2024,
+   "28.3664427731529"
+  ],
+  "USA": [
+   2024,
+   "46.0829796817026"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "land_area",
+  "code": "AG.LND.TOTL.K2",
+  "ok": true,
+  "name": "Land area (sq. km)",
+  "entities": 264,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "129763685.55"
+  ],
+  "BRA": [
+   2024,
+   "8358140"
+  ],
+  "USA": [
+   2024,
+   "9147420"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "protected_areas",
+  "code": "ER.PTD.TOTL.ZS",
+  "ok": true,
+  "name": "Terrestrial and marine protected areas (% of total territorial area)",
+  "entities": 261,
+  "first_year": 2013,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "16.9753812042307"
+  ],
+  "BRA": [
+   2025,
+   "29.4"
+  ],
+  "USA": [
+   2025,
+   "15.8"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "pm25",
+  "code": "EN.ATM.PM25.MC.M3",
+  "ok": true,
+  "name": "PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)",
+  "entities": 248,
+  "first_year": 1990,
+  "last_year": 2023,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "32.872382373302"
+  ],
+  "BRA": [
+   2023,
+   "13.3827173243912"
+  ],
+  "USA": [
+   2023,
+   "6.96804491055748"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "ghg_emissions",
+  "code": "EN.GHG.ALL.MT.CE.AR5",
+  "ok": true,
+  "name": "Total greenhouse gas emissions excluding LULUCF (Mt CO2e)",
+  "entities": 251,
+  "first_year": 1970,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "53206.40126586"
+  ],
+  "BRA": [
+   2024,
+   "1299.1802"
+  ],
+  "USA": [
+   2024,
+   "5912.6177"
+  ],
+  "secs": 0.8
+ },
+ {
+  "slug": "methane_emissions",
+  "code": "EN.GHG.CH4.MT.CE.AR5",
+  "ok": true,
+  "name": "Methane (CH4) emissions (total) excluding LULUCF (Mt CO2e)",
+  "entities": 251,
+  "first_year": 1970,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "9536.49388054425"
+  ],
+  "BRA": [
+   2024,
+   "621.191"
+  ],
+  "USA": [
+   2024,
+   "843.3596"
+  ],
+  "secs": 0.9
+ },
+ {
+  "slug": "freshwater_withdrawal",
+  "code": "ER.H2O.FWTL.ZS",
+  "ok": true,
+  "name": "Annual freshwater withdrawals, total (% of internal resources)",
+  "entities": 224,
+  "first_year": 1962,
+  "last_year": 2022,
+  "last_year_well_covered": 2022,
+  "WLD": [
+   2022,
+   "9.0058287959941"
+  ],
+  "BRA": [
+   2022,
+   "1.20014131778838"
+  ],
+  "USA": [
+   2022,
+   "15.7661462029808"
+  ],
+  "secs": 0.7
+ },
+ {
+  "slug": "freshwater_per_capita",
+  "code": "ER.H2O.INTR.PC",
+  "ok": true,
+  "name": "Renewable internal freshwater resources per capita (cubic meters)",
+  "entities": 231,
+  "first_year": 1961,
+  "last_year": 2022,
+  "last_year_well_covered": 2022,
+  "WLD": [
+   2022,
+   "5392.94445818055"
+  ],
+  "BRA": [
+   2022,
+   "26917.8664854327"
+  ],
+  "USA": [
+   2022,
+   "8437.21911365822"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "marine_protected_areas",
+  "code": "ER.MRN.PTMR.ZS",
+  "ok": true,
+  "name": "Marine protected areas (% of territorial waters)",
+  "entities": 222,
+  "first_year": 2013,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "17.4641679954692"
+  ],
+  "BRA": [
+   2025,
+   "26.6"
+  ],
+  "USA": [
+   2025,
+   "19"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "arable_land_pct",
+  "code": "AG.LND.ARBL.ZS",
+  "ok": true,
+  "name": "Arable land (% of land area)",
+  "entities": 254,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "10.6663285482692"
+  ],
+  "BRA": [
+   2024,
+   "6.65722277923079"
+  ],
+  "USA": [
+   2024,
+   "16.5678869014432"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "cereal_yield",
+  "code": "AG.YLD.CREL.KG",
+  "ok": true,
+  "name": "Cereal yield (kg per hectare)",
+  "entities": 229,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "4229.28308028594"
+  ],
+  "BRA": [
+   2024,
+   "5002.6"
+  ],
+  "USA": [
+   2024,
+   "8413.5"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "food_production_index",
+  "code": "AG.PRD.FOOD.XD",
+  "ok": true,
+  "name": "Food production index (2014-2016 = 100)",
+  "entities": 243,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "115.904681771197"
+  ],
+  "BRA": [
+   2024,
+   "126.09"
+  ],
+  "USA": [
+   2024,
+   "104.12"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "threatened_mammals",
+  "code": "EN.MAM.THRD.NO",
+  "ok": true,
+  "name": "Mammal species, threatened",
+  "entities": 263,
+  "first_year": 2017,
+  "last_year": 2022,
+  "last_year_well_covered": 2022,
+  "WLD": [
+   2017,
+   "3434"
+  ],
+  "BRA": [
+   2022,
+   "97"
+  ],
+  "USA": [
+   2022,
+   "43"
+  ],
+  "secs": 0.8
+ },
+ {
+  "slug": "threatened_birds",
+  "code": "EN.BIR.THRD.NO",
+  "ok": true,
+  "name": "Bird species, threatened",
+  "entities": 263,
+  "first_year": 2017,
+  "last_year": 2022,
+  "last_year_well_covered": 2022,
+  "WLD": [
+   2017,
+   "4584"
+  ],
+  "BRA": [
+   2022,
+   "155"
+  ],
+  "USA": [
+   2022,
+   "87"
+  ],
+  "secs": 0.4
+ },
+ {
+  "slug": "threatened_plants",
+  "code": "EN.HPT.THRD.NO",
+  "ok": true,
+  "name": "Plant species (higher), threatened",
+  "entities": 263,
+  "first_year": 2017,
+  "last_year": 2022,
+  "last_year_well_covered": 2022,
+  "WLD": [
+   2017,
+   "15735"
+  ],
+  "BRA": [
+   2022,
+   "1346"
+  ],
+  "USA": [
+   2022,
+   "688"
+  ],
+  "secs": 0.7
+ },
+ {
+  "slug": "internet_users",
+  "code": "IT.NET.USER.ZS",
+  "ok": true,
+  "name": "Individuals using the Internet (% of population)",
+  "entities": 245,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2025,
+   "73.6"
+  ],
+  "BRA": [
+   2024,
+   "84.46347227"
+  ],
+  "USA": [
+   2024,
+   "94.69380188"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "mobile_subscriptions",
+  "code": "IT.CEL.SETS.P2",
+  "ok": true,
+  "name": "Mobile cellular subscriptions (per 100 people)",
+  "entities": 262,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2025,
+   "111.5"
+  ],
+  "BRA": [
+   2024,
+   "101.926846460424"
+  ],
+  "USA": [
+   2024,
+   "113.190481805755"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "broadband_subscriptions",
+  "code": "IT.NET.BBND.P2",
+  "ok": true,
+  "name": "Fixed broadband subscriptions (per 100 people)",
+  "entities": 256,
+  "first_year": 1998,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2025,
+   "20.11"
+  ],
+  "BRA": [
+   2024,
+   "24.079199344422"
+  ],
+  "USA": [
+   2024,
+   "38.8571729185246"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "secure_servers",
+  "code": "IT.NET.SECR.P6",
+  "ok": true,
+  "name": "Secure Internet servers (per 1 million people)",
+  "entities": 263,
+  "first_year": 2010,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "16381.4711611511"
+  ],
+  "BRA": [
+   2024,
+   "6941.17408045006"
+  ],
+  "USA": [
+   2024,
+   "196616.101319598"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "fixed_telephone",
+  "code": "IT.MLT.MAIN.P2",
+  "ok": true,
+  "name": "Fixed telephone subscriptions (per 100 people)",
+  "entities": 261,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2025,
+   "9.9"
+  ],
+  "BRA": [
+   2024,
+   "10.6345130917461"
+  ],
+  "USA": [
+   2024,
+   "23.6082012347568"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "high_tech_exports",
+  "code": "TX.VAL.TECH.MF.ZS",
+  "ok": true,
+  "name": "High-technology exports (% of manufactured exports)",
+  "entities": 233,
+  "first_year": 2007,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "24.6923279470414"
+  ],
+  "BRA": [
+   2024,
+   "11.1103644206652"
+  ],
+  "USA": [
+   2024,
+   "24.322982844202"
+  ],
+  "secs": 0.7
+ },
+ {
+  "slug": "poverty_rate",
+  "code": "SI.POV.DDAY",
+  "ok": true,
+  "name": "Poverty headcount ratio at $3.00 a day (2021 PPP) (% of population)",
+  "entities": 186,
+  "first_year": 1963,
+  "last_year": 2025,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2024,
+   "10.1"
+  ],
+  "BRA": [
+   2024,
+   "3"
+  ],
+  "USA": [
+   2024,
+   "1.1"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "poverty_national",
+  "code": "SI.POV.NAHC",
+  "ok": true,
+  "name": "Poverty headcount ratio at national poverty lines (% of population)",
+  "entities": 161,
+  "first_year": 1985,
+  "last_year": 2025,
+  "last_year_well_covered": 2022,
+  "WLD": null,
+  "BRA": null,
+  "USA": null,
+  "secs": 0.1
+ },
+ {
+  "slug": "gini",
+  "code": "SI.POV.GINI",
+  "ok": true,
+  "name": "Gini index",
+  "entities": 171,
+  "first_year": 1963,
+  "last_year": 2025,
+  "last_year_well_covered": 2023,
+  "WLD": null,
+  "BRA": [
+   2024,
+   "50.3"
+  ],
+  "USA": [
+   2024,
+   "41.8"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "homicides",
+  "code": "VC.IHR.PSRC.P5",
+  "ok": true,
+  "name": "Intentional homicides (per 100,000 people)",
+  "entities": 244,
+  "first_year": 1990,
+  "last_year": 2023,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "5.2"
+  ],
+  "BRA": [
+   2023,
+   "19.2752957673079"
+  ],
+  "USA": [
+   2023,
+   "5.76340794073065"
+  ],
+  "secs": 0.8
+ },
+ {
+  "slug": "women_in_parliament",
+  "code": "SG.GEN.PARL.ZS",
+  "ok": true,
+  "name": "Proportion of seats held by women in national parliaments (%)",
+  "entities": 241,
+  "first_year": 1997,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "27.2485552269582"
+  ],
+  "BRA": [
+   2025,
+   "18.1286549707602"
+  ],
+  "USA": [
+   2025,
+   "28.9351851851852"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "child_labor",
+  "code": "SL.TLF.0714.ZS",
+  "ok": true,
+  "name": "Children in employment, total (% of children ages 7-14)",
+  "entities": 100,
+  "first_year": 1994,
+  "last_year": 2016,
+  "last_year_well_covered": null,
+  "WLD": null,
+  "BRA": [
+   2015,
+   "2.54"
+  ],
+  "USA": null,
+  "secs": 1.1
+ },
+ {
+  "slug": "income_share_top10",
+  "code": "SI.DST.10TH.10",
+  "ok": true,
+  "name": "Income share held by highest 10%",
+  "entities": 171,
+  "first_year": 1963,
+  "last_year": 2025,
+  "last_year_well_covered": 2023,
+  "WLD": null,
+  "BRA": [
+   2024,
+   "39.3"
+  ],
+  "USA": [
+   2024,
+   "30.7"
+  ],
+  "secs": 0.9
+ },
+ {
+  "slug": "income_share_bottom20",
+  "code": "SI.DST.FRST.20",
+  "ok": true,
+  "name": "Income share held by lowest 20%",
+  "entities": 171,
+  "first_year": 1963,
+  "last_year": 2025,
+  "last_year_well_covered": 2023,
+  "WLD": null,
+  "BRA": [
+   2024,
+   "3.9"
+  ],
+  "USA": [
+   2024,
+   "5.1"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "women_business_law",
+  "code": "SG.LAW.INDX",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "refugees_hosted",
+  "code": "SM.POP.REFG",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "refugees_origin",
+  "code": "SM.POP.REFG.OR",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "battle_deaths",
+  "code": "VC.BTL.DETH",
+  "ok": true,
+  "name": "Battle-related deaths (number of people)",
+  "entities": 140,
+  "first_year": 1989,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": null,
+  "BRA": null,
+  "USA": [
+   2001,
+   "233"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "control_of_corruption",
+  "code": "CC.EST",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "government_effectiveness",
+  "code": "GE.EST",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "political_stability",
+  "code": "PV.EST",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "regulatory_quality",
+  "code": "RQ.EST",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "rule_of_law",
+  "code": "RL.EST",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "voice_accountability",
+  "code": "VA.EST",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "x_ghg_old",
+  "code": "EN.ATM.GHGT.KT.CE",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "x_ch4_old",
+  "code": "EN.ATM.METH.KT.CE",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "x_n2o_old",
+  "code": "EN.ATM.NOXE.KT.CE",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "x_ghg_co2_ar5",
+  "code": "EN.GHG.CO2.MT.CE.AR5",
+  "ok": true,
+  "name": "Carbon dioxide (CO2) emissions (total) excluding LULUCF (Mt CO2e)",
+  "entities": 251,
+  "first_year": 1970,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "39632.6642185422"
+  ],
+  "BRA": [
+   2024,
+   "491.4688"
+  ],
+  "USA": [
+   2024,
+   "4632.1649"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_n2o_ar5",
+  "code": "EN.GHG.N2O.MT.CE.AR5",
+  "ok": true,
+  "name": "Nitrous oxide (N2O) emissions (total) excluding LULUCF (Mt CO2e)",
+  "entities": 251,
+  "first_year": 1970,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "2527.41095710846"
+  ],
+  "BRA": [
+   2024,
+   "169.1332"
+  ],
+  "USA": [
+   2024,
+   "215.603"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "x_smoking",
+  "code": "SH.PRV.SMOK",
+  "ok": true,
+  "name": "Prevalence of current tobacco use (% of adults)",
+  "entities": 213,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "20.2754776913217"
+  ],
+  "BRA": [
+   2024,
+   "11.9"
+  ],
+  "USA": [
+   2024,
+   "15.8"
+  ],
+  "secs": 0.3
+ },
+ {
+  "slug": "x_alcohol",
+  "code": "SH.ALC.PCAP.LI",
+  "ok": true,
+  "name": "Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)",
+  "entities": 235,
+  "first_year": 2000,
+  "last_year": 2020,
+  "last_year_well_covered": 2020,
+  "WLD": [
+   2020,
+   "4.89206588076063"
+  ],
+  "BRA": [
+   2020,
+   "7.7"
+  ],
+  "USA": [
+   2020,
+   "9.9"
+  ],
+  "secs": 0.3
+ },
+ {
+  "slug": "x_nurses",
+  "code": "SH.MED.NUMW.P3",
+  "ok": true,
+  "name": "Nurses and midwives (per 1,000 people)",
+  "entities": 246,
+  "first_year": 1990,
+  "last_year": 2023,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2022,
+   "3.92873185311012"
+  ],
+  "BRA": [
+   2023,
+   "5.502"
+  ],
+  "USA": [
+   2022,
+   "13.38"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_open_def",
+  "code": "SH.STA.ODFC.ZS",
+  "ok": true,
+  "name": "People practicing open defecation (% of population)",
+  "entities": 262,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "4.3455792684962"
+  ],
+  "BRA": [
+   2024,
+   "0"
+  ],
+  "USA": [
+   2024,
+   "0"
+  ],
+  "secs": 0.4
+ },
+ {
+  "slug": "x_marriage_f",
+  "code": "SP.DYN.SMAM.FE",
+  "ok": false,
+  "error": "StopIteration: "
+ },
+ {
+  "slug": "x_gni",
+  "code": "NY.GNP.MKTP.CD",
+  "ok": true,
+  "name": "GNI (current US$)",
+  "entities": 257,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "117704242012008"
+  ],
+  "BRA": [
+   2025,
+   "2205743179103.41"
+  ],
+  "USA": [
+   2025,
+   "30585823000000"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_fossil_elec",
+  "code": "EG.ELC.FOSL.ZS",
+  "ok": true,
+  "name": "Electricity production from oil, gas and coal sources (% of total)",
+  "entities": 257,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "48.6738566192183"
+  ],
+  "BRA": [
+   2025,
+   "11.0572951236959"
+  ],
+  "USA": [
+   2025,
+   "57.5580483096307"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_nuclear_elec",
+  "code": "EG.ELC.NUCL.ZS",
+  "ok": true,
+  "name": "Electricity production from nuclear sources (% of total)",
+  "entities": 257,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2025,
+   "15.1635702907367"
+  ],
+  "BRA": [
+   2025,
+   "2.04074004858905"
+  ],
+  "USA": [
+   2025,
+   "17.3931891967743"
+  ],
+  "secs": 0.3
+ },
+ {
+  "slug": "x_hydro_elec",
+  "code": "EG.ELC.HYRO.ZS",
+  "ok": true,
+  "name": "Electricity production from hydroelectric sources (% of total)",
+  "entities": 257,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "15.2276478120201"
+  ],
+  "BRA": [
+   2025,
+   "51.7357374386998"
+  ],
+  "USA": [
+   2025,
+   "5.80066377373012"
+  ],
+  "secs": 0.7
+ },
+ {
+  "slug": "x_pov_umic",
+  "code": "SI.POV.UMIC",
+  "ok": true,
+  "name": "Poverty headcount ratio at $8.30 a day (2021 PPP) (% of population)",
+  "entities": 186,
+  "first_year": 1963,
+  "last_year": 2025,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2024,
+   "46.2"
+  ],
+  "BRA": [
+   2024,
+   "20.6"
+  ],
+  "USA": [
+   2024,
+   "1.8"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_pov_lmic",
+  "code": "SI.POV.LMIC",
+  "ok": true,
+  "name": "Poverty headcount ratio at $4.20 a day (2021 PPP) (% of population)",
+  "entities": 186,
+  "first_year": 1963,
+  "last_year": 2025,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2024,
+   "18.2"
+  ],
+  "BRA": [
+   2024,
+   "6.2"
+  ],
+  "USA": [
+   2024,
+   "1.2"
+  ],
+  "secs": 1.7
+ },
+ {
+  "slug": "x_surface",
+  "code": "AG.SRF.TOTL.K2",
+  "ok": true,
+  "name": "Surface area (sq. km)",
+  "entities": 264,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "140539257.229"
+  ],
+  "BRA": [
+   2024,
+   "8510420"
+  ],
+  "USA": [
+   2024,
+   "9831510"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_fert",
+  "code": "AG.CON.FERT.ZS",
+  "ok": true,
+  "name": "Fertilizer consumption (kilograms per hectare of arable land)",
+  "entities": 248,
+  "first_year": 1961,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2023,
+   "136.461700816081"
+  ],
+  "BRA": [
+   2024,
+   "397.093724165199"
+  ],
+  "USA": [
+   2024,
+   "127.80546291862"
+  ],
+  "secs": 0.2
+ },
+ {
+  "slug": "x_threat_fish",
+  "code": "EN.FSH.THRD.NO",
+  "ok": true,
+  "name": "Fish species, threatened",
+  "entities": 263,
+  "first_year": 2017,
+  "last_year": 2022,
+  "last_year_well_covered": 2022,
+  "WLD": [
+   2017,
+   "8233"
+  ],
+  "BRA": [
+   2022,
+   "360"
+  ],
+  "USA": [
+   2022,
+   "283"
+  ],
+  "secs": 0.3
+ },
+ {
+  "slug": "x_manuf",
+  "code": "NV.IND.MANF.ZS",
+  "ok": true,
+  "name": "Manufacturing, value added (% of GDP)",
+  "entities": 252,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "14.8720344202053"
+  ],
+  "BRA": [
+   2025,
+   "11.7722632755736"
+  ],
+  "USA": [
+   2021,
+   "10.5250313827085"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_remit_gdp",
+  "code": "BX.TRF.PWKR.DT.GD.ZS",
+  "ok": true,
+  "name": "Personal remittances, received (% of GDP)",
+  "entities": 246,
+  "first_year": 1970,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "0.81482767528872"
+  ],
+  "BRA": [
+   2025,
+   "0.20869631055442"
+  ],
+  "USA": [
+   2025,
+   "0.0303707868455006"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_tech_rd",
+  "code": "SP.POP.TECH.RD.P6",
+  "ok": true,
+  "name": "Technicians in R&D (per million people)",
+  "entities": 139,
+  "first_year": 1996,
+  "last_year": 2018,
+  "last_year_well_covered": 2017,
+  "WLD": null,
+  "BRA": [
+   2014,
+   "969.90222"
+  ],
+  "USA": null,
+  "secs": 0.1
+ },
+ {
+  "slug": "x_preprimary",
+  "code": "SE.PRE.ENRR",
+  "ok": true,
+  "name": "School enrollment, preprimary (% gross)",
+  "entities": 252,
+  "first_year": 1970,
+  "last_year": 2022,
+  "last_year_well_covered": 2021,
+  "WLD": [
+   2020,
+   "60.8573989868164"
+  ],
+  "BRA": [
+   2020,
+   "85.9419708251953"
+  ],
+  "USA": [
+   2020,
+   "72.3956832885742"
+  ],
+  "secs": 0.9
+ },
+ {
+  "slug": "x_ict_goods",
+  "code": "TX.VAL.ICTG.ZS.UN",
+  "ok": true,
+  "name": "ICT goods exports (% of total goods exports)",
+  "entities": 239,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2024,
+  "WLD": [
+   2024,
+   "12.591909798776"
+  ],
+  "BRA": [
+   2024,
+   "0.23"
+  ],
+  "USA": [
+   2024,
+   "9.05"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "x_mega",
+  "code": "EN.URB.MCTY.TL.ZS",
+  "ok": true,
+  "name": "Population in urban agglomerations of more than 1 million (% of total population)",
+  "entities": 159,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "25.2882564994733"
+  ],
+  "BRA": [
+   2025,
+   "44.3149947015542"
+  ],
+  "USA": [
+   2025,
+   "47.0433053738247"
+  ],
+  "secs": 1.0
+ },
+ {
+  "slug": "x_birth_reg",
+  "code": "SP.REG.BRTH.ZS",
+  "ok": true,
+  "name": "Completeness of birth registration (%)",
+  "entities": 215,
+  "first_year": 2000,
+  "last_year": 2022,
+  "last_year_well_covered": 2018,
+  "WLD": [
+   2018,
+   "72.3124359548033"
+  ],
+  "BRA": [
+   2015,
+   "96.4"
+  ],
+  "USA": [
+   2022,
+   "100"
+  ],
+  "secs": 0.7
+ },
+ {
+  "slug": "x_labor_part",
+  "code": "SL.TLF.CACT.ZS",
+  "ok": true,
+  "name": "Labor force participation rate, total (% of total population ages 15+) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1990,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "60.9808041802524"
+  ],
+  "BRA": [
+   2025,
+   "63.139"
+  ],
+  "USA": [
+   2025,
+   "61.704"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_gov_exp",
+  "code": "GC.XPN.TOTL.GD.ZS",
+  "ok": true,
+  "name": "Expense (% of GDP)",
+  "entities": 191,
+  "first_year": 1972,
+  "last_year": 2024,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2022,
+   "28.4897500384154"
+  ],
+  "BRA": [
+   2023,
+   "32.4311004876294"
+  ],
+  "USA": [
+   2023,
+   "24.433337455127"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_wasting",
+  "code": "SH.STA.WAST.ZS",
+  "ok": true,
+  "name": "Prevalence of wasting, weight for height (% of children under 5)",
+  "entities": 178,
+  "first_year": 1983,
+  "last_year": 2024,
+  "last_year_well_covered": 2019,
+  "WLD": [
+   2024,
+   "6.6"
+  ],
+  "BRA": [
+   2019,
+   "3.4"
+  ],
+  "USA": [
+   2022,
+   "0.1"
+  ],
+  "secs": 1.0
+ },
+ {
+  "slug": "x_oop",
+  "code": "SH.XPD.OOPC.CH.ZS",
+  "ok": true,
+  "name": "Out-of-pocket expenditure (% of current health expenditure)",
+  "entities": 241,
+  "first_year": 2000,
+  "last_year": 2024,
+  "last_year_well_covered": 2023,
+  "WLD": [
+   2023,
+   "17.3300850386042"
+  ],
+  "BRA": [
+   2023,
+   "26.23070717"
+  ],
+  "USA": [
+   2023,
+   "10.92723846"
+  ],
+  "secs": 0.5
+ },
+ {
+  "slug": "x_prenatal",
+  "code": "SH.STA.ANVC.ZS",
+  "ok": true,
+  "name": "Pregnant women receiving prenatal care (%)",
+  "entities": 207,
+  "first_year": 1984,
+  "last_year": 2021,
+  "last_year_well_covered": 2019,
+  "WLD": [
+   2019,
+   "87.6327499576889"
+  ],
+  "BRA": [
+   2015,
+   "97.2"
+  ],
+  "USA": null,
+  "secs": 0.1
+ },
+ {
+  "slug": "x_empl_ind",
+  "code": "SL.IND.EMPL.ZS",
+  "ok": true,
+  "name": "Employment in industry (% of total employment) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1991,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "23.6636268783619"
+  ],
+  "BRA": [
+   2025,
+   "20.2130767653291"
+  ],
+  "USA": [
+   2025,
+   "18.9122762686396"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_empl_serv",
+  "code": "SL.SRV.EMPL.ZS",
+  "ok": true,
+  "name": "Employment in services (% of total employment) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1991,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "50.5727947076376"
+  ],
+  "BRA": [
+   2025,
+   "72.1590982894571"
+  ],
+  "USA": [
+   2025,
+   "79.5627787515985"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_unemp_f",
+  "code": "SL.UEM.TOTL.FE.ZS",
+  "ok": true,
+  "name": "Unemployment, female (% of female labor force) (modeled ILO estimate)",
+  "entities": 235,
+  "first_year": 1991,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "4.94057163270212"
+  ],
+  "BRA": [
+   2025,
+   "7.329"
+  ],
+  "USA": [
+   2025,
+   "4.179"
+  ],
+  "secs": 0.1
+ },
+ {
+  "slug": "x_gdp_const",
+  "code": "NY.GDP.MKTP.KD",
+  "ok": true,
+  "name": "GDP (constant 2015 US$)",
+  "entities": 261,
+  "first_year": 1960,
+  "last_year": 2025,
+  "last_year_well_covered": 2025,
+  "WLD": [
+   2025,
+   "99658553419775.2"
+  ],
+  "BRA": [
+   2025,
+   "2074494382804.15"
+  ],
+  "USA": [
+   2025,
+   "23222782186839.4"
+  ],
+  "secs": 0.1
+ }
+]
