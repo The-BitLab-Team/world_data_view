@@ -1,38 +1,42 @@
-[censo2022_n6] t/4714/n6/all/v/93,6318/p/2022 -> 11140 linhas, 3041872 B, 2.6s | períodos ['2022']..['2022'] | V não numéricos: []
-    cabeçalho: ['Município (Código)', 'Município', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano']
-    exemplo: {"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "21494", "D1C": "1100015", "D1N": "Alta Floresta D'Oeste - RO", "D2C": "93", "D2N": "População residente", "D3C": "2022", "D3N": "2022"}
-    Joinville: [{"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "616317", "D1C": "4209102", "D1N": "Joinville - SC", "D2C": "93", "D2N": "População residente", "D3C": "2022", "D3N": "2022"}, {"NC": "6", "NN": "Município", "MC": "26", "MN": "Quilômetros quadrados", "V": "1127.947", "D1C": "4209102", "D1N": "Joinville - SC", "D2C": "6318", "D2N": "Área da un
-    variáveis: [('6318', 'Área da unidade territorial', 'Quilômetros quadrados'), ('93', 'População residente', 'Pessoas')]
-[nascidos_n6_2024] t/2609/n6/all/v/217/p/2024 -> 5570 linhas, 2143768 B, 8.7s | períodos ['2024']..['2024'] | V não numéricos: []
-    cabeçalho: ['Município (Código)', 'Município', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Ano de nascimento (Código)', 'Ano de nascimento', 'Idade da mãe na ocasião do parto (Código)', 'Idade da mãe na ocasião do parto']
-    exemplo: {"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "286", "D1C": "1100015", "D1N": "Alta Floresta D'Oeste - RO", "D2C": "217", "D2N": "Nascidos vivos registrados no ano", "D3C": "2024", "D3N": "2024", "D4C": "0", "D4N": "Total", "D5C": "0", "D5N"
-    Joinville: [{"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "7257", "D1C": "4209102", "D1N": "Joinville - SC", "D2C": "217", "D2N": "Nascidos vivos registrados no ano", "D3C": "2024", "D3N": "2024", "D4C": "0", "D4N": "Total", "D5C": "0", "D5N": "Total", "D6C": "0", "D6N": "Total"}]
-[nascidos_n3_todos] t/2609/n3/all/v/217/p/all -> 594 linhas, 230599 B, 2.1s | períodos ['2003', '2004', '2005', '2006']..['2022', '2023', '2024'] | V não numéricos: []
-    cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Ano de nascimento (Código)', 'Ano de nascimento', 'Idade da mãe na ocasião do parto (Código)', 'Idade da mãe na ocasião do parto']
-    exemplo: {"NC": "3", "NN": "Unidade da Federação", "MC": "45", "MN": "Pessoas", "V": "32421", "D1C": "11", "D1N": "Rondônia", "D2C": "217", "D2N": "Nascidos vivos registrados no ano", "D3C": "2003", "D3N": "2003", "D4C": "0", "D4N": "Total", "D5C": "0", "D5N": "Total",
-[nascidos_n1_todos] t/2609/n1/all/v/217/p/all -> 22 linhas, 8676 B, 0.8s | períodos ['2003', '2004', '2005', '2006']..['2022', '2023', '2024'] | V não numéricos: []
-    cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Sexo (Código)', 'Sexo', 'Ano de nascimento (Código)', 'Ano de nascimento', 'Idade da mãe na ocasião do parto (Código)', 'Idade da mãe na ocasião do parto']
-    exemplo: {"NC": "1", "NN": "Brasil", "MC": "45", "MN": "Pessoas", "V": "3408540", "D1C": "1", "D1N": "Brasil", "D2C": "217", "D2N": "Nascidos vivos registrados no ano", "D3C": "2003", "D3N": "2003", "D4C": "0", "D4N": "Total", "D5C": "0", "D5N": "Total", "D6C": "0", "D
-[pib_n3_todos] t/5938/n3/all/v/37/p/all -> 594 linhas, 169779 B, 0.5s | períodos ['2002', '2003', '2004', '2005']..['2021', '2022', '2023'] | V não numéricos: []
-    cabeçalho: ['Unidade da Federação (Código)', 'Unidade da Federação', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano']
-    exemplo: {"NC": "3", "NN": "Unidade da Federação", "MC": "40", "MN": "Mil Reais", "V": "7467630", "D1C": "11", "D1N": "Rondônia", "D2C": "37", "D2N": "Produto Interno Bruto a preços correntes", "D3C": "2002", "D3N": "2002"}
-[pib_n6_ultimo] t/5938/n6/all/v/37/p/last -> 5570 linhas, 1577853 B, 0.4s | períodos ['2023']..['2023'] | V não numéricos: []
-    cabeçalho: ['Município (Código)', 'Município', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano']
-    exemplo: {"NC": "6", "NN": "Município", "MC": "40", "MN": "Mil Reais", "V": "1046343", "D1C": "1100015", "D1N": "Alta Floresta D'Oeste - RO", "D2C": "37", "D2N": "Produto Interno Bruto a preços correntes", "D3C": "2023", "D3N": "2023"}
-    Joinville: [{"NC": "6", "NN": "Município", "MC": "40", "MN": "Mil Reais", "V": "49815877", "D1C": "4209102", "D1N": "Joinville - SC", "D2C": "37", "D2N": "Produto Interno Bruto a preços correntes", "D3C": "2023", "D3N": "2023"}]
-[pib_n1_todos] t/5938/n1/all/v/37/p/all -> 22 linhas, 6198 B, 0.3s | períodos ['2002', '2003', '2004', '2005']..['2021', '2022', '2023'] | V não numéricos: []
-    cabeçalho: ['Brasil (Código)', 'Brasil', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano']
-    exemplo: {"NC": "1", "NN": "Brasil", "MC": "40", "MN": "Mil Reais", "V": "1488787276", "D1C": "1", "D1N": "Brasil", "D2C": "37", "D2N": "Produto Interno Bruto a preços correntes", "D3C": "2002", "D3N": "2002"}
-[censo2010_n6] t/202/n6/all/v/93/p/2010/c1/0/c2/0 -> 5565 linhas, 1868763 B, 1.6s | períodos ['2010']..['2010'] | V não numéricos: []
-    cabeçalho: ['Município (Código)', 'Município', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano', 'Situação do domicílio (Código)', 'Situação do domicílio', 'Sexo (Código)', 'Sexo']
-    exemplo: {"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "24392", "D1C": "1100015", "D1N": "Alta Floresta D'Oeste - RO", "D2C": "93", "D2N": "População residente", "D3C": "2010", "D3N": "2010", "D4C": "0", "D4N": "Total", "D5C": "0", "D5N": "Total"}
-    Joinville: [{"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "515288", "D1C": "4209102", "D1N": "Joinville - SC", "D2C": "93", "D2N": "População residente", "D3C": "2010", "D3N": "2010", "D4C": "0", "D4N": "Total", "D5C": "0", "D5N": "Total"}]
-[contagem2007_n6] t/793/n6/all/v/93/p/2007 -> 5564 linhas, 1445307 B, 0.9s | períodos ['2007']..['2007'] | V não numéricos: []
-    cabeçalho: ['Município (Código)', 'Município', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano']
-    exemplo: {"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "23857", "D1C": "1100015", "D1N": "Alta Floresta D'Oeste - RO", "D2C": "93", "D2N": "População residente", "D3C": "2007", "D3N": "2007"}
-    Joinville: [{"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "487003", "D1C": "4209102", "D1N": "Joinville - SC", "D2C": "93", "D2N": "População residente", "D3C": "2007", "D3N": "2007"}]
-[pib_variaveis_n6] t/5938/n6/4209102/v/all/p/last -> 46 linhas, 18896 B, 0.3s | períodos ['2023']..['2023'] | V não numéricos: ['...']
-    cabeçalho: ['Município (Código)', 'Município', 'Variável (Código)', 'Variável', 'Ano (Código)', 'Ano']
-    exemplo: {"NC": "6", "NN": "Município", "MC": "40", "MN": "Mil Reais", "V": "49815877", "D1C": "4209102", "D1N": "Joinville (SC)", "D2C": "37", "D2N": "Produto Interno Bruto a preços correntes", "D3C": "2023", "D3N": "2023"}
-    Joinville: [{"NC": "6", "NN": "Município", "MC": "40", "MN": "Mil Reais", "V": "49815877", "D1C": "4209102", "D1N": "Joinville (SC)", "D2C": "37", "D2N": "Produto Interno Bruto a preços correntes", "D3C": "2023", "D3N": "2023"}, {"NC": "6", "NN": "Município", "MC": "2", "MN": "%", "V": "53.53", "D1C": "4209102", "D1N": "Joinville (SC)", "D2C": "553", "D2N": "Participaç
-    variáveis: [('37', 'Produto Interno Bruto a preços correntes', 'Mil Reais'), ('496', 'Participação do produto interno bruto a preços correntes no produto in', '%'), ('497', 'Participação do produto interno bruto a preços correntes no produto in', '%'), ('498', 'Valor adicionado bruto a preços correntes total', ''), ('499', 'Participação do valor adicionado bruto a preços correntes total no val', ''), ('500', 'Participação do valor adicionado bruto a preços correntes total no val', ''), ('513', 'Valor adicionado bruto a preços correntes da agropecuária', ''), ('514', 'Participação do valor adicionado bruto a preços correntes da agropecuá', ''), ('515', 'Participação do valor adicionado bruto a preços correntes da agropecuá', ''), ('516', 'Participação do valor adicionado bruto a preços correntes da agropecuá', ''), ('517', 'Valor adicionado bruto a preços correntes da indústria', ''), ('518', 'Participação do valor adicionado bruto a preços correntes da indústria', ''), ('519', 'Participação do valor adicionado bruto a preços correntes da indústria', ''), ('520', 'Participação do valor adicionado bruto a preços correntes da indústria', ''), ('525', 'Valor adicionado bruto a preços correntes da administração, defesa, ed', ''), ('526', 'Participação do valor adicionado bruto a preços correntes da administr', ''), ('527', 'Participação do valor adicionado bruto a preços correntes da administr', ''), ('528', 'Participação do valor adicionado bruto a preços correntes da administr', ''), ('530', 'Participação do produto interno bruto a preços correntes no produto in', '%'), ('543', 'Impostos, líquidos de subsídios, sobre produtos a preços correntes', ''), ('544', 'Participação dos impostos, líquidos de subsídios, sobre produtos a pre', ''), ('545', 'Participação dos impostos, líquidos de subsídios, sobre produtos a pre', ''), ('546', 'Participação do valor adicionado bruto a preços correntes total no val', ''), ('547', 'Participação do valor adicionado bruto a preços correntes da agropecuá', ''), ('548', 'Participação do valor adicionado bruto a preços correntes da indústria', ''), ('550', 'Participação do valor adicionado bruto a preços correntes da administr', ''), ('551', 'Participação dos impostos, líquidos de subsídios, sobre produtos a pre', ''), ('552', 'Participação do produto interno bruto a preços correntes no produto in', '%'), ('553', 'Participação do produto interno bruto a preços correntes no produto in', '%'), ('554', 'Participação do valor adicionado bruto a preços correntes total no val', ''), ('555', 'Participação do valor adicionado bruto a preços correntes total no val', ''), ('556', 'Participação do valor adicionado bruto a preços correntes da agropecuá', ''), ('557', 'Participação do valor adicionado bruto a preços correntes da agropecuá', ''), ('558', 'Participação do valor adicionado bruto a preços correntes da indústria', ''), ('559', 'Participação do valor adicionado bruto a preços correntes da indústria', ''), ('562', 'Participação do valor adicionado bruto a preços correntes da administr', ''), ('563', 'Participação do valor adicionado bruto a preços correntes da administr', ''), ('570', 'Participação dos impostos, líquidos de subsídios, sobre produtos a pre', ''), ('571', 'Participação dos impostos, líquidos de subsídios, sobre produtos a pre', ''), ('6569', 'Participação do valor adicionado bruto a preços correntes dos serviços', ''), ('6570', 'Participação do valor adicionado bruto a preços correntes dos serviços', ''), ('6571', 'Participação do valor adicionado bruto a preços correntes dos serviços', ''), ('6572', 'Participação do valor adicionado bruto a preços correntes dos serviços', ''), ('6573', 'Participação do valor adicionado bruto a preços correntes dos serviços', ''), ('6574', 'Participação do valor adicionado bruto a preços correntes dos serviços', ''), ('6575', 'Valor adicionado bruto a preços correntes dos serviços, exclusive admi', '')]
+== execuções
+geonames   ok              0 linhas | None
+owid       ok          89722 linhas | None
+worldbank  running         0 linhas | None
+
+== lugares por tipo
+{'kind': 'city', 'n': 65606, 'com_pop': 65534, 'sem_pai': 0}
+{'kind': 'continent', 'n': 6, 'com_pop': 0, 'sem_pai': 0}
+{'kind': 'country', 'n': 248, 'com_pop': 0, 'sem_pai': 1}
+{'kind': 'region', 'n': 3754, 'com_pop': 0, 'sem_pai': 0}
+{'kind': 'world', 'n': 1, 'com_pop': 0, 'sem_pai': 1}
+países sem continente: ['ATA']
+regiões/cidades sem país: 0
+cidades com pai inexistente: 0
+
+== observações por indicador (lugares com dado, ano mais recente, linhas derivadas)
+total: 89722
+co2_emissions                lugares=  221 1750–2025 linhas=  24385 derivadas=0
+co2_per_capita               lugares=  219 1750–2025 linhas=  23830 derivadas=0
+population                   lugares=  222 1750–2025 linhas=  41507 derivadas=0
+
+== fontes
+OWID                                               89722
+
+== amostras
+{'id': 'WLD', 'kind': 'world', 'name': 'Mundo', 'parent_id': None, 'population': None, 'population_year': None, 'population_source': None}
+{'id': 'CON-SA', 'kind': 'continent', 'name': 'América do Sul', 'parent_id': 'WLD', 'population': None, 'population_year': None, 'population_source': None}
+{'id': 'CON-EU', 'kind': 'continent', 'name': 'Europa', 'parent_id': 'WLD', 'population': None, 'population_year': None, 'population_source': None}
+{'id': 'BRA', 'kind': 'country', 'name': 'Brazil', 'parent_id': 'CON-SA', 'population': None, 'population_year': None, 'population_source': None}
+BRA-SC: AUSENTE
+BRA-4209102: AUSENTE
+{'id': 'USA', 'kind': 'country', 'name': 'United States', 'parent_id': 'CON-NA', 'population': None, 'population_year': None, 'population_source': None}
+{'id': 'DEU', 'kind': 'country', 'name': 'Germany', 'parent_id': 'CON-EU', 'population': None, 'population_year': None, 'population_source': None}
+WLD população: [(2025, 8231613067.0, 'OWID'), (2024, 8161972574.0, 'OWID'), (2023, 8091734933.0, 'OWID')]
+CON-SA população: []
+BRA população: [(2025, 212812397.0, 'OWID'), (2024, 211998565.0, 'OWID'), (2023, 211140731.0, 'OWID')]
+BRA-SC população: []
+BRA-4209102 população: []
+cidades GeoNames amostra: [('GEO-1796236', 'Shanghai', 'CHN-23', 24874500), ('GEO-1814906', 'Chongqing', 'CHN-33', 22000000), ('GEO-1815286', 'Chengdu', 'CHN-32', 20937757), ('GEO-1816670', 'Beijing', 'CHN-22', 18960744), ('GEO-1809858', 'Guangzhou', 'CHN-30', 18676605)]
+maiores municípios IBGE: []
+tamanho do banco (MB): 29.5
+amostra WB países: {"indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"}, "country": {"id": "BR", "value": "Brazil"}, "countryiso3code": "BRA", "date": "2024", "value": 2185821610689.31, "unit": "", "obs_status": "", "decimal": 0}
