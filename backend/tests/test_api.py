@@ -34,6 +34,20 @@ def test_indicator_list_has_latest_and_change(client, seeded):
     assert items["smartphones"]["kind"] == "estimate"
 
 
+def test_indicators_that_exist_only_for_places_still_count_as_having_data(client, seeded):
+    items = {i["slug"]: i for i in client.get(f"{API}/indicators").json()}
+    births = items["births_registered"]  # semeado só para cidades do IBGE, sem linha "Mundo"
+    assert births["has_data"] is True and births["has_world_data"] is False
+    assert births["latest"] is None and births["change_pct"] is None
+    assert births["first_year"] == 2024 and births["last_year"] == 2024
+    assert items["population"]["has_world_data"] is True
+    assert items["poverty_rate"]["has_data"] is False and items["poverty_rate"]["has_world_data"] is False
+
+    status = client.get(f"{API}/status").json()
+    with_data = {s for s, i in items.items() if i["has_data"]}
+    assert status["indicators_with_data"] == len(with_data)
+
+
 def test_indicator_list_filters_by_category(client, seeded):
     items = client.get(f"{API}/indicators", params={"category": "planeta"}).json()
     assert items and {i["category"] for i in items} == {"planeta"}
@@ -78,6 +92,31 @@ def test_history_multiple_countries_with_names(client, seeded):
 def test_history_unknown_country_returns_empty_series(client, seeded):
     series = history(client, place="ARG").json()["series"]
     assert series[0]["points"] == []
+
+
+def test_history_reports_the_source_of_each_series(client, seeded):
+    series = {s["place"]: s for s in history(client, place="WLD,BRA-4209102,ARG").json()["series"]}
+    assert series["WLD"]["sources"] == ["TEST"]
+    assert series["BRA-4209102"]["sources"] == ["IBGE"]
+    assert series["ARG"]["points"] == [] and series["ARG"]["sources"] == []
+
+
+def test_history_lists_sources_oldest_first_when_a_series_mixes_them(client, seeded):
+    from app.collectors.base import CollectedBatch, ObservationRow
+    from app.collectors.runner import persist_batch
+
+    batch = CollectedBatch(
+        observations=[
+            ObservationRow("population", "ARG", 2020, 4.5e7, "Censo"),
+            ObservationRow("population", "ARG", 2022, 4.6e7, "Estimativa"),
+            ObservationRow("population", "ARG", 2023, 4.7e7, "Estimativa"),
+        ]
+    )
+    with seeded() as session:
+        persist_batch(session, batch)
+        session.commit()
+    sources = history(client, place="ARG").json()["series"][0]["sources"]
+    assert sources == ["Censo", "Estimativa"]
 
 
 @pytest.mark.parametrize(

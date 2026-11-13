@@ -62,10 +62,22 @@ def latest_source(session: Session, indicator: str, place: str = WORLD) -> str |
     return session.scalar(stmt)
 
 
-def year_extent(session: Session, indicator: str, place: str = WORLD) -> tuple[int, int] | None:
-    stmt = select(func.min(Observation.year), func.max(Observation.year)).where(
-        Observation.indicator == indicator, Observation.place == place
+def series_sources(session: Session, indicator: str, place: str) -> list[str]:
+    """Fontes distintas de uma série, da que cobre os anos mais antigos para a mais recente."""
+    stmt = (
+        select(Observation.source)
+        .where(Observation.indicator == indicator, Observation.place == place)
+        .group_by(Observation.source)
+        .order_by(func.min(Observation.year), Observation.source)
     )
+    return list(session.scalars(stmt))
+
+
+def year_extent(session: Session, indicator: str, place: str | None = None) -> tuple[int, int] | None:
+    """Primeiro e último ano com dado: de um lugar, ou (sem ``place``) de qualquer lugar."""
+    stmt = select(func.min(Observation.year), func.max(Observation.year)).where(Observation.indicator == indicator)
+    if place is not None:
+        stmt = stmt.where(Observation.place == place)
     low, high = session.execute(stmt).one()
     return (low, high) if low is not None else None
 

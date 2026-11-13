@@ -29,18 +29,23 @@ class IndicatorOut(BaseModel):
     kind: str = Field(description="'measured' (série oficial) ou 'estimate' (valor de referência)")
     decimals: int
     per_country: bool = Field(description="True se há dados de lugares além do agregado mundial")
-    has_data: bool
+    has_data: bool = Field(description="Há dado em algum lugar (mundo, país, estado ou cidade)")
+    has_world_data: bool = Field(True, description="Há série do mundo; 'latest', 'previous' e 'change_pct' são dela")
     latest: PointOut | None = None
     previous: PointOut | None = None
     change_pct: float | None = Field(None, description="Variação percentual entre 'previous' e 'latest'")
-    first_year: int | None = None
-    last_year: int | None = None
-    is_demo: bool = Field(False, description="True se o último ponto veio de dados de demonstração")
+    first_year: int | None = Field(None, description="Primeiro ano com dado em qualquer lugar")
+    last_year: int | None = Field(None, description="Último ano com dado em qualquer lugar")
+    is_demo: bool = Field(False, description="True se o último ponto do mundo veio de dados de demonstração")
 
 
 class SeriesOut(BaseModel):
     place: str
     name: str
+    sources: list[str] = Field(
+        default_factory=list,
+        description="Fontes dos pontos da série (mais antiga primeiro). Vazio se a série não tem dados.",
+    )
     points: list[PointOut]
 
 

@@ -103,6 +103,8 @@ def _check_years(start_year: int | None, end_year: int | None) -> None:
 
 def _summary(session: Session, indicator: Indicator) -> schemas.IndicatorOut:
     points = series_service.latest_points(session, indicator.slug, WORLD, 2)
+    # Alguns indicadores só existem por lugar (nascimentos do IBGE, séries do Banco Mundial sem linha "Mundo"):
+    # "tem dados" vale para qualquer lugar; "latest/previous" continuam sendo os do mundo.
     extent = series_service.year_extent(session, indicator.slug)
     latest = points[0] if points else None
     previous = points[1] if len(points) > 1 else None
@@ -120,7 +122,8 @@ def _summary(session: Session, indicator: Indicator) -> schemas.IndicatorOut:
         kind=indicator.kind,
         decimals=indicator.decimals,
         per_country=indicator.per_country,
-        has_data=latest is not None,
+        has_data=extent is not None,
+        has_world_data=latest is not None,
         latest=schemas.PointOut(year=latest.year, value=latest.value) if latest else None,
         previous=schemas.PointOut(year=previous.year, value=previous.value) if previous else None,
         change_pct=change,
@@ -140,7 +143,7 @@ def health(db: DB) -> dict:
 @router.get("/status", response_model=schemas.StatusOut, tags=["meta"], summary="Frescor dos dados")
 def status(db: DB) -> schemas.StatusOut:
     total = db.scalar(select(func.count(Observation.id))) or 0
-    with_data = db.scalar(select(func.count(distinct(Observation.indicator))).where(Observation.place == WORLD)) or 0
+    with_data = db.scalar(select(func.count(distinct(Observation.indicator))).where(Observation.indicator.in_(INDICATORS))) or 0
     per_kind = {kind: n for kind, n in db.execute(select(Place.kind, func.count()).group_by(Place.kind))}
     demo = db.scalar(select(Observation.id).where(Observation.source == DEMO_SOURCE).limit(1)) is not None
     runs = db.scalars(select(CollectorRun).order_by(CollectorRun.id.desc()).limit(8)).all()
@@ -231,6 +234,7 @@ def indicator_history(
             limit=limit,
         )
         result.append((code, points))
+    sources = {code: series_service.series_sources(db, slug, code) if points else [] for code, points in result}
 
     if fmt == "csv":
         buffer = io.StringIO()
@@ -250,6 +254,7 @@ def indicator_history(
             schemas.SeriesOut(
                 place=code,
                 name=names.get(code, code),
+                sources=sources[code],
                 points=[schemas.PointOut(year=p.year, value=p.value) for p in points],
             )
             for code, points in result
