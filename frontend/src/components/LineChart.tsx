@@ -2,7 +2,7 @@ import { scaleLinear } from "d3-scale";
 import { area as d3area, line as d3line } from "d3-shape";
 import { useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import type { Point } from "../api/types";
-import { nearestYear, unionYears, yDomain } from "../lib/chartMath";
+import { distinctTicks, nearestYear, unionYears, yDomain } from "../lib/chartMath";
 
 export interface ChartSeries {
   id: string;
@@ -23,6 +23,7 @@ interface Props {
 
 const MARGIN = { top: 22, bottom: 28, left: 46 };
 const LABEL_ROOM = 124;
+const LABEL_CHAR_WIDTH = 7; // largura média de um caractere do rótulo do eixo (12 px)
 const MIN_LABEL_GAP = 16;
 
 function truncate(text: string, max: number): string {
@@ -34,6 +35,8 @@ export function LineChart({ series, formatValue, formatTick, ariaLabel, height =
   const [width, setWidth] = useState(0); // 0 = ainda não medido: o SVG só nasce depois da medida
   const [active, setActive] = useState<number | null>(null);
   const [byKeyboard, setByKeyboard] = useState(false);
+  const tipRef = useRef<HTMLDivElement>(null);
+  const [tipWidth, setTipWidth] = useState(0);
 
   useLayoutEffect(() => {
     const element = wrapRef.current;
@@ -45,6 +48,11 @@ export function LineChart({ series, formatValue, formatTick, ariaLabel, height =
     return () => observer.disconnect();
   }, []);
 
+  // A caixa do tooltip é medida para nunca passar das bordas do gráfico (no celular ela é larga demais).
+  useLayoutEffect(() => {
+    if (tipRef.current) setTipWidth(tipRef.current.offsetWidth);
+  }, [active, series]);
+
   const years = useMemo(() => unionYears(series), [series]);
   const multi = series.length >= 2;
   const innerH = height - MARGIN.top - MARGIN.bottom;
@@ -54,12 +62,16 @@ export function LineChart({ series, formatValue, formatTick, ariaLabel, height =
     return scaleLinear().domain(yDomain(values)).range([innerH, 0]).nice(5);
   }, [series, innerH]);
 
+  const yTicks = useMemo(() => distinctTicks((count) => y.ticks(count), formatTick), [y, formatTick]);
+  // A margem esquerda acompanha o rótulo mais largo ("350 mi" ocupa mais que "8 bi"); senão o primeiro dígito é cortado.
+  const left = Math.max(MARGIN.left, Math.ceil(Math.max(0, ...yTicks.map((t) => formatTick(t).length)) * LABEL_CHAR_WIDTH) + 14);
+
   // Rótulos diretos nas pontas só quando as linhas terminam separadas; senão a legenda basta.
   const endYs = series.flatMap((s) => (s.points.length ? [y(s.points[s.points.length - 1].value)] : [])).sort((a, b) => a - b);
   const colliding = endYs.some((value, i) => i > 0 && value - endYs[i - 1] < MIN_LABEL_GAP);
   const directLabels = multi && series.length <= 4 && !colliding && width >= 520;
   const marginRight = directLabels ? LABEL_ROOM : 24;
-  const innerW = Math.max(1, width - MARGIN.left - marginRight);
+  const innerW = Math.max(1, width - left - marginRight);
 
   const x = useMemo(() => {
     const min = years[0] ?? 0;
@@ -71,7 +83,6 @@ export function LineChart({ series, formatValue, formatTick, ariaLabel, height =
 
   if (!years.length) return null;
 
-  const yTicks = y.ticks(5);
   const xTicks = x.ticks(Math.max(2, Math.floor(innerW / 90))).filter(Number.isInteger);
   const lineGen = d3line<Point>()
     .x((d) => x(d.year))
@@ -92,7 +103,7 @@ export function LineChart({ series, formatValue, formatTick, ariaLabel, height =
   const onPointerMove = (event: PointerEvent<SVGSVGElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setByKeyboard(false);
-    setActive(nearestYear(years, x.invert(event.clientX - rect.left - MARGIN.left)));
+    setActive(nearestYear(years, x.invert(event.clientX - rect.left - left)));
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -149,7 +160,7 @@ export function LineChart({ series, formatValue, formatTick, ariaLabel, height =
           onPointerMove={onPointerMove}
           onPointerLeave={() => !byKeyboard && setActive(null)}
         >
-          <g transform={`translate(${MARGIN.left},${MARGIN.top})`}>
+          <g transform={`translate(${left},${MARGIN.top})`}>
             {yTicks.map((tick) => (
               <g key={tick} transform={`translate(0,${y(tick)})`}>
                 <line x1={0} x2={innerW} className="stroke-grid" strokeWidth={1} />
@@ -223,11 +234,14 @@ export function LineChart({ series, formatValue, formatTick, ariaLabel, height =
 
         {active !== null && (
           <div
-            className="pointer-events-none absolute z-10 min-w-40 rounded-md border border-hair bg-surface px-3 py-2 text-sm shadow-lg"
+            ref={tipRef}
+            className="pointer-events-none absolute z-10 min-w-40 whitespace-nowrap rounded-md border border-hair bg-surface px-3 py-2 text-sm shadow-lg"
             style={{
               top: MARGIN.top,
-              left: MARGIN.left + x(active) + (tooltipOnRight ? 14 : -14),
-              transform: tooltipOnRight ? undefined : "translateX(-100%)",
+              left: Math.min(
+                Math.max(4, left + x(active) + (tooltipOnRight ? 14 : -14 - tipWidth)),
+                Math.max(4, width - tipWidth - 4),
+              ),
             }}
           >
             <p className="mb-1 font-semibold text-ink">{active}</p>

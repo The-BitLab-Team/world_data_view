@@ -7,8 +7,9 @@ from dataclasses import dataclass
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.db.models import Country, Observation
+from app.db.models import Observation, Place
 from app.indicators import WORLD
+from app.places import KIND_COUNTRY
 
 
 @dataclass(frozen=True)
@@ -20,7 +21,7 @@ class Point:
 def get_series(
     session: Session,
     indicator: str,
-    country: str = WORLD,
+    place: str = WORLD,
     *,
     start_year: int | None = None,
     end_year: int | None = None,
@@ -30,7 +31,7 @@ def get_series(
     limit: int | None = None,
 ) -> list[Point]:
     stmt = select(Observation.year, Observation.value).where(
-        Observation.indicator == indicator, Observation.country == country
+        Observation.indicator == indicator, Observation.place == place
     )
     if start_year is not None:
         stmt = stmt.where(Observation.year >= start_year)
@@ -46,40 +47,55 @@ def get_series(
     return [Point(year, value) for year, value in session.execute(stmt)]
 
 
-def latest_points(session: Session, indicator: str, country: str = WORLD, n: int = 2) -> list[Point]:
+def latest_points(session: Session, indicator: str, place: str = WORLD, n: int = 2) -> list[Point]:
     """Os ``n`` pontos mais recentes, do mais novo para o mais antigo."""
-    return get_series(session, indicator, country, descending=True, limit=n)
+    return get_series(session, indicator, place, descending=True, limit=n)
 
 
-def latest_source(session: Session, indicator: str, country: str = WORLD) -> str | None:
+def latest_source(session: Session, indicator: str, place: str = WORLD) -> str | None:
     stmt = (
         select(Observation.source)
-        .where(Observation.indicator == indicator, Observation.country == country)
+        .where(Observation.indicator == indicator, Observation.place == place)
         .order_by(Observation.year.desc())
         .limit(1)
     )
     return session.scalar(stmt)
 
 
-def year_extent(session: Session, indicator: str, country: str = WORLD) -> tuple[int, int] | None:
-    stmt = select(func.min(Observation.year), func.max(Observation.year)).where(
-        Observation.indicator == indicator, Observation.country == country
+def series_sources(session: Session, indicator: str, place: str) -> list[str]:
+    """Fontes distintas de uma série, da que cobre os anos mais antigos para a mais recente."""
+    stmt = (
+        select(Observation.source)
+        .where(Observation.indicator == indicator, Observation.place == place)
+        .group_by(Observation.source)
+        .order_by(func.min(Observation.year), Observation.source)
     )
+    return list(session.scalars(stmt))
+
+
+def year_extent(session: Session, indicator: str, place: str | None = None) -> tuple[int, int] | None:
+    """Primeiro e último ano com dado: de um lugar, ou (sem ``place``) de qualquer lugar."""
+    stmt = select(func.min(Observation.year), func.max(Observation.year)).where(Observation.indicator == indicator)
+    if place is not None:
+        stmt = stmt.where(Observation.place == place)
     low, high = session.execute(stmt).one()
     return (low, high) if low is not None else None
 
 
-def country_names(session: Session, codes: list[str]) -> dict[str, str]:
+def place_names(session: Session, ids: list[str]) -> dict[str, str]:
+    """Nome de cada lugar (inglês para países, como veio da fonte; a interface traduz)."""
     names = {WORLD: "World"}
-    rows = session.execute(select(Country.iso3, Country.name).where(Country.iso3.in_(codes)))
-    names.update({iso: name for iso, name in rows})
+    rows = session.execute(select(Place.id, Place.name).where(Place.id.in_(ids)))
+    names.update({pid: name for pid, name in rows})
     return names
 
 
 def map_values(session: Session, indicator: str, year: int | None) -> tuple[int | None, list[tuple[str, float]]]:
-    """Valores por país em um ano. Sem ``year``, usa o ano mais recente com ao menos 50 países
+    """Valores por *país* em um ano. Sem ``year``, usa o ano mais recente com ao menos 50 países
     (evita escolher um ano em que só meia dúzia de países já reportou)."""
-    base = (Observation.indicator == indicator) & (Observation.country != WORLD)
+    base = (Observation.indicator == indicator) & Observation.place.in_(
+        select(Place.id).where(Place.kind == KIND_COUNTRY)
+    )
     if year is None:
         stmt = (
             select(Observation.year)
@@ -94,16 +110,16 @@ def map_values(session: Session, indicator: str, year: int | None) -> tuple[int 
             year = session.scalar(select(func.max(Observation.year)).where(base))
     if year is None:
         return None, []
-    rows = session.execute(
-        select(Observation.country, Observation.value).where(base, Observation.year == year)
-    ).all()
+    rows = session.execute(select(Observation.place, Observation.value).where(base, Observation.year == year)).all()
     return year, [(c, v) for c, v in rows]
 
 
-def countries_with_data(session: Session) -> list[tuple[str, str]]:
+def countries_with_data(session: Session) -> list[Place]:
+    """Países que têm dados em algum indicador, em ordem alfabética."""
     from app.indicators import INDICATORS
 
     slugs = [s for s, i in INDICATORS.items() if i.per_country]
-    codes = select(Observation.country).where(Observation.indicator.in_(slugs), Observation.country != WORLD).distinct()
-    rows = session.execute(select(Country.iso3, Country.name).where(Country.iso3.in_(codes)).order_by(Country.name))
-    return [(iso, name) for iso, name in rows]
+    codes = select(Observation.place).where(Observation.indicator.in_(slugs)).distinct()
+    return list(
+        session.scalars(select(Place).where(Place.kind == KIND_COUNTRY, Place.id.in_(codes)).order_by(Place.name))
+    )

@@ -16,8 +16,9 @@ from app.collectors.base import (
     CollectorError,
     HttpClientLike,
     ObservationRow,
+    PlaceRow,
 )
-from app.indicators import WORLD
+from app.places import KIND_COUNTRY, WORLD
 
 OWID_URL = "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
 SOURCE = "OWID"
@@ -57,6 +58,7 @@ def parse_owid_csv(text: str) -> CollectedBatch:
         raise CollectorError(f"CSV do OWID sem as colunas esperadas: {sorted(missing)}")
 
     batch = CollectedBatch()
+    seen_countries: set[str] = set()
     for row in reader:
         code = _resolve_country(row["country"], row["iso_code"])
         if code is None:
@@ -65,8 +67,9 @@ def parse_owid_csv(text: str) -> CollectedBatch:
             year = int(row["year"])
         except (TypeError, ValueError):
             continue
-        if code != WORLD:
-            batch.countries[code] = row["country"]
+        if code != WORLD and code not in seen_countries:
+            seen_countries.add(code)
+            batch.places.append(PlaceRow(code, KIND_COUNTRY, row["country"], country_id=code))
         for column, slug in COLUMN_TO_INDICATOR.items():
             value = _to_float(row.get(column))
             if value is not None:

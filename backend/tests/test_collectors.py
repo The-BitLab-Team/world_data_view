@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import io
 import json
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -11,17 +13,20 @@ from app.collectors.base import (
     Collector,
     CollectorError,
     ObservationRow,
+    PlaceRow,
 )
 from app.collectors.gistemp import parse_gistemp_csv
 from app.collectors.owid import parse_owid_csv
 from app.collectors.reference import load_reference_file
-from app.collectors.runner import collect_all, run_collector, upsert_observations
+from app.collectors.runner import collect_all, persist_batch, run_collector, upsert_observations
 from app.collectors.worldbank import (
     WorldBankCollector,
     derive_net_change,
-    parse_worldbank_page,
+    parse_bulk_zip,
+    parse_countries,
+    parse_indicator_page,
 )
-from app.db.models import CollectorRun, Country, Observation
+from app.db.models import CollectorRun, Observation, Place
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -35,21 +40,43 @@ def fixture_json(name: str):
 
 
 class FakeHttp:
-    def __init__(self, json_by_code=None, text=None, fail=()):
+    """Cliente HTTP falso: respostas por trecho da URL, ou por uma função ``handler(url, params)``."""
+
+    def __init__(self, json_by_code=None, text=None, fail=(), handler=None, bytes_by_code=None, text_by_code=None):
         self.json_by_code = json_by_code or {}
         self.text = text
+        self.text_by_code = text_by_code or {}
+        self.bytes_by_code = bytes_by_code or {}
         self.fail = fail
+        self.handler = handler
         self.calls = []
 
-    def get_text(self, url, params=None):
-        self.calls.append(url)
-        return self.text
-
-    def get_json(self, url, params=None):
-        self.calls.append((url, params))
+    def _check_fail(self, url):
         for code in self.fail:
             if code in url:
                 raise CollectorError(f"falha simulada em {code}")
+
+    def get_text(self, url, params=None):
+        self.calls.append(url)
+        self._check_fail(url)
+        for code, text in self.text_by_code.items():
+            if code in url:
+                return text
+        return self.text
+
+    def get_bytes(self, url, params=None):
+        self.calls.append(url)
+        self._check_fail(url)
+        for code, data in self.bytes_by_code.items():
+            if code in url:
+                return data
+        raise CollectorError(f"sem resposta simulada para {url}")
+
+    def get_json(self, url, params=None):
+        self.calls.append((url, params))
+        self._check_fail(url)
+        if self.handler is not None:
+            return self.handler(url, params)
         for code, payload in self.json_by_code.items():
             if code in url:
                 return payload
@@ -60,11 +87,14 @@ class FakeHttp:
 def test_owid_maps_world_and_countries_and_drops_aggregates():
     batch = parse_owid_csv(fixture_text("owid_sample.csv"))
 
-    countries = {o.country for o in batch.observations}
-    assert countries == {"WLD", "BRA", "USA"}  # Africa (agregado) e Kosovo (sem ISO) ficam de fora
-    assert batch.countries == {"BRA": "Brazil", "USA": "United States"}  # WLD não vira "país"
+    places = {o.place for o in batch.observations}
+    assert places == {"WLD", "BRA", "USA"}  # Africa (agregado) e Kosovo (sem ISO) ficam de fora
+    assert {(p.id, p.name, p.kind) for p in batch.places} == {
+        ("BRA", "Brazil", "country"),
+        ("USA", "United States", "country"),
+    }  # WLD não vira "país"
 
-    world_pop = {o.year: o.value for o in batch.observations if o.indicator == "population" and o.country == "WLD"}
+    world_pop = {o.year: o.value for o in batch.observations if o.indicator == "population" and o.place == "WLD"}
     assert world_pop[2021] == 7954448387
     assert {o.indicator for o in batch.observations} == {"population", "co2_emissions", "co2_per_capita"}
 
@@ -83,35 +113,87 @@ def test_owid_rejects_unexpected_format():
 
 
 # ------------------------------------------------------------------------ World Bank
-def test_worldbank_parse_skips_null_values():
-    rows, pages = parse_worldbank_page(fixture_json("worldbank_forest_page.json"), "forest_area")
-    assert pages == 1
-    assert {r.year: r.value for r in rows} == {2021: 40600000.5, 2020: 40650000.25, 2018: 40750000.0}
-    assert all(r.country == "WLD" and r.indicator == "forest_area" for r in rows)
+def test_worldbank_countries_exclude_aggregates():
+    places = parse_countries(fixture_json("worldbank_country_meta_sample.json"))
+    ids = {p.id for p in places}
+    assert {"ABW", "AFG", "AGO", "ARG", "AUS"} <= ids
+    assert not ids & {"AFE", "AFR", "ARB", "BEA"}  # regiões e faixas de renda não são países
+    aruba = next(p for p in places if p.id == "ABW")
+    assert aruba.iso2 == "AW" and aruba.kind == "country"
+    assert aruba.info == {"capital": "Oranjestad", "income_level": "HIC", "wb_region": "LCN"}
+
+
+def test_worldbank_countries_without_iso_code_get_a_continent():
+    # Ilhas do Canal (CHI) existem no Banco Mundial, mas não no GeoNames: sem pai ficariam soltas.
+    payload = [
+        {"page": 1, "pages": 1, "per_page": 400, "total": 2},
+        [
+            {"id": "CHI", "iso2Code": "JG", "name": "Channel Islands", "region": {"id": "ECS"}, "incomeLevel": {"id": "HIC"}, "capitalCity": ""},
+            {"id": "BRA", "iso2Code": "BR", "name": "Brazil", "region": {"id": "LCN"}, "incomeLevel": {"id": "UMC"}, "capitalCity": "Brasilia"},
+        ],
+    ]
+    by_id = {p.id: p for p in parse_countries(payload)}
+    assert by_id["CHI"].parent_id == "CON-EU"
+    assert by_id["BRA"].parent_id is None  # o continente do Brasil vem do GeoNames
+
+
+def test_worldbank_page_keeps_only_known_places_and_skips_nulls():
+    payload = fixture_json("worldbank_all_countries_sample.json")
+    rows, pages = parse_indicator_page(payload, "gdp", {"WLD"})
+    assert pages == 4
+    # AFE/ARB são agregados da API e ficam de fora; sobram só os 6 anos do mundo, sem os nulos.
+    assert {r.place for r in rows} == {"WLD"}
+    assert sorted(r.year for r in rows) == [2020, 2021, 2022, 2023, 2024, 2025]
+    assert next(r.value for r in rows if r.year == 2025) == 118350166039396
 
 
 def test_worldbank_error_payload_raises():
     with pytest.raises(CollectorError, match="recusou"):
-        parse_worldbank_page(fixture_json("worldbank_error.json"), "x")
+        parse_indicator_page(fixture_json("worldbank_error.json"), "x", {"WLD"})
 
 
 def test_worldbank_empty_data_is_not_an_error():
-    rows, pages = parse_worldbank_page([{"page": 1, "pages": 1}, None], "x")
+    rows, pages = parse_indicator_page([{"page": 1, "pages": 1}, None], "x", {"WLD"})
     assert rows == [] and pages == 1
 
 
-def test_net_change_only_uses_consecutive_years():
+def test_net_change_only_uses_consecutive_years_per_place():
     rows = [ObservationRow("forest_area", "WLD", y, v, "WorldBank") for y, v in [(2018, 100.0), (2020, 90.0), (2021, 85.0)]]
-    derived = derive_net_change(rows)
-    # 2019 não existe, então 2020 não tem "ano anterior"; só 2021 (85 - 90).
-    assert [(r.year, r.value) for r in derived] == [(2021, -5.0)]
+    rows += [ObservationRow("forest_area", "BRA", 2021, 50.0, "WorldBank"), ObservationRow("forest_area", "BRA", 2022, 48.0, "WorldBank")]
+    derived = {(r.place, r.year): r.value for r in derive_net_change(rows)}
+    # Mundo: 2019 não existe, então 2020 não tem "ano anterior"; só 2021 (85 - 90). Brasil: 2022 (48 - 50).
+    assert derived == {("WLD", 2021): -5.0, ("BRA", 2022): -2.0}
+
+
+def _wb_http(extra=None, **kwargs):
+    countries = fixture_json("worldbank_country_meta_sample.json")
+    forest = fixture_json("worldbank_forest_page.json")
+    # Mesmo formato real da API, com um país (ABW) além do mundo.
+    forest[1].append({**forest[1][0], "country": {"id": "AW", "value": "Aruba"}, "countryiso3code": "ABW", "date": "2020", "value": 4.2})
+    json_by_code = {"/country?": countries, "AG.LND.FRST.K2": forest, **(extra or {})}
+
+    def handler(url, params):
+        if url.endswith("/country"):
+            return countries
+        for code, payload in json_by_code.items():
+            if code in url:
+                return payload
+        return [{"page": 1, "pages": 1}, None]
+
+    return FakeHttp(handler=handler, **kwargs)
+
+
+def test_worldbank_collector_collects_countries_and_world():
+    batch = WorldBankCollector().collect(_wb_http())
+
+    assert {p.id for p in batch.places} >= {"ABW", "AFG"}
+    forest = {(o.place, o.year): o.value for o in batch.observations if o.indicator == "forest_area"}
+    assert forest[("WLD", 2021)] == 40600000.5 and forest[("ABW", 2020)] == 4.2
+    assert ("WLD", 2021) in {(o.place, o.year) for o in batch.observations if o.indicator == "forest_net_change"}
 
 
 def test_worldbank_collector_partial_failure_keeps_other_indicators():
-    http = FakeHttp(
-        json_by_code={"AG.LND.FRST.K2": fixture_json("worldbank_forest_page.json")},
-        fail=("SP.DYN.CBRT.IN",),
-    )
+    http = _wb_http(fail=("SP.DYN.CBRT.IN",))
     batch = WorldBankCollector().collect(http)
 
     slugs = {o.indicator for o in batch.observations}
@@ -121,22 +203,32 @@ def test_worldbank_collector_partial_failure_keeps_other_indicators():
 
 
 def test_worldbank_collector_total_failure_raises():
-    http = FakeHttp(fail=("SP.", "AG.", "SI.", "SE."))
+    http = FakeHttp(fail=("country",))
     with pytest.raises(CollectorError):
         WorldBankCollector().collect(http)
 
 
+def test_worldbank_collector_without_any_indicator_raises():
+    countries = fixture_json("worldbank_country_meta_sample.json")
+    http = FakeHttp(handler=lambda url, params: countries if url.endswith("/country") else fixture_json("worldbank_error.json"))
+    with pytest.raises(CollectorError, match="nenhum indicador"):
+        WorldBankCollector().collect(http)
+
+
 def test_worldbank_collector_follows_pagination():
-    page1 = [{"page": 1, "pages": 2}, [{"date": "2020", "value": 1.0}]]
-    page2 = [{"page": 2, "pages": 2}, [{"date": "2021", "value": 2.0}]]
+    countries = fixture_json("worldbank_country_meta_sample.json")
+    row = {"countryiso3code": "ABW", "date": "2020", "value": 1.0}
+    page1 = [{"page": 1, "pages": 2}, [row]]
+    page2 = [{"page": 2, "pages": 2}, [{**row, "date": "2021", "value": 2.0}]]
 
-    class Paged(FakeHttp):
-        def get_json(self, url, params=None):
-            if "SP.DYN.CBRT.IN" not in url:
-                return [{"page": 1, "pages": 1}, None]
-            return page1 if params["page"] == 1 else page2
+    def handler(url, params):
+        if url.endswith("/country"):
+            return countries
+        if "SP.DYN.CBRT.IN" not in url:
+            return [{"page": 1, "pages": 1}, None]
+        return page1 if params["page"] == 1 else page2
 
-    batch = WorldBankCollector().collect(Paged())
+    batch = WorldBankCollector().collect(FakeHttp(handler=handler))
     assert sorted(o.year for o in batch.observations if o.indicator == "birth_rate") == [2020, 2021]
 
 
@@ -204,7 +296,7 @@ class OkCollector(Collector):
     def collect(self, http):
         return CollectedBatch(
             observations=[ObservationRow("population", "BRA", 2024, 1.0, "T")],
-            countries={"BRA": "Brazil"},
+            places=[PlaceRow("BRA", "country", "Brazil", country_id="BRA")],
             warnings=["aviso"],
         )
 
@@ -216,11 +308,11 @@ def test_failed_collector_is_recorded_and_does_not_raise(session_factory):
         assert session.scalar(select(func.count(Observation.id))) == 0
 
 
-def test_collector_with_warnings_is_partial_and_persists_countries(session_factory):
+def test_collector_with_warnings_is_partial_and_persists_places(session_factory):
     run = run_collector(session_factory, OkCollector(), FakeHttp())
     assert (run.status, run.rows, run.message) == ("partial", 1, "aviso")
     with session_factory() as session:
-        assert session.get(Country, "BRA").name == "Brazil"
+        assert session.get(Place, "BRA").name == "Brazil"
         assert session.scalar(select(func.count(CollectorRun.id))) == 1
 
 
@@ -238,7 +330,6 @@ def test_real_data_replaces_demo_rows_of_the_same_indicator(session_factory):
     from sqlalchemy import select
 
     from app.collectors.base import CollectedBatch, ObservationRow
-    from app.collectors.runner import persist_batch
     from app.db.models import Observation
 
     demo = CollectedBatch()
@@ -262,7 +353,6 @@ def test_demo_rows_never_replace_other_demo_or_real_rows(session_factory):
     from sqlalchemy import select
 
     from app.collectors.base import CollectedBatch, ObservationRow
-    from app.collectors.runner import persist_batch
     from app.db.models import Observation
 
     real = CollectedBatch()
@@ -275,3 +365,72 @@ def test_demo_rows_never_replace_other_demo_or_real_rows(session_factory):
         session.commit()
         sources = set(session.scalars(select(Observation.source)).all())
     assert sources == {"World Bank", "DEMO"}  # persistir demo não apaga dado real
+
+
+# ----------------------------------------------------------- Banco Mundial: download em massa
+def bulk_zip(csv_name: str = "worldbank_bulk_birth_rate_sample.csv", member: str = "API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv") -> bytes:
+    """Zip no formato do download em massa (amostra real, reduzida a poucas linhas)."""
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr("Metadata_Indicator_API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv", "\"INDICATOR_CODE\",\"INDICATOR_NAME\",\n")
+        archive.writestr(member, fixture_text(csv_name))
+        archive.writestr("Metadata_Country_API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv", "\"Country Code\",\"Region\",\n")
+    return buffer.getvalue()
+
+
+def test_worldbank_bulk_keeps_countries_and_world_and_drops_aggregates_and_empty_cells():
+    rows = parse_bulk_zip(bulk_zip(), "birth_rate", "SP.DYN.CBRT.IN", {"ABW", "AFG", "BRA", "WLD"})
+    by_key = {(r.place, r.year): r.value for r in rows}
+
+    assert by_key[("BRA", 1960)] == 43.85 and by_key[("BRA", 2024)] == 12.133
+    assert by_key[("WLD", 1961)] == 31.2341888501891
+    assert {r.place for r in rows} == {"ABW", "AFG", "BRA", "WLD"}  # EMU (agregado) e INX (sem dados) ficam de fora
+    assert all(r.indicator == "birth_rate" and r.source == "WorldBank" for r in rows)
+    # a coluna de 2025 existe no arquivo, mas vem vazia: não vira zero nem ponto
+    assert not [r for r in rows if r.year == 2025]
+    assert len([r for r in rows if r.place == "BRA"]) == 65
+
+
+def test_worldbank_bulk_rejects_files_that_are_not_what_it_expects():
+    with pytest.raises(CollectorError, match="zip válido"):
+        parse_bulk_zip("<html>manutenção</html>".encode(), "birth_rate", "SP.DYN.CBRT.IN", {"BRA"})
+
+    only_metadata = io.BytesIO()
+    with zipfile.ZipFile(only_metadata, "w") as archive:
+        archive.writestr("Metadata_Country_API_X.csv", "x")
+    with pytest.raises(CollectorError, match="CSV de dados"):
+        parse_bulk_zip(only_metadata.getvalue(), "birth_rate", "SP.DYN.CBRT.IN", {"BRA"})
+
+    no_header = io.BytesIO()
+    with zipfile.ZipFile(no_header, "w") as archive:
+        archive.writestr("API_SP.DYN.CBRT.IN_DS2.csv", '"Data Source","World Development Indicators",\n')
+    with pytest.raises(CollectorError, match="cabeçalho"):
+        parse_bulk_zip(no_header.getvalue(), "birth_rate", "SP.DYN.CBRT.IN", {"BRA"})
+
+
+def test_worldbank_bulk_ignores_rows_of_another_indicator():
+    rows = parse_bulk_zip(bulk_zip(), "death_rate", "SP.DYN.CDRT.IN", {"BRA", "WLD"})
+    assert rows == []
+
+
+def test_worldbank_collector_prefers_the_bulk_download_over_the_paged_api():
+    http = _wb_http(bytes_by_code={"SP.DYN.CBRT.IN": bulk_zip()})
+    batch = WorldBankCollector().collect(http)
+
+    birth = {(o.place, o.year): o.value for o in batch.observations if o.indicator == "birth_rate"}
+    assert birth[("WLD", 1960)] == 31.9992347613352 and ("AFG", 2024) in birth
+    # o indicador veio do zip: a API paginada nem foi consultada para ele
+    assert not [u for u in http.calls if "country/all/indicator/SP.DYN.CBRT.IN" in u]
+    assert any("downloadformat=csv" in u and "SP.DYN.CBRT.IN" in u for u in http.calls)
+
+
+def test_worldbank_collector_falls_back_to_the_paged_api_when_the_bulk_download_fails(caplog):
+    http = _wb_http()  # sem zip simulado: o download em massa de todos os indicadores falha
+    with caplog.at_level("WARNING"):
+        batch = WorldBankCollector().collect(http)
+
+    forest = {(o.place, o.year) for o in batch.observations if o.indicator == "forest_area"}
+    assert ("WLD", 2021) in forest  # veio pela API paginada
+    assert "usando a API paginada" in caplog.text
+    forest_calls = [u for u in http.calls if "AG.LND.FRST.K2" in u]
+    assert "downloadformat=csv" in forest_calls[0]  # o download em massa vem primeiro

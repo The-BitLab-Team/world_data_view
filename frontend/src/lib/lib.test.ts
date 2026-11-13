@@ -1,11 +1,14 @@
 import { describe, expect, it } from "vitest";
 import type { Counter, Indicator } from "../api/types";
-import { assignSlots, nearestYear, tableRows, toIndex100, unionYears, yDomain } from "./chartMath";
+import { assignSlots, distinctTicks, nearestYear, tableRows, toIndex100, unionYears, yDomain } from "./chartMath";
 import { counterValue, periodStartMs } from "./counters";
 import { countryName, numericToIso3 } from "./countries";
-import { axisFormatter, describeValue } from "./display";
+import { axisFormatter, describeValue, describeValueAt, formatsFor } from "./display";
 import { formatCompact, formatNumber, formatPercentChange } from "./format";
+import { scaleLinear } from "d3-scale";
 import { quantileBins } from "./mapScale";
+
+const scaleTicks = (min: number, max: number, count: number) => scaleLinear().domain([min, max]).ticks(count);
 
 const plain = (s: string) => s.replace(/ | /g, " ");
 
@@ -21,6 +24,7 @@ const indicator = (over: Partial<Indicator>): Indicator => ({
   decimals: 0,
   per_country: false,
   has_data: true,
+  has_world_data: true,
   latest: null,
   previous: null,
   change_pct: null,
@@ -176,5 +180,52 @@ describe("mapScale", () => {
     expect(Math.max(...counts) - Math.min(...counts)).toBeLessThanOrEqual(1);
     expect(bins.colorFor(values[0])).toBe("a");
     expect(bins.colorFor(values.at(-1)!)).toBe("f");
+  });
+});
+
+describe("formatação por nível (mundo × lugar)", () => {
+  const co2 = indicator({ slug: "co2_emissions", unit: "Mt CO₂", decimals: 0 });
+  const forest = indicator({ slug: "forest_area", unit: "km²", decimals: 0 });
+
+  it("o mundo mantém as conversões legíveis; um lugar não herda 0,0", () => {
+    expect(describeValueAt(co2, 38995, "WLD")).toEqual({ text: "39,0", unit: "bilhões de t de CO₂" });
+    expect(describeValueAt(co2, 480, "BRA")).toEqual({ text: "480", unit: "milhões de t de CO₂" });
+    expect(describeValueAt(co2, 0.4, "BRA-SC")).toEqual({ text: "0,40", unit: "milhões de t de CO₂" });
+    expect(plain(describeValueAt(forest, 4_900_000, "BRA").text)).toBe("4,9 mi");
+    expect(describeValueAt(forest, 250, "LUX")).toEqual({ text: "250", unit: "km²" });
+  });
+
+  it("gráficos só de lugares usam a unidade da fonte; com o mundo, as conversões", () => {
+    const places = formatsFor(forest, false);
+    expect(places.unit).toBe("km²");
+    expect(plain(places.value(250))).toBe("250 km²");
+    expect(plain(places.tick(4_900_000))).toBe("4,9 mi");
+
+    const withWorld = formatsFor(forest, true);
+    expect(withWorld.unit).toBe("milhões de km²");
+    expect(withWorld.tick(40_700_000)).toBe("40,7");
+
+    expect(formatsFor(co2, false).value(480)).toBe("480 Mt");
+    expect(formatsFor(co2, true).unit).toBe("bilhões de t de CO₂");
+  });
+});
+
+describe("distinctTicks", () => {
+  const compact = (v: number) => formatCompact(v, 1);
+
+  it("mantém as marcas quando os rótulos já são distintos", () => {
+    const ticks = distinctTicks((n) => scaleTicks(0, 100, n), (v) => String(v));
+    expect(ticks.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("pede menos marcas quando os rótulos compactos coincidem", () => {
+    // 8,12 a 8,33 milhões: marcas de 50 mil dariam "8,3 mi" e "8,3 mi" lado a lado.
+    const naive = scaleTicks(8_120_000, 8_330_000, 5).map(compact);
+    expect(new Set(naive).size).toBeLessThan(naive.length); // o problema existe sem a correção
+
+    const ticks = distinctTicks((n) => scaleTicks(8_120_000, 8_330_000, n), compact);
+    const labels = ticks.map(compact);
+    expect(new Set(labels).size).toBe(labels.length);
+    expect(ticks.length).toBeGreaterThanOrEqual(2);
   });
 });

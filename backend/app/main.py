@@ -23,12 +23,13 @@ from app.services.cache import TTLCache
 log = logging.getLogger(__name__)
 
 DESCRIPTION = """
-**World Data View** reúne indicadores globais (população, clima, tecnologia, indicadores sociais)
-a partir de fontes abertas e os expõe numa API pública.
+**World Data View** reúne indicadores globais (população, economia, saúde, educação, energia, clima,
+tecnologia, indicadores sociais) a partir de fontes abertas e os expõe numa API pública.
 
-* Séries históricas com filtros por país, período e faixa de valores (JSON ou CSV).
+* **Lugares** em cinco níveis: mundo, continentes, países, estados/regiões e cidades (busca, hierarquia, rankings).
+* Séries históricas com filtros por lugar, período e faixa de valores (JSON ou CSV).
 * Valores por país para mapas, comparação entre indicadores e contadores em tempo real.
-* Cada indicador informa sua **fonte** e se é uma série oficial ou uma **estimativa**.
+* Cada indicador informa sua **fonte** e se é uma série oficial, uma **estimativa** ou um valor **calculado** pelo projeto.
 """
 
 
