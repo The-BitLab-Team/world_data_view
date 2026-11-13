@@ -1,78 +1,44 @@
 
-=== IBGE alcance
-IBGE FALHOU 25.1s https://servicodados.ibge.gov.br/api/v1/localidades/estados :: URLError: <urlopen error timed out>
-IBGE ok 200 0.7s https://apisidra.ibge.gov.br/values/t/6579/n1/all/v/9324/p/last :: b'[\r\n  {\r\n    "NC": "N\xc3\xadvel Territorial (C\xc3\xb3digo)",\r\n    "NN": "N\xc3\xadvel Territorial'
-IBGE ok 200 0.8s https://ftp.ibge.gov.br/Estimativas_de_Populacao/ :: b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<html>\n <head>\n  <title>'
-IBGE FALHOU 0.4s https://www.ibge.gov.br/ :: HTTPError: HTTP Error 403: Forbidden
-
-=== IBGE
-FALHOU: URLError: <urlopen error timed out>
+=== IBGE SIDRA
+GET https://apisidra.ibge.gov.br/values/t/6579/n1/all/v/9324/p/all -> 5932 B em 0.5s
+ibge_sidra_6579_brasil_todos_anos.json: 23 linhas | cabeçalho: {"NC": "Nível Territorial (Código)", "NN": "Nível Territorial", "MC": "Unidade de Medida (Código)", "MN": "Unidade de Medida", "V": "Valor", "D1C": "Brasil (Código)", "D1N": "Brasil", "D2C": "Variável (Código)", "D2N": "Variável", "D3C": "Ano (Código)", "D3N": "Ano"}
+   exemplo: {"NC": "1", "NN": "Brasil", "MC": "45", "MN": "Pessoas", "V": "172385826", "D1C": "1", "D1N": "Brasil", "D2C": "9324", "D2N": "População residente estimada", "D3C": "2001", "D3N": "2001"}
+anos em 6579 (Brasil): ['2001', '2002', '2003', '2004', '2005', '2006', '2008', '2009', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2024', '2025', '2026']
+GET https://apisidra.ibge.gov.br/values/t/6579/n3/all/v/9324/p/last%203 -> 22483 B em 0.2s
+ibge_sidra_6579_estados_ultimos3.json: 82 linhas | cabeçalho: {"NC": "Nível Territorial (Código)", "NN": "Nível Territorial", "MC": "Unidade de Medida (Código)", "MN": "Unidade de Medida", "V": "Valor", "D1C": "Unidade da Federação (Código)", "D1N": "Unidade da Federação", "D2C": "Variável (Código)", "D2N": "Variável", "D3C": "Ano (Código)", "D3N": "Ano"}
+   exemplo: {"NC": "3", "NN": "Unidade da Federação", "MC": "45", "MN": "Pessoas", "V": "1746227", "D1C": "11", "D1N": "Rondônia", "D2C": "9324", "D2N": "População residente estimada", "D3C": "2024", "D3N": "2024"}
+ultimo ano: 2026
+GET https://apisidra.ibge.gov.br/values/t/6579/n6/all/v/9324/p/2026 -> 1508656 B em 0.8s
+municipios no ultimo ano: 5571
+Joaçaba (4209102): [{"NC": "6", "NN": "Município", "MC": "45", "MN": "Pessoas", "V": "673980", "D1C": "4209102", "D1N": "Joinville - SC", "D2C": "9324", "D2N": "População residente estimada", "D3C": "2026", "D3N": "2026"}]
+valores nao numericos: []
+GET https://apisidra.ibge.gov.br/values/t/6579/n6/in%20n3%2042/v/9324/p/last%203 -> 239162 B em 0.8s
+SC municipios 3 anos: 885 linhas em 0.8s
+GET https://apisidra.ibge.gov.br/values/t/6579/n3/all/v/9324/p/2026 -> 7745 B em 0.2s
+estados: 27 | exemplo: [{"NC": "3", "NN": "Unidade da Federação", "MC": "45", "MN": "Pessoas", "V": "1757338", "D1C": "11", "D1N": "Rondônia", "D2C": "9324", "D2N": "População residente estimada", "D3C": "2026", "D3N": "2026"}, {"NC": "3", "NN": "Unidade da Federação", "MC": "45", "MN": "Pessoas", "V": "887794", "D1C": "1
 
 === Banco Mundial
-GET https://api.worldbank.org/v2/country?format=json&per_page=400 -> 113954 B em 0.2s
+GET https://api.worldbank.org/v2/country?format=json&per_page=400 -> 113954 B em 0.1s
 paises (WB): {'page': 1, 'pages': 1, 'per_page': '400', 'total': 296} | exemplo: {"id": "ABW", "iso2Code": "AW", "name": "Aruba", "region": {"id": "LCN", "iso2code": "ZJ", "value": "Latin America & Caribbean "}, "adminregion": {"id": "", "iso2code": "", "value": ""}, "incomeLevel": {"id": "HIC", "iso2code": "XD", "value": "High income"}, "lendingType": {"id": "LNX", "iso2code": "XX", "value": "Not classified"}, "capitalCity": "Oranjestad", "longitude": "-70.0167", "latitude": "12.5167"}
 reais: 217 | agregados: 79 | exemplos agregados: ['AFE', 'AFR', 'AFW', 'ARB', 'BEA', 'BEC', 'BHI', 'BLA', 'BMN', 'BSS', 'CAA', 'CEA']
-SP.POP.TOTL            paises=217 mediana_ano=2025 0s | Population, total
-SP.DYN.CBRT.IN         paises=217 mediana_ano=2024 0s | Birth rate, crude (per 1,000 people)
-SP.DYN.CDRT.IN         paises=217 mediana_ano=2024 0s | Death rate, crude (per 1,000 people)
-SP.DYN.TFRT.IN         paises=217 mediana_ano=2024 0s | Fertility rate, total (births per woman)
-SP.DYN.LE00.IN         paises=217 mediana_ano=2024 0s | Life expectancy at birth, total (years)
-SP.DYN.IMRT.IN         paises=196 mediana_ano=2024 0s | Mortality rate, infant (per 1,000 live births)
-SP.POP.GROW            paises=217 mediana_ano=2025 0s | Population growth (annual %)
-SP.POP.0014.TO.ZS      paises=217 mediana_ano=2025 0s | Population ages 0-14 (% of total population)
-SP.POP.65UP.TO.ZS      paises=217 mediana_ano=2025 0s | Population ages 65 and above (% of total population)
-SP.URB.TOTL.IN.ZS      paises=217 mediana_ano=2025 0s | Urban population (% of total population)
-EN.POP.DNST            paises=216 mediana_ano=2024 0s | Population density (people per sq. km of land area)
-SM.POP.NETM            paises=217 mediana_ano=2025 0s | Net migration
-SM.POP.TOTL            paises=215 mediana_ano=2024 0s | International migrant stock, total
-SM.POP.TOTL.ZS         paises=216 mediana_ano=2024 0s | International migrant stock (% of population)
-SM.POP.REFG            SEM DADOS ([{'message': [{'id': '175', 'key': 'Invalid format', 'value': 'The indicator was not found. It may have been deleted or )
-NY.GDP.MKTP.CD         paises=214 mediana_ano=2025 0s | GDP (current US$)
-NY.GDP.PCAP.CD         paises=214 mediana_ano=2025 0s | GDP per capita (current US$)
-NY.GDP.MKTP.KD.ZG      paises=214 mediana_ano=2025 0s | GDP growth (annual %)
-FP.CPI.TOTL.ZG         paises=193 mediana_ano=2025 0s | Inflation, consumer prices (annual %)
-SL.UEM.TOTL.ZS         paises=187 mediana_ano=2025 0s | Unemployment, total (% of total labor force) (modeled ILO estimate)
-NE.EXP.GNFS.ZS         ERRO TimeoutError: The read operation timed out
-NE.IMP.GNFS.ZS         paises=194 mediana_ano=2025 0s | Imports of goods and services (% of GDP)
-SI.POV.GINI            paises=171 mediana_ano=2021 0s | Gini index
-SI.POV.DDAY            paises=171 mediana_ano=2021 0s | Poverty headcount ratio at $3.00 a day (2021 PPP) (% of population)
-GC.DOD.TOTL.GD.ZS      paises=109 mediana_ano=2020 0s | Central government debt, total (% of GDP)
-NY.GDP.PCAP.PP.CD      paises=203 mediana_ano=2025 0s | GDP per capita, PPP (current international $)
-SH.XPD.CHEX.GD.ZS      paises=193 mediana_ano=2023 0s | Current health expenditure (% of GDP)
-SH.MED.PHYS.ZS         paises=208 mediana_ano=2022 0s | Physicians (per 1,000 people)
-SH.STA.MMRT            paises=194 mediana_ano=2023 0s | Maternal mortality ratio (modeled estimate, per 100,000 live births)
-SN.ITK.DEFC.ZS         paises=168 mediana_ano=2024 0s | Prevalence of undernourishment (% of population)
-SH.H2O.BASW.ZS         paises=214 mediana_ano=2024 0s | People using at least basic drinking water services (% of population)
-SH.STA.BASS.ZS         paises=214 mediana_ano=2024 0s | People using at least basic sanitation services (% of population)
-SH.DYN.MORT            paises=196 mediana_ano=2024 0s | Mortality rate, under-5 (per 1,000 live births)
-SH.IMM.MEAS            paises=193 mediana_ano=2024 0s | Immunization, measles (% of children ages 12-23 months)
-SH.MED.BEDS.ZS         paises=201 mediana_ano=2022 0s | Hospital beds (per 1,000 people)
-SE.ADT.LITR.ZS         paises=170 mediana_ano=2021 0s | Literacy rate, adult total (% of people ages 15 and above)
-SE.PRM.ENRR            paises=209 mediana_ano=2024 0s | School enrollment, primary (% gross)
-SE.SEC.ENRR            paises=208 mediana_ano=2024 0s | School enrollment, secondary (% gross)
-SE.TER.ENRR            paises=203 mediana_ano=2023 0s | School enrollment, tertiary (% gross)
-SE.XPD.TOTL.GD.ZS      paises=203 mediana_ano=2023 0s | Government expenditure on education, total (% of GDP)
-SE.PRM.CMPT.ZS         ERRO TimeoutError: The read operation timed out
-EG.ELC.ACCS.ZS         paises=216 mediana_ano=2024 0s | Access to electricity (% of population)
-EG.FEC.RNEW.ZS         paises=212 mediana_ano=2021 0s | Renewable energy consumption (% of total final energy consumption)
-EG.USE.PCAP.KG.OE      paises=179 mediana_ano=2024 0s | Energy use (kg of oil equivalent per capita)
-EG.ELC.RNEW.ZS         paises=209 mediana_ano=2021 0s | Renewable electricity output (% of total electricity output)
-AG.LND.FRST.ZS         paises=214 mediana_ano=2024 0s | Forest area (% of land area)
-AG.LND.FRST.K2         paises=214 mediana_ano=2025 0s | Forest area (sq. km)
-AG.LND.TOTL.K2         ERRO TimeoutError: The read operation timed out
-AG.LND.AGRI.ZS         paises=210 mediana_ano=2024 0s | Agricultural land (% of land area)
-EN.ATM.PM25.MC.M3      paises=200 mediana_ano=2023 0s | PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)
-ER.PTD.TOTL.ZS         ERRO TimeoutError: The read operation timed out
-EN.ATM.CO2E.PC         SEM DADOS ([{'message': [{'id': '175', 'key': 'Invalid format', 'value': 'The indicator was not found. It may have been deleted or )
-IT.NET.USER.ZS         paises=213 mediana_ano=2024 0s | Individuals using the Internet (% of population)
-IT.CEL.SETS.P2         paises=214 mediana_ano=2024 0s | Mobile cellular subscriptions (per 100 people)
-IT.NET.BBND.P2         paises=208 mediana_ano=2024 0s | Fixed broadband subscriptions (per 100 people)
-SL.TLF.CACT.FE.ZS      ERRO TimeoutError: The read operation timed out
-SG.GEN.PARL.ZS         ERRO TimeoutError: The read operation timed out
-VC.IHR.PSRC.P5         paises=196 mediana_ano=2022 0s | Intentional homicides (per 100,000 people)
-SP.DYN.AMRT.FE         ERRO TimeoutError: The read operation timed out
-SL.TLF.TOTL.IN         ERRO TimeoutError: The read operation timed out
-MS.MIL.XPND.GD.ZS      paises=166 mediana_ano=2025 0s | Military expenditure (% of GDP)
-GB.XPD.RSDV.GD.ZS      paises=156 mediana_ano=2023 0s | Research and development expenditure (% of GDP)
-IP.JRN.ARTC.SC         ERRO TimeoutError: The read operation timed out
+NE.EXP.GNFS.ZS         paises=194 mediana_ano=2025 0s | Exports of goods and services (% of GDP)
+SE.PRM.CMPT.ZS         paises=198 mediana_ano=2024 0s | Primary completion rate, total (% of relevant age group)
+AG.LND.TOTL.K2         paises=216 mediana_ano=2024 0s | Land area (sq. km)
+ER.PTD.TOTL.ZS         paises=213 mediana_ano=2025 0s | Terrestrial and marine protected areas (% of total territorial area)
+SL.TLF.CACT.FE.ZS      paises=187 mediana_ano=2025 0s | Labor force participation rate, female (% of female population ages 15
+SG.GEN.PARL.ZS         paises=193 mediana_ano=2025 0s | Proportion of seats held by women in national parliaments (%)
+SP.DYN.AMRT.FE         paises=217 mediana_ano=2024 0s | Mortality rate, adult, female (per 1,000 female adults)
+SL.TLF.TOTL.IN         paises=187 mediana_ano=2025 0s | Labor force, total
+IP.JRN.ARTC.SC         paises=197 mediana_ano=2023 0s | Scientific and technical journal articles
+SI.POV.NAHC            paises=161 mediana_ano=2021 0s | Poverty headcount ratio at national poverty lines (% of population)
+SP.DYN.LE00.FE.IN      ERRO TimeoutError: The read operation timed out
+SP.DYN.LE00.MA.IN      ERRO TimeoutError: The read operation timed out
+NY.GDP.MKTP.PP.CD      paises=203 mediana_ano=2025 0s | GDP, PPP (current international $)
+SP.RUR.TOTL.ZS         ERRO TimeoutError: The read operation timed out
+GET https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=500&page=1 -> 123140 B em 0.1s
+per_page=500: 0.1s | cabeçalho {'page': 1, 'pages': 36, 'per_page': 500, 'total': 17556, 'sourceid': '2', 'lastupdated': '2026-11-11'} | registros 500
+GET https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=1000&page=1 -> 250428 B em 0.1s
+per_page=1000: 0.1s | cabeçalho {'page': 1, 'pages': 18, 'per_page': 1000, 'total': 17556, 'sourceid': '2', 'lastupdated': '2026-11-11'} | registros 1000
+GET https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=5000&page=1 -> 1191980 B em 0.1s
+per_page=5000: 0.1s | cabeçalho {'page': 1, 'pages': 4, 'per_page': 5000, 'total': 17556, 'sourceid': '2', 'lastupdated': '2026-11-11'} | registros 5000
 FALHOU: TimeoutError: The read operation timed out
