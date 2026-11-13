@@ -50,7 +50,8 @@ class HttpClient:
     """Cliente HTTP com timeout, retentativas com backoff e User-Agent identificável."""
 
     def __init__(self, timeout: float = 60.0, retries: int = 3, user_agent: str = "WorldDataView/0.1"):
-        self.timeout = timeout
+        # (conexão, leitura): um servidor que não responde falha em segundos, não em minutos.
+        self.timeout = (min(10.0, timeout), timeout)
         self.session = requests.Session()
         self.session.headers["User-Agent"] = user_agent
         retry = Retry(

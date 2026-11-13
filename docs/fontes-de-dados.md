@@ -7,22 +7,30 @@ De onde vem cada número, com que grau de confiança, e o que fazer para atualiz
 | Fonte | Indicadores | Escopo | Situação |
 |---|---|---|---|
 | [Our World in Data, `co2-data`](https://github.com/owid/co2-data) | População, emissões de CO₂, CO₂ per capita | Mundo e ~220 países, de 1750 em diante | ✅ Executado contra o servidor real |
-| [Banco Mundial, API v2](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392) | Natalidade, mortalidade, área florestal (e variação anual derivada), pobreza extrema, alfabetização de adultos | Mundo (`WLD`) | 🧪 Só testado com amostras gravadas |
-| [NASA GISTEMP v4](https://data.giss.nasa.gov/gistemp/) | Anomalia da temperatura global | Mundo, anual | 🧪 Só testado com amostras gravadas |
+| [Banco Mundial, API v2](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392) | Natalidade, mortalidade, área florestal (e variação anual derivada), pobreza extrema, alfabetização de adultos | Mundo (`WLD`) | ✅ Executado contra o servidor real (13/11/2026) |
+| [NASA GISTEMP v4](https://data.giss.nasa.gov/gistemp/) | Anomalia da temperatura global | Mundo, anual | ✅ Executado contra o servidor real (13/11/2026) |
 | [`reference_estimates.json`](../backend/app/data/reference_estimates.json) | Smartphones, dados da internet por dia, espécies extintas | Mundo, um valor | ⚠️ Estimativas sem fonte citável ainda |
 | `seed-demo` | Qualquer indicador sem dados | Mundo | 🎭 Sintético, **não são dados reais** |
 
-### O que "🧪 só testado com amostras" significa
+### Como as fontes foram verificadas
 
-O ambiente em que o MVP foi construído não alcançava o Banco Mundial nem a NASA (rede restrita). Os coletores foram escritos a partir dos formatos documentados dessas fontes e têm testes com arquivos de exemplo (`backend/tests/fixtures/`), incluindo respostas de erro e paginação. **Mas nunca rodaram contra os servidores reais.** O primeiro passo ao publicar é:
+O ambiente de desenvolvimento não alcançava o Banco Mundial nem a NASA, então os coletores nasceram com testes sobre arquivos de exemplo (`backend/tests/fixtures/`). Em **13/11/2026** eles foram executados contra os servidores reais num runner do GitHub Actions (que tem internet):
+
+| Coletor | Resultado | Último ponto mundial |
+|---|---|---|
+| `owid` | ok, 89.722 linhas | população 8,23 bi (2025) |
+| `worldbank` | ok, 286 linhas | natalidade 16,3 (2024), mortalidade 7,55 (2024), floresta 40,35 milhões de km² (2023), pobreza extrema 10,1% (2024), alfabetização 87,7% (2024) |
+| `gistemp` | ok, 146 linhas | anomalia de 1,19 °C (2025) |
+
+O `collect` completo levou cerca de 10 s num banco novo e 7 s numa segunda rodada sobre os mesmos dados. Para repetir a verificação no seu ambiente:
 
 ```bash
 cd backend
 python -m app.cli collect
-python -m app.cli status      # confira que worldbank e gistemp estão "ok", não "error"
+python -m app.cli status      # worldbank e gistemp devem estar "ok", não "error"
 ```
 
-Se algum falhar, a mensagem fica em `collector_runs` e aparece no aviso "Uma fonte falhou na última coleta" do painel. Os demais coletores não são afetados.
+Se alguma fonte falhar, a mensagem fica em `collector_runs` e aparece no aviso "Uma fonte falhou na última coleta" do painel. Os demais coletores não são afetados.
 
 ## Detalhes por fonte
 

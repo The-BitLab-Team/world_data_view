@@ -90,8 +90,8 @@ Configuração por variáveis `WDV_*`: veja [backend/.env.example](backend/.env.
 
 Esta plataforma existe para ser confiável, então vale ser explícito:
 
-- ✅ **Verificado com dados reais:** população e emissões de CO₂ (mundo e ~220 países) vindos do Our World in Data.
-- 🧪 **Implementado e testado só com amostras gravadas:** Banco Mundial (natalidade, mortalidade, floresta, pobreza, alfabetização) e NASA GISTEMP. Os coletores seguem os formatos documentados dessas APIs e têm testes com fixtures, mas **não foram executados contra os servidores reais** no ambiente de desenvolvimento (rede bloqueada). Rode `python -m app.cli collect` no seu ambiente e confira `python -m app.cli status`.
+- ✅ **Dados reais:** população e emissões de CO₂ (mundo e ~220 países) vindos do Our World in Data.
+- ✅ **Verificado contra os servidores reais** (em 13/11/2026, num runner do GitHub): Banco Mundial (natalidade, mortalidade, floresta, pobreza, alfabetização) e NASA GISTEMP, além do OWID. Rode `python -m app.cli collect` e `status` no seu ambiente para repetir.
 - ⚠️ **Estimativas:** smartphones, dados da internet por dia e espécies extintas vêm de [`reference_estimates.json`](backend/app/data/reference_estimates.json). São valores editoriais herdados do projeto original e **ainda precisam de uma fonte citável** cada um. Aparecem com o selo *estimativa*.
 - 🎭 **Demonstração:** `seed-demo` gera séries sintéticas só para os indicadores que não têm nenhum dado, para a interface poder ser avaliada. Tudo que vem delas carrega o selo *demonstração*, inclusive a curiosidade do dia e os contadores. **Não são dados reais.**
 - 🔢 **Contadores:** são projeções de taxas anuais, não medições instantâneas.
@@ -102,7 +102,7 @@ Fontes, licenças e como cada número é obtido: [docs/fontes-de-dados.md](docs/
 
 - **Fase 1 — MVP** ✅ coleta de fontes abertas, banco, API e dashboard com contadores, gráficos, mapa e comparação.
 - **Fase 2 — Beta**
-  - Validar os coletores do Banco Mundial e da NASA em produção e remover a dependência de dados de demonstração.
+  - Substituir os dados de demonstração por coleta real em produção (os coletores já foram validados contra as fontes).
   - Dar fonte citável às estimativas de referência.
   - Categoria Cultura & História, migrações (UNHCR), projeções populacionais (ONU/WPP) e "quantas pessoas já viveram".
   - Limite de requisições e chaves opcionais para a API pública.

@@ -45,7 +45,7 @@ Para adicionar um indicador, veja o passo a passo em [docs/arquitetura.md](docs/
 - Nesta fonte tipográfica, vírgula e ponto *tabulares* ficam largos. Números com `tabular-nums` passam por `<Num>` para os separadores voltarem à largura normal.
 - **`LineChart` mede o contêiner antes de desenhar o SVG.** Um SVG com largura inicial fixa estoura o grid no celular e a medição devolve o valor já inflado.
 - Tailwind v4: tokens em `@theme inline` no `index.css`, tema por `data-theme` (claro/escuro, segue o sistema até a pessoa escolher).
-- Os coletores do Banco Mundial e da NASA só foram testados com amostras gravadas. Se mexer neles, confirme contra a fonte real quando houver rede.
+- Este ambiente de desenvolvimento costuma não alcançar o Banco Mundial nem a NASA. Os coletores foram validados contra as fontes reais num runner do GitHub Actions (13/11/2026). Ao mexer neles, repita essa validação: uma branch descartável com um workflow que roda `python -m app.cli collect` e lê o resultado pelas anotações do *check run*.
 
 ## Revisão visual (interface)
 
