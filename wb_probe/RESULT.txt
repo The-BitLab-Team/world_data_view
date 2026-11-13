@@ -1,0 +1,32 @@
+== JSON paginado (country/all), 3 repetições por tamanho de página
+per_page= 1000 rep=0 status=None 120.2s 0.00 MB páginas=None ct=TimeoutError: The read operation timed out
+per_page= 1000 rep=1 status=None 120.0s 0.00 MB páginas=None ct=TimeoutError: The read operation timed out
+per_page= 1000 rep=2 status=200   0.1s 0.25 MB páginas=18 ct=application/json;charset=utf-8
+per_page= 5000 rep=0 status=200   0.4s 1.17 MB páginas=4 ct=application/json;charset=utf-8
+per_page= 5000 rep=1 status=200   0.1s 1.17 MB páginas=4 ct=application/json;charset=utf-8
+per_page= 5000 rep=2 status=200   0.1s 1.17 MB páginas=4 ct=application/json;charset=utf-8
+per_page=20000 rep=0 status=200   0.1s 3.91 MB páginas=1 ct=application/json;charset=utf-8
+per_page=20000 rep=1 status=200   0.1s 3.91 MB páginas=1 ct=application/json;charset=utf-8
+per_page=20000 rep=2 status=200   0.1s 3.91 MB páginas=1 ct=application/json;charset=utf-8
+
+== Download em massa (CSV zipado)
+bulk rep=0 status=200   0.1s 0.08 MB ct=application/zip url_final=https://api.worldbank.org/v2/en/indicator/SP.DYN.CBRT.IN?downloadformat=csv
+membros: ['Metadata_Indicator_API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv', 'API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv', 'Metadata_Country_API_SP.DYN.CBRT.IN_DS2_en_csv_v2_74855.csv']
+linhas: 271
+  | "Data Source","World Development Indicators",
+  | 
+  | "Last Updated Date","2026-11-11",
+  | 
+  | "Country Name","Country Code","Indicator Name","Indicator Code","1960","1961","1962","1963","1964","1965","1966","1967","1968","1969","1970","1971","1972","1973","1974","1975","1976","1977","1978","1979","1980","1981","1982","1983
+  | "Aruba","ABW","Birth rate, crude (per 1,000 people)","SP.DYN.CBRT.IN","32.043","31.225","30.386","29.635","28.846","28.24","27.421","26.708","25.775","24.801","23.957","23.239","20.69","17.204","16.487","16.605","16.122","16.951",
+  | "Brazil","BRA","Birth rate, crude (per 1,000 people)","SP.DYN.CBRT.IN","43.85","43.292","42.698","42.014","41.001","39.844","38.638","37.409","36.345","35.685","35.231","34.875","34.541","34.223","33.682","33.484","33.32","33.173","32.979","32.734","32.417","32.017","31.463","30.8","29.967","29.184","28.343","27.383","26.459","25.644","24.765","24.056","23.302","22.95","22.525","22.283","21.872","
+  | "World","WLD","Birth rate, crude (per 1,000 people)","SP.DYN.CBRT.IN","31.9992347613352","31.2341888501891","35.1632445830402","36.3474563845187","35.1867781359517","34.5166542843224","33.4763662664044","33.1903180507835","33.3167956338247","32.8206532186312","32.5683883067216","31.8386630222275","31.3785214258942","30.743811739418","29.8916994956859","29.2261787061019","28.4282781400367","28.0436
+bulk rep=1 status=200   0.1s 0.08 MB ct=application/zip url_final=https://api.worldbank.org/v2/en/indicator/SP.DYN.CBRT.IN?downloadformat=csv
+bulk rep=2 status=200   0.1s 0.08 MB ct=application/zip url_final=https://api.worldbank.org/v2/en/indicator/SP.DYN.CBRT.IN?downloadformat=csv
+
+== Vários indicadores num pedido só (source=2)
+multi rep=0 status=None 120.0s 0.00 MB meta=None
+multi rep=1 status=200 113.0s 1.11 MB meta={'page': 1, 'pages': 3, 'per_page': 5000, 'total': 10640, 'sourceid': None, 'lastupdated': '2026-11-11'}
+
+== Pedido com intervalo de datas (menos linhas)
+date=1960:2024 status=200  76.9s 1.17 MB
