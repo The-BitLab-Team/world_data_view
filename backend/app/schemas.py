@@ -28,7 +28,7 @@ class IndicatorOut(BaseModel):
     source_url: str
     kind: str = Field(description="'measured' (série oficial) ou 'estimate' (valor de referência)")
     decimals: int
-    per_country: bool = Field(description="True se há dados por país além do agregado mundial")
+    per_country: bool = Field(description="True se há dados de lugares além do agregado mundial")
     has_data: bool
     latest: PointOut | None = None
     previous: PointOut | None = None
@@ -39,7 +39,7 @@ class IndicatorOut(BaseModel):
 
 
 class SeriesOut(BaseModel):
-    country: str
+    place: str
     name: str
     points: list[PointOut]
 
@@ -57,7 +57,7 @@ class CompareSeriesOut(BaseModel):
 
 
 class CompareOut(BaseModel):
-    country: str
+    place: str
     normalized: bool
     series: list[CompareSeriesOut]
 
@@ -65,10 +65,12 @@ class CompareOut(BaseModel):
 class CountryOut(BaseModel):
     iso3: str
     name: str
+    iso2: str | None = None
+    continent: str | None = Field(None, description="Identificador do continente (ex.: CON-SA)")
 
 
 class MapValueOut(BaseModel):
-    country: str
+    place: str
     name: str
     value: float
 
@@ -117,7 +119,72 @@ class CollectorRunOut(BaseModel):
 
 class StatusOut(BaseModel):
     observations: int
+    places: dict[str, int] = Field(description="Quantidade de lugares por tipo (country, region, city...)")
     indicators_with_data: int
     indicators_total: int
     has_demo_data: bool
     last_runs: list[CollectorRunOut]
+
+
+class PopulationOut(BaseModel):
+    value: int
+    year: int | None = Field(None, description="Ano de referência; nulo nos instantâneos do GeoNames, que não informam o ano")
+    source: str | None = None
+    is_derived: bool = False
+
+
+class PlaceRefOut(BaseModel):
+    id: str
+    name: str
+    kind: str
+
+
+class PlaceOut(BaseModel):
+    id: str
+    kind: str
+    kind_label: str
+    name: str
+    parent_id: str | None = None
+    country_id: str | None = None
+    iso2: str | None = None
+    lat: float | None = None
+    lon: float | None = None
+    population: PopulationOut | None = None
+
+
+class PlaceListOut(BaseModel):
+    total: int
+    items: list[PlaceOut]
+
+
+class MetricOut(BaseModel):
+    indicator: str
+    latest: PointOut
+    previous: PointOut | None = None
+    change_pct: float | None = None
+    first_year: int
+    last_year: int
+    source: str
+    is_derived: bool = Field(description="True se o valor foi calculado pelo projeto a partir de outros dados")
+    recent: list[PointOut] = Field(description="Últimos pontos da série, do mais antigo para o mais novo")
+
+
+class PlaceDetailOut(PlaceOut):
+    breadcrumb: list[PlaceRefOut]
+    children_counts: dict[str, int]
+    info: dict | None = Field(None, description="Ficha estática (capital, moeda, idiomas, área...)")
+    info_source: str | None = None
+    metrics: list[MetricOut]
+
+
+class RankingItemOut(BaseModel):
+    place: PlaceOut
+    value: float
+    source: str | None = None
+
+
+class RankingOut(BaseModel):
+    indicator: IndicatorOut
+    year: int | None
+    total: int
+    items: list[RankingItemOut]

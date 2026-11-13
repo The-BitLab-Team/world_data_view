@@ -15,9 +15,9 @@ import sys
 
 from sqlalchemy import func, select
 
-from app.collectors import COLLECTORS, collect_all
+from app.collectors import ALL_STEPS, collect_all
 from app.core.config import get_settings
-from app.db.models import CollectorRun, Observation
+from app.db.models import CollectorRun, Observation, Place
 from app.db.session import create_db_engine, create_session_factory, init_db
 from app.scheduler import build_http
 from app.services.demo import seed_demo
@@ -28,7 +28,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("init-db", help="cria as tabelas")
     collect = sub.add_parser("collect", help="coleta dados das fontes")
-    collect.add_argument("--only", nargs="+", choices=list(COLLECTORS), help="coletores a executar (padrão: todos)")
+    collect.add_argument("--only", nargs="+", choices=list(ALL_STEPS), help="coletores a executar (padrão: todos)")
     sub.add_parser("seed-demo", help="preenche indicadores vazios com dados sintéticos")
     sub.add_parser("status", help="resumo do banco")
     args = parser.parse_args(argv)
@@ -46,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "collect":
         runs = collect_all(session_factory, build_http(settings), only=args.only)
         for run in runs:
-            print(f"{run.collector:<10} {run.status:<8} {run.rows:>8} linhas  {run.message or ''}")
+            print(f"{run.collector:<11} {run.status:<8} {run.rows:>8} linhas  {run.message or ''}")
         return 0 if all(r.status != "error" for r in runs) else 1
 
     if args.command == "seed-demo":
@@ -58,6 +58,8 @@ def main(argv: list[str] | None = None) -> int:
         with session_factory() as session:
             total = session.scalar(select(func.count(Observation.id)))
             print(f"Observações: {total}")
+            per_kind = session.execute(select(Place.kind, func.count()).group_by(Place.kind).order_by(Place.kind))
+            print("Lugares: " + ", ".join(f"{kind} {n}" for kind, n in per_kind))
             per_indicator = session.execute(
                 select(Observation.indicator, Observation.source, func.count(), func.max(Observation.year))
                 .group_by(Observation.indicator, Observation.source)

@@ -1,14 +1,15 @@
 """Modelos do banco.
 
 Em vez de uma tabela por indicador, todos os dados ficam em ``observations``
-(indicador + país + ano + valor). Adicionar um indicador novo não exige migração.
+(indicador + lugar + ano + valor). Adicionar um indicador novo não exige migração.
+Os lugares (mundo, continentes, países, regiões e cidades) ficam em ``places``.
 """
 
 from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, Float, Index, Integer, String, Text, UniqueConstraint
+from sqlalchemy import JSON, DateTime, Float, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.session import Base
@@ -18,28 +19,52 @@ def utcnow() -> datetime:
     return datetime.now(UTC)
 
 
-class Country(Base):
-    __tablename__ = "countries"
+class Place(Base):
+    """Um lugar da hierarquia mundo → continente → país → região → cidade (ver ``app.places``)."""
 
-    iso3: Mapped[str] = mapped_column(String(3), primary_key=True)
-    name: Mapped[str] = mapped_column(String(120))
+    __tablename__ = "places"
+    __table_args__ = (
+        Index("ix_place_parent_kind", "parent_id", "kind"),
+        Index("ix_place_kind_population", "kind", "population"),
+    )
+
+    id: Mapped[str] = mapped_column(String(16), primary_key=True)
+    kind: Mapped[str] = mapped_column(String(10))
+    name: Mapped[str] = mapped_column(String(160))
+    # Nome sem acentos e em minúsculas, usado pela busca (``app.places.search_key``).
+    name_search: Mapped[str] = mapped_column(String(200), index=True)
+    parent_id: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    # País ao qual o lugar pertence (ISO alfa-3); o próprio código para países.
+    country_id: Mapped[str | None] = mapped_column(String(3), nullable=True, index=True)
+    iso2: Mapped[str | None] = mapped_column(String(2), nullable=True)
+    lat: Mapped[float | None] = mapped_column(Float, nullable=True)
+    lon: Mapped[float | None] = mapped_column(Float, nullable=True)
+    # População *pontual* (instantâneo da fonte). Séries por ano ficam em ``observations``.
+    # ``population_year`` é nulo quando a fonte não informa o ano de referência (ex.: GeoNames).
+    population: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    population_year: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    population_source: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    # Ficha estática (capital, moeda, idiomas, área...) e a fonte dela.
+    info: Mapped[dict | None] = mapped_column(JSON(none_as_null=True), nullable=True)
+    info_source: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
 
 class Observation(Base):
     __tablename__ = "observations"
     __table_args__ = (
-        UniqueConstraint("indicator", "country", "year", name="uq_observation"),
+        UniqueConstraint("indicator", "place", "year", name="uq_observation"),
         Index("ix_observation_indicator_year", "indicator", "year"),
+        Index("ix_observation_place", "place", "indicator"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     indicator: Mapped[str] = mapped_column(String(64))
-    # ISO 3166-1 alfa-3; "WLD" representa o agregado mundial.
-    country: Mapped[str] = mapped_column(String(3))
+    # Identificador de ``places`` (``WLD``, ``CON-SA``, ``BRA``, ``BRA-SC``, ``BRA-4209102``...).
+    place: Mapped[str] = mapped_column(String(16))
     year: Mapped[int] = mapped_column(Integer)
     value: Mapped[float] = mapped_column(Float)
-    # Fonte do dado ("OWID", "WorldBank", "NASA GISTEMP", "reference", "DEMO").
-    source: Mapped[str] = mapped_column(String(64))
+    # Fonte do dado ("OWID", "WorldBank", "IBGE", "NASA GISTEMP", "reference", "DEMO" ou "Derivado: ...").
+    source: Mapped[str] = mapped_column(String(80))
     fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 

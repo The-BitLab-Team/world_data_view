@@ -1,0 +1,80 @@
+AR.14	Misiones	Misiones	3430657
+AR.09	Formosa	Formosa	3433896
+AR.07	Buenos Aires F.D.	Buenos Aires F.D.	3433955
+AR.08	Entre Rios	Entre Rios	3434137
+AR.06	Corrientes	Corrientes	3435214
+AR.01	Buenos Aires	Buenos Aires	3435907
+AR.24	Tucuman	Tucuman	3833578
+AR.23	Tierra del Fuego	Tierra del Fuego	3834450
+AR.22	Santiago del Estero	Santiago del Estero	3835868
+AR.21	Santa Fe	Santa Fe	3836276
+AR.20	Santa Cruz	Santa Cruz	3836350
+AR.19	San Luis	San Luis	3837029
+AR.18	San Juan	San Juan	3837152
+AR.17	Salta	Salta	3838231
+AR.16	Rio Negro	Rio Negro	3838830
+AR.15	Neuquen	Neuquen	3843122
+AR.13	Mendoza	Mendoza	3844419
+AR.12	La Rioja	La Rioja	3848949
+AR.11	La Pampa	La Pampa	3849574
+AR.10	Jujuy	Jujuy	3853404
+AR.05	Cordoba	Cordoba	3860255
+AR.04	Chubut	Chubut	3861244
+AR.03	Chaco	Chaco	3861887
+AR.02	Catamarca	Catamarca	3862286
+BR.22	Rio Grande do Norte	Rio Grande do Norte	3390290
+BR.20	Piauí	Piaui	3392213
+BR.30	Pernambuco	Pernambuco	3392268
+BR.17	Paraíba	Paraiba	3393098
+BR.16	Pará	Para	3393129
+BR.13	Maranhão	Maranhao	3395443
+BR.06	Ceará	Ceara	3402362
+BR.03	Amapá	Amapa	3407762
+BR.02	Alagoas	Alagoas	3408096
+BR.28	Sergipe	Sergipe	3447799
+BR.27	São Paulo	Sao Paulo	3448433
+BR.26	Santa Catarina	Santa Catarina	3450387
+BR.23	Rio Grande do Sul	Rio Grande do Sul	3451133
+BR.21	Rio de Janeiro	Rio de Janeiro	3451189
+BR.18	Paraná	Parana	3455077
+BR.15	Minas Gerais	Minas Gerais	3457153
+BR.11	Mato Grosso do Sul	Mato Grosso do Sul	3457415
+BR.14	Mato Grosso	Mato Grosso	3457419
+BR.29	Goiás	Goias	3462372
+BR.07	Federal District	Federal District	3463504
+BR.08	Espírito Santo	Espirito Santo	3463930
+BR.05	Bahia	Bahia	3471168
+BR.31	Tocantins	Tocantins	3474575
+BR.25	Roraima	Roraima	3662560
+BR.04	Amazonas	Amazonas	3665361
+BR.01	Acre	Acre	3665474
+BR.24	Rondônia	Rondonia	3924825
+DE.15	Thuringia	Thuringia	2822542
+DE.10	Schleswig-Holstein	Schleswig-Holstein	2838632
+DE.14	Saxony-Anhalt	Saxony-Anhalt	2842565
+DE.13	Saxony	Saxony	2842566
+DE.09	Saarland	Saarland	2842635
+DE.08	Rheinland-Pfalz	Rheinland-Pfalz	2847618
+DE.07	North Rhine-Westphalia	North Rhine-Westphalia	2861876
+DE.06	Lower Saxony	Lower Saxony	2862926
+DE.12	Mecklenburg-Vorpommern	Mecklenburg-Vorpommern	2872567
+DE.05	Hesse	Hesse	2905330
+DE.04	Hamburg	Hamburg	2911297
+DE.03	Bremen	Bremen	2944387
+DE.11	Brandenburg	Brandenburg	2945356
+DE.16	State of Berlin	State of Berlin	2950157
+DE.02	Bavaria	Bavaria	2951839
+DE.01	Baden-Wurttemberg	Baden-Wurttemberg	2953481
+FR.93	Provence-Alpes-Côte d'Azur	Provence-Alpes-Cote d'Azur	2985244
+FR.52	Pays de la Loire	Pays de la Loire	2988289
+FR.11	Île-de-France	Ile-de-France	3012874
+FR.94	Corsica	Corsica	3023519
+FR.24	Centre-Val de Loire	Centre-Val de Loire	3027939
+FR.53	Brittany	Brittany	3030293
+FR.27	Bourgogne-Franche-Comté	Bourgogne-Franche-Comte	11071619
+FR.75	New Aquitaine	New Aquitaine	11071620
+FR.28	Normandy	Normandy	11071621
+FR.44	Grand Est	Grand Est	11071622
+FR.76	Occitanie	Occitanie	11071623
+FR.32	Hauts-de-France	Hauts-de-France	11071624
+FR.84	Auvergne-Rhône-Alpes	Auvergne-Rhone-Alpes	11071625

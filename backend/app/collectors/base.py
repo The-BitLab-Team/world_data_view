@@ -26,22 +26,45 @@ class CollectorError(RuntimeError):
 @dataclass(frozen=True)
 class ObservationRow:
     indicator: str
-    country: str
+    place: str  # identificador de lugar (ver app.places): WLD, BRA, BRA-SC, GEO-123...
     year: int
     value: float
     source: str
 
 
+@dataclass(frozen=True)
+class PlaceRow:
+    """Um lugar descoberto por um coletor. Campos ``None`` não apagam o que outra fonte já informou."""
+
+    id: str
+    kind: str
+    name: str
+    parent_id: str | None = None
+    country_id: str | None = None
+    iso2: str | None = None
+    lat: float | None = None
+    lon: float | None = None
+    population: int | None = None
+    population_year: int | None = None
+    population_source: str | None = None
+    info: dict[str, Any] | None = None
+    info_source: str | None = None
+    # Fontes de nomes mais confiáveis (GeoNames, IBGE) trocam o nome já gravado; as demais só preenchem.
+    overwrite_name: bool = False
+
+
 @dataclass
 class CollectedBatch:
     observations: list[ObservationRow] = field(default_factory=list)
-    countries: dict[str, str] = field(default_factory=dict)
+    places: list[PlaceRow] = field(default_factory=list)
     # Problemas não fatais (ex.: um indicador específico falhou). Vão para o log da execução.
     warnings: list[str] = field(default_factory=list)
 
 
 class HttpClientLike(Protocol):
     def get_text(self, url: str, params: dict[str, Any] | None = None) -> str: ...
+
+    def get_bytes(self, url: str, params: dict[str, Any] | None = None) -> bytes: ...
 
     def get_json(self, url: str, params: dict[str, Any] | None = None) -> Any: ...
 
@@ -72,6 +95,14 @@ class HttpClient:
             raise CollectorError(f"Falha ao acessar {url}: {exc}") from exc
         response.encoding = response.encoding or "utf-8"
         return response.text
+
+    def get_bytes(self, url: str, params: dict[str, Any] | None = None) -> bytes:
+        try:
+            response = self.session.get(url, params=params, timeout=self.timeout)
+            response.raise_for_status()
+        except requests.RequestException as exc:
+            raise CollectorError(f"Falha ao acessar {url}: {exc}") from exc
+        return response.content
 
     def get_json(self, url: str, params: dict[str, Any] | None = None) -> Any:
         try:
