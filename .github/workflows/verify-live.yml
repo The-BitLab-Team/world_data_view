@@ -2,55 +2,28 @@ name: verify-live
 on:
   push:
     branches: [tmp/verify-live-sources]
+permissions:
+  contents: write
 concurrency:
   group: verify-live
   cancel-in-progress: true
 
 jobs:
-  live:
+  probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      WDV_DATABASE_URL: sqlite:////tmp/all.db
-      PYTHONUNBUFFERED: "1"
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: pip install -r backend/requirements.txt
-      - name: collect completo (banco novo)
-        working-directory: backend
-        env:
-          WDV_DATABASE_URL: sqlite:////tmp/all.db
-        run: |
-          s=$(date +%s)
-          (timeout --signal=INT --kill-after=10 200 python -m app.cli collect > /tmp/all1.log 2>&1; echo "exit=$? tempo=$(( $(date +%s) - s ))s" >> /tmp/all1.log) || true
-      - name: collect completo (segunda vez, mesmo banco)
-        working-directory: backend
-        env:
-          WDV_DATABASE_URL: sqlite:////tmp/all.db
-        run: |
-          s=$(date +%s)
-          (timeout --signal=INT --kill-after=10 200 python -m app.cli collect > /tmp/all2.log 2>&1; echo "exit=$? tempo=$(( $(date +%s) - s ))s" >> /tmp/all2.log) || true
-      - name: Relatório
+      - name: Sonda
+        run: python probe/probe.py
+      - name: Publica as amostras na própria branch
         if: always()
-        working-directory: backend
         run: |
-          python - <<'PY'
-          import os, sqlite3
-          def enc(s): return s.replace("%", "%25").replace("\r", "").replace("\n", "%0A")
-          def tail(path, n=22):
-              try: return "\n".join(open(path, encoding="utf-8", errors="replace").read().splitlines()[-n:])
-              except FileNotFoundError: return "(sem log)"
-          for name in ("all1", "all2"):
-              print(f"::notice title=LOG-{name}::" + enc(tail(f"/tmp/{name}.log", 40)))
-          if os.path.exists("/tmp/all.db"):
-              db = sqlite3.connect("/tmp/all.db")
-              rows = db.execute("select indicator, source, count(*), min(year), max(year) from observations where country='WLD' group by indicator, source order by indicator").fetchall()
-              lines = []
-              for ind, src, n, y0, y1 in rows:
-                  v = db.execute("select value from observations where indicator=? and country='WLD' and year=?", (ind, y1)).fetchone()[0]
-                  lines.append(f"{ind} | {src} | {n} pts | {y0}-{y1} | ultimo={v}")
-              print("::notice title=WLD::" + enc("\n".join(lines) or "(vazio)"))
-          PY
+          git config user.name "probe-bot"
+          git config user.email "probe-bot@users.noreply.github.com"
+          git add -f backend/tests/fixtures/live
+          git commit -m "Amostras reais da sonda" || echo "nada a commitar"
+          git push origin HEAD:tmp/verify-live-sources
