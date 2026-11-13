@@ -102,7 +102,8 @@ _INDICATORS: tuple[Indicator, ...] = (
         unit="pessoas",
         description=(
             "População total. Países e mundo: estimativas da ONU/UN WPP e fontes históricas, via Our World in Data. "
-            "Estados e municípios do Brasil: estimativas anuais e Censo 2022 do IBGE. Continentes: soma dos países."
+            "Estados e municípios do Brasil: estimativas anuais e Censo 2022 do IBGE. Estados e regiões de outros países: "
+            "censos e estimativas datados registrados no Wikidata, quando existem. Continentes: soma dos países."
         ),
         source="Our World in Data (UN WPP, HYDE, Gapminder); IBGE no Brasil",
         source_url="https://github.com/owid/co2-data",

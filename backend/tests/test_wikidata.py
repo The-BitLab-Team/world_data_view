@@ -4,6 +4,8 @@ As linhas SPARQL abaixo seguem o formato real do serviço (``results.bindings`` 
 o teste de ponta a ponta com resposta gravada do serviço fica no fim do arquivo.
 """
 
+import json
+
 import pytest
 
 from app.collectors.base import CollectorError
@@ -21,7 +23,7 @@ from app.collectors.wikidata import (
 )
 
 from .test_collectors import FakeHttp
-from .test_places_collectors import text
+from .test_places_collectors import FIXTURES, text
 
 NORMAL = "http://wikiba.se/ontology#NormalRank"
 PREFERRED = "http://wikiba.se/ontology#PreferredRank"
@@ -130,3 +132,52 @@ def test_collector_end_to_end_with_partial_failure():
 
     with pytest.raises(CollectorError, match="nenhuma consulta funcionou"):
         WikidataCollector().collect(FakeHttp(text_by_code=http.text_by_code, handler=broken))
+
+
+def real_http():
+    """Respostas gravadas do serviço em 13/11/2026: 16 divisões de 8 países (63 linhas SPARQL)."""
+    sparql = json.loads((FIXTURES / "wikidata_sparql_sample.json").read_text(encoding="utf-8"))
+    return FakeHttp(
+        text_by_code={
+            "countryInfo": text("geonames_countryInfo.txt"),
+            "admin1CodesASCII": text("wikidata_admin1_sample.txt"),
+        },
+        handler=lambda url, params: sparql,
+    )
+
+
+def test_real_sample_from_wikidata_end_to_end():
+    batch = WikidataCollector().collect(real_http())
+    assert batch.warnings == []
+    assert len(batch.places) == 16 and len(batch.observations) == 57
+    assert all(o.source == SOURCE and o.indicator == "population" and o.year >= 1950 for o in batch.observations)
+    assert not any(o.place.startswith("BRA-") for o in batch.observations)
+
+    by_place = {p.id: p for p in batch.places}
+    assert (by_place["ARG-14"].population, by_place["ARG-14"].population_year) == (1278873, 2022)
+    assert (by_place["IND-28"].population, by_place["IND-28"].population_year) == (91276115, 2011)
+    assert (by_place["USA-DC"].population, by_place["USA-DC"].population_year) == (689545, 2020)
+
+    # Schleswig-Holstein tem dois valores diferentes e igualmente válidos para 2022: o ano é descartado
+    # e o ponto mais recente passa a ser 2018, em vez de o projeto escolher um dos dois.
+    schleswig = {o.year: o.value for o in batch.observations if o.place == "DEU-10"}
+    assert 2022 not in schleswig
+    assert (by_place["DEU-10"].population, by_place["DEU-10"].population_year) == (2896712, 2018)
+
+
+def test_runner_persists_regions_with_year_and_source(session_factory, client):
+    from app.collectors.runner import run_collector
+
+    run = run_collector(session_factory, WikidataCollector(), real_http())
+    assert run.status == "ok" and run.rows == 57
+
+    detail = client.get("/api/v1/places/ARG-14").json()
+    assert detail["name"] == "Misiones"
+    assert detail["population"]["value"] == 1278873
+    assert detail["population"]["year"] == 2022
+    assert detail["population"]["source"] == SOURCE
+
+    series = client.get("/api/v1/indicators/population/history", params={"place": "ARG-14"}).json()["series"][0]
+    assert series["place"] == "ARG-14"
+    assert [p["year"] for p in series["points"]] == [2010, 2015, 2022]
+    assert series["sources"] == [SOURCE]

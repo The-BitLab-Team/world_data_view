@@ -7,6 +7,7 @@ const LABELS: Record<string, string> = {
   WorldBank: "Banco Mundial",
   OWID: "Our World in Data",
   reference: "Valor de referência",
+  Wikidata: "Wikidata (base colaborativa)",
   [DEMO_SOURCE]: "Demonstração",
 };
 
