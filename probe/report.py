@@ -50,6 +50,23 @@ for ind in ("gdp", "life_expectancy", "birth_rate", "births_registered", "birth_
             print(f"{ind:<20} {pid:<12} {r[0][0]} {r[0][1]:.4g} ({r[0][2]})")
 print("cidades GeoNames amostra:", [tuple(r) for r in q("SELECT id, name, parent_id, population FROM places WHERE id LIKE 'GEO-%' ORDER BY population DESC LIMIT 5")])
 print("maiores municípios IBGE:", [tuple(r) for r in q("SELECT id, name, population, population_year FROM places WHERE id GLOB 'BRA-[0-9]*' ORDER BY population DESC LIMIT 5")])
+print("\n== checagens de consistência")
+ref = q("SELECT max(year) FROM observations WHERE indicator='population' AND place='WLD'")[0][0]
+conts = q("SELECT place, year, value, source FROM observations WHERE indicator='population' AND place LIKE 'CON-%' AND year=?", ref)
+wld = q("SELECT value FROM observations WHERE indicator='population' AND place='WLD' AND year=?", ref)
+if wld:
+    total = sum(r["value"] for r in conts)
+    print(f"população {ref}: soma dos continentes {total:.4g} / mundo {wld[0][0]:.4g} = {total / wld[0][0]:.4f}  ({len(conts)} continentes)")
+print("países com população em Place:", q("SELECT count(*) FROM places WHERE kind='country' AND population IS NOT NULL")[0][0], "de", q("SELECT count(*) FROM places WHERE kind='country'")[0][0])
+print("continentes com população em Place:", [(r[0], r[1]) for r in q("SELECT id, population FROM places WHERE kind='continent'")])
+try:
+    from app.indicators import INDICATORS
+    slugs = list(INDICATORS) if isinstance(INDICATORS, dict) else [i.slug for i in INDICATORS]
+    have = {r[0] for r in q("SELECT DISTINCT indicator FROM observations")}
+    print("indicadores do catálogo SEM nenhuma observação:", sorted(set(slugs) - have))
+except Exception as exc:  # noqa: BLE001
+    print("catálogo indisponível:", type(exc).__name__, exc)
+print("DEMO no banco:", q("SELECT count(*) FROM observations WHERE source='DEMO'")[0][0])
 print("tamanho do banco (MB):", round(os.path.getsize(os.environ["WDV_DATABASE_URL"].replace("sqlite:///", "")) / 1e6, 1))
 
 # amostra real de linhas de países do Banco Mundial para as fixtures de teste

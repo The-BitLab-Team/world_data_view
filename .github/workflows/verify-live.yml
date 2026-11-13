@@ -11,7 +11,9 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 120
+    env:
+      WDV_DATABASE_URL: sqlite:////tmp/live.db
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,20 +27,27 @@ jobs:
           python-version: "3.13"
       - name: Dependências
         run: pip install -r code/backend/requirements.txt
-      - name: Coleta real (todas as fontes)
+      - name: Fontes rápidas (GeoNames, OWID, NASA, referência)
         working-directory: code/backend
-        env:
-          WDV_DATABASE_URL: sqlite:////tmp/live.db
-        run: |
-          mkdir -p ../../results/backend/tests/fixtures/live
-          start=$(date +%s)
-          python -m app.cli collect 2>&1 | tee ../../results/backend/tests/fixtures/live/COLLECT.log
-          echo "duração: $(( $(date +%s) - start ))s" | tee -a ../../results/backend/tests/fixtures/live/COLLECT.log
+        continue-on-error: true
+        run: ../../results/probe/step.sh geonames owid gistemp reference
+      - name: IBGE
+        working-directory: code/backend
+        continue-on-error: true
+        run: ../../results/probe/step.sh ibge
+      - name: Banco Mundial
+        working-directory: code/backend
+        continue-on-error: true
+        run: ../../results/probe/step.sh worldbank
+      - name: Agregados
+        working-directory: code/backend
+        continue-on-error: true
+        run: ../../results/probe/step.sh aggregates
       - name: Relatório do banco coletado
         if: always()
         working-directory: code/backend
         env:
-          WDV_DATABASE_URL: sqlite:////tmp/live.db
+          PYTHONPATH: .
         run: python ../../results/probe/report.py | tee ../../results/backend/tests/fixtures/live/REPORT.txt
       - name: Publica os resultados na própria branch
         if: always()
