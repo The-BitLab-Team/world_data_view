@@ -462,3 +462,8 @@ INFO Coletor worldbank: ok (1508159 linhas, 154 s)
 worldbank   ok        1508159 linhas  
 pico de memória: 325772 KB
 ### worldbank duração: 155s (saída 0)
+### aggregates (início 17:50:40Z)
+INFO Agregados: ok (19482 linhas)
+aggregates  ok          19482 linhas  
+pico de memória: 97340 KB
+### aggregates duração: 6s (saída 0)
