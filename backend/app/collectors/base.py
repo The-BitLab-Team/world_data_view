@@ -11,8 +11,10 @@ Isso mantém os coletores fáceis de testar com respostas gravadas.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable, Sequence
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Protocol
+from typing import Any, ClassVar, Protocol, TypeVar
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -21,6 +23,33 @@ from urllib3.util.retry import Retry
 
 class CollectorError(RuntimeError):
     """Falha ao coletar dados de uma fonte."""
+
+
+T = TypeVar("T")
+R = TypeVar("R")
+
+# Fontes grandes (Banco Mundial, IBGE) respondem devagar a pedidos grandes; vários pedidos ao mesmo
+# tempo cortam a coleta de dezenas de minutos para poucos minutos sem sobrecarregar o servidor.
+DEFAULT_WORKERS = 6
+
+
+def map_ordered(fn: Callable[[T], R], items: Sequence[T], workers: int = DEFAULT_WORKERS) -> list[R | Exception]:
+    """Aplica ``fn`` a cada item em threads e devolve os resultados **na ordem de ``items``**.
+
+    Uma exceção em um item não interrompe os demais: ela vem no lugar do resultado, e quem chama
+    decide o que fazer (em geral, um aviso). A ordem fixa mantém a saída determinística.
+    """
+
+    def guarded(item: T) -> R | Exception:
+        try:
+            return fn(item)
+        except Exception as exc:
+            return exc
+
+    if workers <= 1 or len(items) <= 1:
+        return [guarded(item) for item in items]
+    with ThreadPoolExecutor(max_workers=min(workers, len(items))) as pool:
+        return list(pool.map(guarded, items))
 
 
 @dataclass(frozen=True)
@@ -83,7 +112,8 @@ class HttpClient:
             status_forcelist=(429, 500, 502, 503, 504),
             allowed_methods=("GET",),
         )
-        adapter = HTTPAdapter(max_retries=retry)
+        # O pool de conexões acompanha o número de threads dos coletores (DEFAULT_WORKERS).
+        adapter = HTTPAdapter(max_retries=retry, pool_connections=4, pool_maxsize=2 * DEFAULT_WORKERS)
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
 

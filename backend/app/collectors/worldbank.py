@@ -1,7 +1,8 @@
 """Coletor do Banco Mundial (World Bank Open Data).
 
 Para cada indicador do catálogo com ``wb_code``, busca **todos os países de uma vez**
-(``country/all``), em páginas de 5.000 registros. A API responde ``[metadados, [registros...]]``;
+(``country/all``), em páginas de 5.000 registros. Os indicadores são baixados em paralelo: em
+produção cada página leva vários segundos, e 64 indicadores em série passavam de 40 minutos. A API responde ``[metadados, [registros...]]``;
 quando há erro, responde ``[{"message": [...]}]``. A resposta mistura países e agregados
 (regiões, faixas de renda); só ficam os países da lista oficial e o mundo (``WLD``).
 Docs: https://datahelpdesk.worldbank.org/knowledgebase/articles/889392
@@ -9,7 +10,9 @@ Docs: https://datahelpdesk.worldbank.org/knowledgebase/articles/889392
 
 from __future__ import annotations
 
+import logging
 import math
+import time
 from typing import Any, ClassVar
 
 from app.collectors.base import (
@@ -19,6 +22,7 @@ from app.collectors.base import (
     HttpClientLike,
     ObservationRow,
     PlaceRow,
+    map_ordered,
 )
 from app.indicators import WB_INDICATORS
 from app.places import KIND_COUNTRY, WORLD
@@ -27,6 +31,8 @@ COUNTRIES_URL = "https://api.worldbank.org/v2/country"
 INDICATOR_URL = "https://api.worldbank.org/v2/country/all/indicator/{code}"
 SOURCE = "WorldBank"
 PAGE_SIZE = 5000
+
+log = logging.getLogger(__name__)
 
 
 def _check_payload(payload: Any, what: str) -> list:
@@ -122,18 +128,21 @@ class WorldBankCollector(Collector):
         )
         allowed = {p.id for p in batch.places} | {WORLD}
 
-        for slug, code in WB_INDICATORS.items():
-            try:
-                rows = self._fetch_indicator(http, slug, code, allowed)
-            except CollectorError as exc:
-                batch.warnings.append(f"{slug}: {exc}")
+        items = list(WB_INDICATORS.items())
+        results = map_ordered(lambda item: self._fetch_indicator(http, item[0], item[1], allowed), items)
+        # Os resultados chegam na ordem do catálogo, então a saída é determinística.
+        for (slug, _), result in zip(items, results, strict=True):
+            if isinstance(result, Exception):
+                if not isinstance(result, CollectorError):
+                    log.error("Banco Mundial %s: erro inesperado", slug, exc_info=result)
+                batch.warnings.append(f"{slug}: {result}")
                 continue
-            if not rows:
+            if not result:
                 batch.warnings.append(f"{slug}: sem dados")
                 continue
-            batch.observations.extend(rows)
+            batch.observations.extend(result)
             if slug == "forest_area":
-                batch.observations.extend(derive_net_change(rows))
+                batch.observations.extend(derive_net_change(result))
 
         if not batch.observations:
             raise CollectorError("Banco Mundial: nenhum indicador pôde ser coletado. " + " | ".join(batch.warnings))
@@ -142,6 +151,7 @@ class WorldBankCollector(Collector):
     @staticmethod
     def _fetch_indicator(http: HttpClientLike, slug: str, code: str, allowed: set[str]) -> list[ObservationRow]:
         url = INDICATOR_URL.format(code=code)
+        started = time.monotonic()
         rows: list[ObservationRow] = []
         page, pages = 1, 1
         while page <= pages:
@@ -149,4 +159,6 @@ class WorldBankCollector(Collector):
             page_rows, pages = parse_indicator_page(payload, slug, allowed)
             rows.extend(page_rows)
             page += 1
+        # Visível no log de uma coleta longa: mostra até onde ela chegou e quais fontes são lentas.
+        log.info("Banco Mundial %s: %d linhas em %d páginas (%.0f s)", slug, len(rows), pages, time.monotonic() - started)
         return rows
