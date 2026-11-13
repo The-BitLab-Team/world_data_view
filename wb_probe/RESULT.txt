@@ -1,0 +1,67 @@
+slug                           status     s     KB linhas países  valores anos  flags
+birth_rate                     200      0.3     81    266    265    17195 1960–2025 
+death_rate                     200      0.1     77    266    265    17195 1960–2025 
+fertility_rate                 200      0.1     75    266    265    17193 1960–2025 
+life_expectancy                200      0.1     91    266    265    17191 1960–2025 
+life_expectancy_female         200      0.1     83    266    265    17191 1960–2025 
+life_expectancy_male           200      0.1     83    266    265    17191 1960–2025 
+population_growth              200      0.1    162    266    265    17193 1960–2025 
+population_0_14                200      0.1    162    266    265    17490 1960–2025 
+population_65_plus             200      0.1    163    266    265    17490 1960–2025 
+urban_population               200      0.1    160    266    265    17490 1960–2025 
+rural_population               200      0.1    160    266    265    17490 1960–2025 
+population_density             200      0.1    143    266    264    15558 1960–2025 
+net_migration                  200      0.1     67    266    265    17490 1960–2025 
+migrant_stock                  200      0.1     23    266    263     2104 1960–2025 
+migrant_stock_pct              200      0.1     22    266    264     2112 1960–2025 
+gdp                            200      0.1    143    266    262    14811 1960–2025 
+gdp_per_capita                 200      0.1    148    266    262    14811 1960–2025 
+gdp_growth                     200      0.1    141    266    262    14388 1960–2025 
+gdp_ppp                        200      0.1     95    266    251     8748 1960–2025 
+gdp_per_capita_ppp             200      0.1     95    266    251     8748 1960–2025 
+inflation                      200      0.1    115    266    241    11547 1960–2025 
+unemployment                   200      0.1     48    266    235     8211 1960–2025 
+labor_force                    200      0.1     53    266    235     8446 1960–2025 
+female_labor_participation     200      0.1     51    266    235     8446 1960–2025 
+exports_gdp                    200      0.1    115    266    239    11427 1960–2025 
+imports_gdp                    200      0.1    116    266    240    11479 1960–2025 
+government_debt                200      0.1     33    266    120     1799 1960–2025 sem WLD
+military_spending              200      0.1     90    266    213    10931 1960–2025 
+infant_mortality               200      0.1     51    266    244    13510 1960–2025 
+under5_mortality               200      0.1     53    266    244    13541 1960–2025 
+maternal_mortality             200      0.1     29    266    242     9438 1960–2025 
+health_spending_gdp            200      0.1     51    266    241     5716 1960–2025 
+physicians                     200      0.1     31    266    256     5533 1960–2025 
+hospital_beds                  200      0.1     43    266    249     5862 1960–2025 
+measles_immunization           200      0.1     43    266    241    10046 1960–2025 
+undernourishment               200      0.1     30    266    216     5142 1960–2025 
+water_basic                    200      0.1     66    266    262     6398 1960–2025 
+sanitation_basic               200     68.2     68    266    262     6363 1960–2025 
+adult_literacy                 200      0.1     26    266    211     2804 1960–2025 
+enrollment_primary             200      0.1     90    266    254     9542 1960–2025 
+enrollment_secondary           200      0.1     84    266    253     8307 1960–2025 
+enrollment_tertiary            200      0.1     79    266    248     7351 1960–2025 
+primary_completion             200      0.1     71    266    243     6805 1960–2025 
+education_spending_gdp         200      0.1     68    266    250     6372 1960–2025 
+rd_spending_gdp                200      0.1     31    266    196     3199 1960–2025 
+journal_articles               200      0.1     43    266    245     6860 1960–2025 
+electricity_access             200      0.1     39    266    264     8122 1960–2025 
+renewable_energy_share         200      0.1     40    266    260     8234 1960–2025 
+renewable_electricity_share    200      0.1     76    266    257     7323 1960–2025 
+energy_use_per_capita          200      0.1     78    266    227     6864 1960–2025 
+forest_area                    200      0.1     46    266    262     9091 1960–2025 
+forest_pct                     200      0.1     77    266    262     8882 1960–2025 
+agricultural_land_pct          200     73.5    117    266    258    15353 1960–2025 
+land_area                      200      0.1     25    266    264    15587 1960–2025 
+protected_areas                200    100.0     23    266    261     3370 1960–2025 
+pm25                           200      0.1     89    266    248     8432 1960–2025 
+internet_users                 200      0.1     50    266    245     6896 1960–2025 
+mobile_subscriptions           200      0.1     85    266    262    13068 1960–2025 
+broadband_subscriptions        200      0.1     62    266    256     5337 1960–2025 
+poverty_rate                   200      0.1     20    266    186     3013 1960–2025 
+poverty_national               200      0.1     17    266    161     1185 1960–2025 sem WLD
+gini                           200      0.1     20    266    171     2434 1960–2025 sem WLD
+homicides                      200      0.1     54    266    244     4417 1960–2025 
+women_in_parliament            200      0.1     41    266    241     6599 1960–2025 
+
+tempo total dos 64 downloads: 246.3 s
