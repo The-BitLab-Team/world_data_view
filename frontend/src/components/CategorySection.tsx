@@ -1,86 +1,41 @@
 import { useMemo, useState } from "react";
-import { api, csvUrl } from "../api/client";
+import { api } from "../api/client";
 import type { Category, Indicator } from "../api/types";
+import type { Comparison } from "../hooks/useComparison";
 import { useAsync } from "../hooks/useAsync";
-import { tableRows, toIndex100 } from "../lib/chartMath";
-import { countryName, WORLD } from "../lib/countries";
-import { axisFormatter, displayUnit, formatWithUnit, mapFormat } from "../lib/display";
-import { formatNumber } from "../lib/format";
-import { Badge } from "./Badge";
+import { countryName } from "../lib/countries";
+import { mapFormat } from "../lib/display";
 import { ChoroplethMap } from "./ChoroplethMap";
 import { DataTable } from "./DataTable";
-import { LineChart, type ChartSeries } from "./LineChart";
+import { HistoryPanel } from "./HistoryPanel";
 import { RankedBars } from "./RankedBars";
 import { StatTile } from "./StatTile";
+
+/** Quantos indicadores aparecem antes do "Ver todos": categorias grandes ocupariam telas inteiras de blocos. */
+export const COLLAPSED_TILES = 8;
 
 interface Props {
   category: Category;
   blurb: string;
   indicators: Indicator[];
   startYear: number | null;
-  entities: string[];
-  colorOf: (code: string) => string;
-  onPickCountry: (code: string) => void;
+  comparison: Comparison;
 }
 
-function Segmented<T extends string>({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: T;
-  options: { value: T; label: string }[];
-  onChange: (value: T) => void;
-}) {
-  return (
-    <div role="group" aria-label={label} className="inline-flex overflow-hidden rounded-md border border-hair text-sm">
-      {options.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          aria-pressed={option.value === value}
-          onClick={() => onChange(option.value)}
-          className={`px-3 py-1 transition-colors ${
-            option.value === value ? "bg-ink font-medium text-surface" : "text-ink-2 hover:bg-grid hover:text-ink"
-          }`}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-export function CategorySection({ category, blurb, indicators, startYear, entities, colorOf, onPickCountry }: Props) {
+export function CategorySection({ category, blurb, indicators, startYear, comparison }: Props) {
   const firstWithData = indicators.find((i) => i.has_data) ?? indicators[0];
   const [slug, setSlug] = useState(firstWithData.slug);
-  const [view, setView] = useState<"chart" | "table">("chart");
-  const [scale, setScale] = useState<"absolute" | "index">("absolute");
+  const [expanded, setExpanded] = useState(false);
   const indicator = indicators.find((i) => i.slug === slug) ?? firstWithData;
 
-  const countries = useMemo(() => (indicator.per_country && entities.length ? entities : [WORLD]), [indicator.per_country, entities]);
-  const query = { slug: indicator.slug, countries, startYear };
-  const history = useAsync(
-    (signal) => (indicator.has_data ? api.history(query, signal) : Promise.reject(new Error("sem dados"))),
-    [indicator.slug, indicator.has_data, countries.join(","), startYear],
-  );
-
-  const series: ChartSeries[] = useMemo(
-    () =>
-      (history.data?.series ?? [])
-        .filter((s) => s.points.length > 0)
-        .map((s) => ({ id: s.country, name: countryName(s.country, s.name), color: colorOf(s.country), points: s.points })),
-    [history.data, colorOf],
-  );
-
-  const indexed = scale === "index" && series.length >= 2;
-  const plotted = useMemo(() => (indexed ? toIndex100(series) : series), [indexed, series]);
-  const formatTick = indexed ? (v: number) => formatNumber(v, 0) : axisFormatter(indicator);
-  const formatValue = indexed ? (v: number) => formatNumber(v, 0) : (v: number) => formatWithUnit(indicator, v);
-  const unitLabel = indexed ? "índice (primeiro ano em comum = 100)" : displayUnit(indicator);
-  const onlyOnePoint = plotted.length > 0 && plotted.every((s) => s.points.length === 1);
+  // Recolhido: os primeiros indicadores com dado (os sem dado vão para o fim) e sempre o selecionado.
+  const ordered = useMemo(() => [...indicators.filter((i) => i.has_data), ...indicators.filter((i) => !i.has_data)], [indicators]);
+  const collapsible = ordered.length > COLLAPSED_TILES;
+  const shown = useMemo(() => {
+    if (expanded || !collapsible) return ordered;
+    const head = ordered.slice(0, COLLAPSED_TILES);
+    return head.some((i) => i.slug === indicator.slug) ? head : [...head, indicator];
+  }, [expanded, collapsible, ordered, indicator]);
 
   return (
     <section id={category.id} aria-labelledby={`${category.id}-title`} className="border-t border-hair pt-12 pb-4">
@@ -90,126 +45,40 @@ export function CategorySection({ category, blurb, indicators, startYear, entiti
       <p className="mt-1 text-ink-2 prose-measure">{blurb}</p>
 
       <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] border-t border-l border-hair">
-        {indicators.map((item) => (
+        {shown.map((item) => (
           <StatTile key={item.slug} indicator={item} selected={item.slug === indicator.slug} onSelect={() => setSlug(item.slug)} />
         ))}
       </div>
+      {collapsible && (
+        <button
+          type="button"
+          aria-expanded={expanded}
+          onClick={() => setExpanded((v) => !v)}
+          className="mt-3 text-sm text-link underline-offset-4 hover:underline"
+        >
+          {expanded ? "Mostrar menos indicadores" : `Ver os ${ordered.length} indicadores desta seção`}
+        </button>
+      )}
 
-      <div className="mt-6 rounded-lg border border-hair bg-surface p-5 sm:p-7">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h3 className="text-xl font-semibold">{indicator.name}</h3>
-            <p className="mt-1 text-sm text-ink-2 prose-measure">{indicator.description}</p>
-            <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-ink-3">
-              <span>
-                Fonte:{" "}
-                <a href={indicator.source_url} target="_blank" rel="noreferrer" className="text-link underline-offset-4 hover:underline">
-                  {indicator.source}
-                </a>
-              </span>
-              {indicator.kind === "estimate" && <Badge title="Valor de referência, não é uma série oficial">estimativa</Badge>}
-              {indicator.is_demo && <Badge title="Dados de demonstração, não reais">demonstração</Badge>}
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {series.length >= 2 && (
-              <Segmented
-                label="Escala"
-                value={scale}
-                onChange={setScale}
-                options={[
-                  { value: "absolute", label: "Valores" },
-                  { value: "index", label: "Índice 100" },
-                ]}
-              />
-            )}
-            <Segmented
-              label="Visualização"
-              value={view}
-              onChange={setView}
-              options={[
-                { value: "chart", label: "Gráfico" },
-                { value: "table", label: "Tabela" },
-              ]}
-            />
-            {indicator.has_data && (
-              <a
-                href={csvUrl(query)}
-                download
-                className="rounded-md border border-hair px-3 py-1 text-sm text-ink-2 hover:border-axis hover:text-ink"
-              >
-                Baixar CSV
-              </a>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-6 min-h-[22rem]">
-          {!indicator.has_data ? (
-            <p className="py-16 text-center text-ink-2">
-              Este indicador ainda não tem dados. Rode a coleta no backend (<code className="rounded bg-grid px-1.5 py-0.5 text-sm">python -m app.cli collect</code>) para preenchê-lo.
-            </p>
-          ) : history.error && !history.data ? (
-            <p className="py-16 text-center text-ink-2" role="alert">
-              Não foi possível carregar este gráfico. Confira se a API está no ar e tente de novo.
-            </p>
-          ) : !history.data ? (
-            <p className="py-16 text-center text-ink-3" aria-busy="true">
-              Carregando…
-            </p>
-          ) : plotted.every((s) => s.points.length === 0) ? (
-            <p className="py-16 text-center text-ink-2">Não há dados nesse período. Escolha “Tudo” ou um período mais longo.</p>
-          ) : view === "chart" ? (
-            <>
-              <p className="mb-2 text-sm text-ink-3">{unitLabel}</p>
-              <LineChart
-                series={plotted}
-                formatValue={formatValue}
-                formatTick={formatTick}
-                ariaLabel={`${indicator.name}, ${unitLabel}`}
-                dimmed={history.loading}
-              />
-              {onlyOnePoint && (
-                <p className="mt-3 text-sm text-ink-3">
-                  Há só um valor de referência para este indicador; não existe série histórica.
-                </p>
-              )}
-              {indexed && (
-                <p className="mt-3 text-sm text-ink-3">
-                  No índice, cada linha parte de 100 no primeiro ano em que todas têm dado. Assim dá para comparar crescimento de entidades de tamanhos muito diferentes.
-                </p>
-              )}
-            </>
-          ) : (
-            <DataTable
-              caption={`${indicator.name}: valores por ano (${unitLabel})`}
-              rowHeader="Ano"
-              columns={plotted.map((s) => s.name)}
-              rows={tableRows(plotted).map((row) => ({ label: String(row.year), cells: row.cells }))}
-              formatValue={formatValue}
-            />
-          )}
-        </div>
+      <div className="mt-6">
+        <HistoryPanel
+          indicator={indicator}
+          places={comparison.entities}
+          startYear={startYear}
+          colorOf={comparison.colorOf}
+          nameOf={comparison.nameOf}
+        />
       </div>
 
       {indicator.per_country && indicator.has_data && (
-        <CountryMap indicator={indicator} entities={entities} colorOf={colorOf} onPickCountry={onPickCountry} />
+        <CountryMap indicator={indicator} comparison={comparison} />
       )}
     </section>
   );
 }
 
-function CountryMap({
-  indicator,
-  entities,
-  colorOf,
-  onPickCountry,
-}: {
-  indicator: Indicator;
-  entities: string[];
-  colorOf: (code: string) => string;
-  onPickCountry: (code: string) => void;
-}) {
+function CountryMap({ indicator, comparison }: { indicator: Indicator; comparison: Comparison }) {
+  const { entities, colorOf, add: onPickCountry } = comparison;
   const [year, setYear] = useState<number | null>(null);
   const [showTable, setShowTable] = useState(false);
   const map = useAsync((signal) => api.map(indicator.slug, year, signal), [indicator.slug, year]);
@@ -268,7 +137,11 @@ function CountryMap({
             />
             <div>
               <h4 className="mb-2 text-sm font-semibold text-ink-2">Maiores valores em {shownYear}</h4>
-              <RankedBars values={values} formatValue={formatTick} onPick={onPickCountry} />
+              <RankedBars
+                entries={values.map((v) => ({ id: v.place, label: countryName(v.place, v.name), value: v.value }))}
+                formatValue={formatTick}
+                onPick={(id) => onPickCountry(id)}
+              />
               <button
                 type="button"
                 aria-pressed={showTable}
@@ -290,7 +163,7 @@ function CountryMap({
             columns={[mapUnit]}
             rows={[...values]
               .sort((a, b) => b.value - a.value)
-              .map((v) => ({ label: countryName(v.country, v.name), cells: [v.value] }))}
+              .map((v) => ({ label: countryName(v.place, v.name), cells: [v.value] }))}
             formatValue={formatValue}
           />
         </div>

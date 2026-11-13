@@ -46,7 +46,7 @@ def seed_demo(session_factory: sessionmaker[Session]) -> int:
     with session_factory() as session:
         for slug, (start, end, curve) in _CURVES.items():
             has_data = session.scalar(
-                select(Observation.id).where(Observation.indicator == slug, Observation.country == WORLD).limit(1)
+                select(Observation.id).where(Observation.indicator == slug, Observation.place == WORLD).limit(1)
             )
             if has_data is not None:
                 continue

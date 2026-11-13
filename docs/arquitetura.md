@@ -7,19 +7,23 @@ Visão técnica do World Data View: como os dados entram, onde ficam e como cheg
 ```mermaid
 flowchart TD
     subgraph Fontes
+      G[GeoNames<br/>países, regiões, cidades]
+      I[IBGE SIDRA<br/>UFs e municípios do Brasil]
+      W[Banco Mundial API<br/>60+ indicadores por país]
       O[OWID co2-data CSV]
-      W[Banco Mundial API]
       N[NASA GISTEMP CSV]
       R[reference_estimates.json]
     end
     subgraph Backend["backend/ (FastAPI)"]
       C[collectors/*<br/>collect = parse puro] --> RU[runner<br/>persiste, registra execução,<br/>nunca levanta exceção]
-      RU --> DB[(observations<br/>countries<br/>collector_runs)]
-      DB --> SV[services/<br/>series · live · facts]
+      RU --> DB[(places<br/>observations<br/>collector_runs)]
+      RU --> AG[aggregates<br/>continentes e mundo<br/>a partir dos países]
+      AG --> DB
+      DB --> SV[services/<br/>series · places · live · facts]
       SV --> API["/api/v1"]
       SCH[APScheduler<br/>ou cron + CLI] --> C
     end
-    O & W & N & R --> C
+    G & I & W & O & N & R --> C
     API --> FE["frontend/ (React + Vite)"]
 ```
 
@@ -27,36 +31,68 @@ flowchart TD
 
 | Caminho | Responsabilidade |
 |---|---|
-| `indicators.py` | **Catálogo**: 13 indicadores e 5 categorias (slug, nome, unidade, descrição, fonte, `kind` medido ou estimativa, casas decimais, se tem série por país). É a fonte da verdade que a API e a interface leem. |
-| `db/models.py` | `Observation` (indicador, país ISO3, ano, valor, fonte, `fetched_at`; único por indicador+país+ano), `Country`, `CollectorRun`. O mundo é o país `WLD`. |
-| `db/session.py` | Engine/sessões. SQLite com WAL por padrão, PostgreSQL via `WDV_DATABASE_URL`. |
-| `collectors/` | Um coletor por fonte. `collect()` é **puro** (recebe um cliente HTTP, devolve linhas e avisos) e por isso é testável com fakes. `runner.py` persiste com *upsert*, registra a execução em `collector_runs` e **nunca propaga exceção**: falha de rede vira aviso e as demais fontes seguem. |
-| `services/series.py` | Consultas: séries, últimos pontos, valores por país, anos disponíveis. |
+| `indicators.py` | **Catálogo**: 75 indicadores em 9 categorias (slug, nome, unidade, descrição, fonte, `kind` medido ou estimativa, casas decimais, se tem série por lugar, código do Banco Mundial e regra de agregação). É a fonte da verdade que a API e a interface leem. |
+| `places.py` | Tipos de lugar, identificadores (`WLD`, `CON-SA`, `BRA`, `BRA-SC`, `BRA-4209102`, `GEO-…`), continentes, as 27 UFs e a normalização de busca (minúsculas, sem acento). |
+| `db/models.py` | `Place` (lugar, hierarquia, população mais recente e ficha), `Observation` (indicador, lugar, ano, valor, fonte, `fetched_at`; único por indicador+lugar+ano), `CollectorRun`. |
+| `db/session.py` | Engine/sessões. SQLite com WAL por padrão, PostgreSQL via `WDV_DATABASE_URL`. `init_db` também migra bancos antigos (coluna `country` → `place`, tabela `countries` → `places`) e semeia o mundo e os continentes. |
+| `collectors/` | Um coletor por fonte: `geonames`, `owid`, `worldbank`, `ibge`, `gistemp`, `reference`. `collect()` é **puro** (recebe um cliente HTTP, devolve linhas, lugares e avisos) e por isso é testável com fakes. `runner.py` persiste com *upsert*, registra a execução em `collector_runs` e **nunca propaga exceção**: falha de rede vira aviso e as demais fontes seguem. Depois de todos, roda a etapa `aggregates`. |
+| `services/series.py` | Consultas: séries (com as fontes de cada uma), últimos pontos, valores por país, anos disponíveis. |
+| `services/places.py` | Busca, trilha do mundo até o lugar, filhos, métricas de um lugar e rankings. |
+| `services/aggregate.py` | Continentes (e o mundo, quando a fonte não traz) calculados a partir dos países; veja [Agregados](#agregados-continentes-e-mundo). |
 | `services/live.py` | Contadores ao vivo. |
 | `services/facts.py` | Curiosidade do dia. |
 | `services/demo.py` | Dados sintéticos de demonstração (`source="DEMO"`). |
 | `services/cache.py` | Cache em memória com TTL para respostas pesadas. É limpo a cada coleta. |
 | `api/routes.py` | Rotas sob `/api/v1`. |
 | `scheduler.py` | APScheduler em processo (opcional). |
-| `cli.py` | `init-db`, `collect`, `seed-demo`, `status`. |
+| `cli.py` | `init-db`, `collect [--only …]`, `seed-demo`, `status`. |
 
 ### Modelo de dados
 
-Uma tabela estreita e normalizada em vez de uma tabela por indicador:
+Duas tabelas principais, estreitas e normalizadas, em vez de uma tabela por indicador:
 
 ```
-observations(id, indicator, country, year, value, source, fetched_at)
-UNIQUE (indicator, country, year)
+places(id, kind, name, name_search, parent_id, country_id, iso2, lat, lon,
+       population, population_year, population_source, info, info_source)
+observations(id, indicator, place, year, value, source, fetched_at)
+UNIQUE (indicator, place, year)
 ```
 
-Vantagens: indicador novo não exige migração, consultas de série e de mapa são o mesmo `SELECT`, e a procedência (`source`, `fetched_at`) acompanha cada número. O *upsert* usa `ON CONFLICT DO UPDATE` específico de cada dialeto (SQLite e PostgreSQL), então recoletar é idempotente.
+Vantagens: indicador novo não exige migração, consultas de série, mapa e ranking são o mesmo `SELECT`, e a procedência (`source`, `fetched_at`) acompanha cada número. O *upsert* usa `ON CONFLICT DO UPDATE` específico de cada dialeto (SQLite e PostgreSQL), então recoletar é idempotente.
+
+#### Lugares
+
+Todo dado pertence a um lugar. Identificadores curtos e legíveis; a hierarquia (`parent_id`) é mundo → continente → país → estado/região → cidade:
+
+| Tipo | Identificador | Fonte |
+|---|---|---|
+| mundo | `WLD` | semeado |
+| continente | `CON-AF`, `CON-AS`, `CON-EU`, `CON-NA`, `CON-SA`, `CON-OC` | semeado (a Antártida não tem habitantes fixos e fica de fora) |
+| país | ISO 3166-1 alfa-3 (`BRA`) | GeoNames (`countryInfo`), com capital, área, moeda, idiomas; Banco Mundial acrescenta faixa de renda |
+| estado/região | `BRA-SC` (UFs do IBGE), `USA-CA` (divisão administrativa de 1º nível do GeoNames, só as que têm ao menos uma cidade) | IBGE; GeoNames |
+| cidade | `BRA-4209102` (município do IBGE), `GEO-5128581` (GeoNames) | IBGE (5.571 municípios); GeoNames `cities5000` (cidades com mais de 5.000 habitantes) |
+
+`Place.population` guarda o **último valor conhecido** de cada lugar (com ano e fonte) para listar e ranquear sem varrer `observations`. Nas cidades do GeoNames ele é um instantâneo **sem ano de referência**, e a interface diz isso. O Brasil vem inteiro do IBGE (o GeoNames pula as cidades brasileiras) para não duplicar municípios.
+
+Fora do Brasil só há série histórica de países, continentes e mundo; estados e cidades de outros países têm população (instantâneo) e ficha, não séries.
+
+#### Agregados: continentes e mundo
+
+Continentes não têm fonte própria: `services/aggregate.py` os calcula a partir dos países, só para indicadores com regra no catálogo (`agg`: soma ou média ponderada pela população). Regras para nunca inventar um número:
+
+- um ano só entra se os países que informaram somam ao menos **95%** (soma) ou **90%** (média) da população atual do grupo;
+- a média usa a população do próprio ano (ou do ano anterior mais próximo, até 5 anos antes);
+- o mundo que a própria fonte publica nunca é sobrescrito; só se calcula o mundo quando a fonte não traz;
+- linhas calculadas têm `source` começando por `Derivado: `, e a interface as marca como **calculado**;
+- linhas de demonstração (`DEMO`) nunca entram na conta;
+- razões que não se somam nem se ponderam (Gini, % do PIB) ficam sem dado nos continentes.
 
 ### Como adicionar um indicador
 
-1. Cadastre-o em `app/indicators.py` (slug, categoria, unidade, fonte, `kind`).
-2. Faça um coletor existente emiti-lo, ou crie um novo em `collectors/` e registre-o em `COLLECTORS` (`runner.py`).
-3. Se a unidade pedir escala diferente na tela (bilhões, milhões), ajuste `OVERRIDES` em `frontend/src/lib/display.ts`.
-4. Adicione fixture e teste em `backend/tests/test_collectors.py`.
+1. Cadastre-o em `app/indicators.py`. Para um indicador do Banco Mundial use o auxiliar `_wb(slug, código, nome, categoria, unidade, descrição, ...)`: o coletor `worldbank` já o baixa para todos os países. Passe `agg=AGG_SUM` ou `AGG_POP_MEAN` se o continente puder ser somado ou ponderado por população.
+2. Para outra fonte, faça um coletor existente emiti-lo, ou crie um novo em `collectors/` e registre-o em `COLLECTORS` (`runner.py`).
+3. Se o valor **mundial** pedir escala diferente na tela (bilhões, milhões), ajuste `OVERRIDES` em `frontend/src/lib/display.ts`. Lugares usam a unidade da fonte (veja `mapFormat`).
+4. Adicione fixture e teste em `backend/tests/` (`test_collectors.py` para o Banco Mundial e a OWID).
 
 A interface descobre categorias e indicadores pela API; não há lista a atualizar no frontend além do texto de apresentação de cada categoria.
 
@@ -86,18 +122,26 @@ Cada gerador em `services/facts.py` monta uma frase a partir dos dados atuais do
 
 | Caminho | Conteúdo |
 |---|---|
-| `App.tsx` | Estado global (período, entidades comparadas, cores) e carregamento de dados. |
+| `App.tsx` | Rota (hash), período, lugares comparados e carregamento de dados. |
 | `api/` | Cliente tipado da API (`client.ts`, `types.ts`). |
-| `hooks/` | `useAsync` (carregamento/erro, mantém o dado anterior atenuado durante recarga), `useNow`, `useTheme`. |
-| `lib/` | Funções puras e testadas: formatação pt-BR, escalas do mapa, normalização Índice 100, atribuição de cores. |
-| `components/` | `LiveSection`, `CategorySection`, `LineChart`, `ChoroplethMap`, `RankedBars`, `DataTable`, `FilterBar`, `Notices`, `SiteChrome`. |
+| `hooks/` | `useAsync` (carregamento/erro, mantém o dado anterior atenuado durante recarga), `useComparison` (lugares comparados com cor estável), `useHashRoute`, `useNow`, `useTheme`. |
+| `lib/` | Funções puras e testadas: formatação pt-BR (por nível: mundo × lugar), escalas do mapa, Índice 100, cores, `places.ts` (nomes em português, rotas, busca local, agrupamento de métricas, ficha) e `sources.ts` (códigos de fonte → texto). |
+| `components/` | `LiveSection`, `PlacesExplorer`, `CategorySection`, `HistoryPanel` (gráfico/tabela/CSV de um indicador para N lugares), `PlacePage`, `PlaceSearch` (combobox acessível), `LineChart`, `Sparkline`, `ChoroplethMap`, `RankedBars`, `DataTable`, `FilterBar`, `Notices`, `SiteChrome`. |
 | `index.css` | Tokens de cor e tipografia (Tailwind v4, `@theme`), temas claro/escuro. |
+
+### Páginas e rotas
+
+A interface usa rota por *hash*, o que dispensa configuração de servidor em hospedagem estática: `#/` é o painel e `#/lugar/{id}` é a página de um lugar (`#/lugar/BRA-SC`). A página do lugar mostra a trilha mundo → … → lugar, a população (com ano e fonte), a ficha, o gráfico de evolução com comparação de até 4 lugares, o ranking dos lugares contidos e todos os indicadores com dado ali.
+
+Nomes de países, continentes e do mundo são traduzidos no navegador (`i18n-iso-countries` e uma tabela de continentes); estados e cidades usam o nome da fonte. A busca de países e continentes roda no navegador; estados e cidades vêm de `/places/search`.
 
 ### Decisões de visualização
 
 - **Gráfico de linhas em SVG próprio** (d3-scale + d3-shape): cursor com tooltip, rótulos diretos nas pontas quando não colidem, legenda para 2 ou mais séries, setas do teclado para percorrer os anos, **tabela equivalente** e CSV. Toda informação do tooltip está também na tabela.
 - **Um só eixo Y**, sempre. Para comparar entidades de escala muito diferente (Brasil × mundo) existe o modo **Índice 100**, em vez de eixo duplo.
-- **A cor segue a entidade, não a posição**: remover um país não repinta os demais (`assignSlots`). Máximo de 4 entidades, usando paleta categórica validada para daltonismo.
+- **A cor segue a entidade, não a posição**: remover um lugar não repinta os demais (`assignSlots`). Máximo de 4 entidades, usando paleta categórica validada para daltonismo.
+- **Origem sempre visível**: cada série informa suas fontes; selos marcam *estimativa*, *demonstração* e *calculado*. Quando a origem dos pontos difere da fonte geral do indicador (um município do IBGE num indicador do Banco Mundial), há uma linha própria.
+- **Unidades por nível**: o mundo usa conversões legíveis (CO₂ em bilhões de t); países, estados e cidades usam a unidade da fonte, senão virariam "0,0".
 - **Mapa coroplético** com classes por quantis e rampa sequencial de um só matiz. No tema escuro a rampa inverte (mais claro = maior valor). O ranking ao lado dá a leitura exata.
 - Estados de erro e vazio explicam o que houve e o que fazer; nada de painel em branco.
 

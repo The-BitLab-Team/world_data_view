@@ -11,8 +11,10 @@ Isso mantém os coletores fáceis de testar com respostas gravadas.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable, Sequence
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Protocol
+from typing import Any, ClassVar, Protocol, TypeVar
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -23,25 +25,75 @@ class CollectorError(RuntimeError):
     """Falha ao coletar dados de uma fonte."""
 
 
+T = TypeVar("T")
+R = TypeVar("R")
+
+# Fontes grandes (Banco Mundial, IBGE) respondem devagar a pedidos grandes; vários pedidos ao mesmo
+# tempo cortam a coleta de dezenas de minutos para poucos minutos sem sobrecarregar o servidor.
+DEFAULT_WORKERS = 6
+
+
+def map_ordered(fn: Callable[[T], R], items: Sequence[T], workers: int = DEFAULT_WORKERS) -> list[R | Exception]:
+    """Aplica ``fn`` a cada item em threads e devolve os resultados **na ordem de ``items``**.
+
+    Uma exceção em um item não interrompe os demais: ela vem no lugar do resultado, e quem chama
+    decide o que fazer (em geral, um aviso). A ordem fixa mantém a saída determinística.
+    """
+
+    def guarded(item: T) -> R | Exception:
+        try:
+            return fn(item)
+        except Exception as exc:
+            return exc
+
+    if workers <= 1 or len(items) <= 1:
+        return [guarded(item) for item in items]
+    with ThreadPoolExecutor(max_workers=min(workers, len(items))) as pool:
+        return list(pool.map(guarded, items))
+
+
 @dataclass(frozen=True)
 class ObservationRow:
     indicator: str
-    country: str
+    place: str  # identificador de lugar (ver app.places): WLD, BRA, BRA-SC, GEO-123...
     year: int
     value: float
     source: str
 
 
+@dataclass(frozen=True)
+class PlaceRow:
+    """Um lugar descoberto por um coletor. Campos ``None`` não apagam o que outra fonte já informou."""
+
+    id: str
+    kind: str
+    name: str
+    parent_id: str | None = None
+    country_id: str | None = None
+    iso2: str | None = None
+    lat: float | None = None
+    lon: float | None = None
+    population: int | None = None
+    population_year: int | None = None
+    population_source: str | None = None
+    info: dict[str, Any] | None = None
+    info_source: str | None = None
+    # Fontes de nomes mais confiáveis (GeoNames, IBGE) trocam o nome já gravado; as demais só preenchem.
+    overwrite_name: bool = False
+
+
 @dataclass
 class CollectedBatch:
     observations: list[ObservationRow] = field(default_factory=list)
-    countries: dict[str, str] = field(default_factory=dict)
+    places: list[PlaceRow] = field(default_factory=list)
     # Problemas não fatais (ex.: um indicador específico falhou). Vão para o log da execução.
     warnings: list[str] = field(default_factory=list)
 
 
 class HttpClientLike(Protocol):
     def get_text(self, url: str, params: dict[str, Any] | None = None) -> str: ...
+
+    def get_bytes(self, url: str, params: dict[str, Any] | None = None) -> bytes: ...
 
     def get_json(self, url: str, params: dict[str, Any] | None = None) -> Any: ...
 
@@ -50,7 +102,8 @@ class HttpClient:
     """Cliente HTTP com timeout, retentativas com backoff e User-Agent identificável."""
 
     def __init__(self, timeout: float = 60.0, retries: int = 3, user_agent: str = "WorldDataView/0.1"):
-        self.timeout = timeout
+        # (conexão, leitura): um servidor que não responde falha em segundos, não em minutos.
+        self.timeout = (min(10.0, timeout), timeout)
         self.session = requests.Session()
         self.session.headers["User-Agent"] = user_agent
         retry = Retry(
@@ -59,7 +112,8 @@ class HttpClient:
             status_forcelist=(429, 500, 502, 503, 504),
             allowed_methods=("GET",),
         )
-        adapter = HTTPAdapter(max_retries=retry)
+        # O pool de conexões acompanha o número de threads dos coletores (DEFAULT_WORKERS).
+        adapter = HTTPAdapter(max_retries=retry, pool_connections=4, pool_maxsize=2 * DEFAULT_WORKERS)
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
 
@@ -71,6 +125,14 @@ class HttpClient:
             raise CollectorError(f"Falha ao acessar {url}: {exc}") from exc
         response.encoding = response.encoding or "utf-8"
         return response.text
+
+    def get_bytes(self, url: str, params: dict[str, Any] | None = None) -> bytes:
+        try:
+            response = self.session.get(url, params=params, timeout=self.timeout)
+            response.raise_for_status()
+        except requests.RequestException as exc:
+            raise CollectorError(f"Falha ao acessar {url}: {exc}") from exc
+        return response.content
 
     def get_json(self, url: str, params: dict[str, Any] | None = None) -> Any:
         try:

@@ -40,6 +40,13 @@ export function StatTile({ indicator, selected, onSelect }: Props) {
             )}
           </span>
         </>
+      ) : indicator.has_data ? (
+        <>
+          <span className="mt-2 text-sm font-medium text-ink">Sem valor mundial</span>
+          <span className="text-sm text-ink-3">
+            Há dados por lugar. Escolha um país, estado ou cidade em “Comparar” para ver a série.
+          </span>
+        </>
       ) : (
         <span className="mt-2 text-sm text-ink-3">Sem dados ainda</span>
       )}

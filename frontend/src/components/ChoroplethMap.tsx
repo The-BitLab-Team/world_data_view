@@ -53,7 +53,7 @@ interface Props {
 
 export function ChoroplethMap({ values, formatValue, formatTick, highlight, onPick, ariaLabel }: Props) {
   const shapes = useMemo(getShapes, []);
-  const byIso = useMemo(() => new Map(values.map((v) => [v.country, v])), [values]);
+  const byIso = useMemo(() => new Map(values.map((v) => [v.place, v])), [values]);
   const bins = useMemo(
     () => (values.length ? quantileBins(values.map((v) => v.value), RAMP) : null),
     [values],
@@ -113,7 +113,7 @@ export function ChoroplethMap({ values, formatValue, formatTick, highlight, onPi
             style={{ left: Math.min(hover.x + 14, (wrapRef.current?.clientWidth ?? 600) - 190), top: hover.y + 14 }}
           >
             <p className="font-semibold text-ink">{formatValue(hovered.value)}</p>
-            <p className="text-ink-2">{countryName(hovered.country, hovered.name)}</p>
+            <p className="text-ink-2">{countryName(hovered.place, hovered.name)}</p>
           </div>
         )}
       </div>
