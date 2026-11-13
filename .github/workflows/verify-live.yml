@@ -2,40 +2,58 @@ name: verify-live
 on:
   push:
     branches: [tmp/verify-live-sources]
+concurrency:
+  group: verify-live
+  cancel-in-progress: true
 
 jobs:
   live:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      WDV_DATABASE_URL: sqlite:////tmp/live.db
+      PYTHONUNBUFFERED: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
       - run: pip install -r backend/requirements.txt
-      - name: Coleta real
+      - name: Alcance de rede (curl)
+        run: |
+          for u in https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv "https://api.worldbank.org/v2/country/WLD/indicator/SP.DYN.CBRT.IN?format=json&per_page=3" "https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv"; do
+            r=$(curl -s -o /dev/null -m 25 -w "%{http_code} conn=%{time_connect}s total=%{time_total}s bytes=%{size_download}" "$u" || echo "curl_exit=$?")
+            echo "$u -> $r" >> /tmp/net.log
+          done
+          cat /tmp/net.log
+      - name: owid
         working-directory: backend
-        env:
-          WDV_DATABASE_URL: sqlite:////tmp/live.db
-        run: python -m app.cli collect 2>&1 | tee /tmp/collect.log; true
+        run: (timeout --signal=INT --kill-after=10 150 python -m app.cli collect --only owid > /tmp/owid.log 2>&1; echo "exit=$?" >> /tmp/owid.log) || true
+      - name: worldbank
+        working-directory: backend
+        run: (timeout --signal=INT --kill-after=10 240 python -m app.cli collect --only worldbank > /tmp/worldbank.log 2>&1; echo "exit=$?" >> /tmp/worldbank.log) || true
+      - name: gistemp
+        working-directory: backend
+        run: (timeout --signal=INT --kill-after=10 120 python -m app.cli collect --only gistemp > /tmp/gistemp.log 2>&1; echo "exit=$?" >> /tmp/gistemp.log) || true
       - name: Relatório
+        if: always()
         working-directory: backend
-        env:
-          WDV_DATABASE_URL: sqlite:////tmp/live.db
         run: |
           python - <<'PY'
-          import sqlite3
-          db = sqlite3.connect("/tmp/live.db")
-          nl = "%0A"
-          runs = db.execute("select collector,status,rows,coalesce(message,'') from collector_runs order by id").fetchall()
-          print("::notice title=RUNS::" + nl.join(f"{c} | {s} | {r} linhas | {m[:300]}" for c, s, r, m in runs))
-          rows = db.execute(
-              "select indicator, source, count(*), min(year), max(year) from observations where country='WLD' group by indicator, source order by indicator"
-          ).fetchall()
-          lines = []
-          for ind, src, n, y0, y1 in rows:
-              v = db.execute("select value from observations where indicator=? and country='WLD' and year=?", (ind, y1)).fetchone()[0]
-              lines.append(f"{ind} | {src} | {n} pts | {y0}-{y1} | ultimo={v}")
-          print("::notice title=WLD::" + nl.join(lines))
-          npaises = db.execute("select count(distinct country) from observations where country!='WLD'").fetchone()[0]
-          print(f"::notice title=PAISES::{npaises} paises com dados")
+          import os, sqlite3
+          def enc(s): return s.replace("%", "%25").replace("\r", "").replace("\n", "%0A")
+          def tail(path, n=22):
+              try: return "\n".join(open(path, encoding="utf-8", errors="replace").read().splitlines()[-n:])
+              except FileNotFoundError: return "(sem log)"
+          print("::notice title=REDE::" + enc(tail("/tmp/net.log")))
+          for name in ("owid", "worldbank", "gistemp"):
+              print(f"::notice title=LOG-{name}::" + enc(tail(f"/tmp/{name}.log")))
+          if os.path.exists("/tmp/live.db"):
+              db = sqlite3.connect("/tmp/live.db")
+              rows = db.execute("select indicator, source, count(*), min(year), max(year) from observations where country='WLD' group by indicator, source order by indicator").fetchall()
+              lines = []
+              for ind, src, n, y0, y1 in rows:
+                  v = db.execute("select value from observations where indicator=? and country='WLD' and year=?", (ind, y1)).fetchone()[0]
+                  lines.append(f"{ind} | {src} | {n} pts | {y0}-{y1} | ultimo={v}")
+              print("::notice title=WLD::" + enc("\n".join(lines) or "(vazio)"))
           PY
