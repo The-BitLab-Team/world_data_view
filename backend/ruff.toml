@@ -1,0 +1,6 @@
+# Lint determinístico: não depende da configuração global de quem roda.
+target-version = "py311"   # o mesmo Python mínimo documentado no README
+line-length = 120
+
+[lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]   # erros, pyflakes, ordem de imports e sintaxe moderna
