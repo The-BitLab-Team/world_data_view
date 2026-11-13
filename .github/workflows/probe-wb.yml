@@ -1,0 +1,28 @@
+name: probe-wb
+on:
+  push:
+    branches: [tmp/probe-wb-bulk]
+permissions:
+  contents: write
+concurrency:
+  group: probe-wb
+  cancel-in-progress: true
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Mede o Banco Mundial
+        run: python probe/wb_probe.py
+      - name: Publica
+        if: always()
+        run: |
+          git config user.name probe-bot
+          git config user.email probe-bot@users.noreply.github.com
+          git add -f wb_probe
+          git commit -m "Resultado da sonda do Banco Mundial" || echo nada
+          git push origin HEAD:tmp/probe-wb-bulk
