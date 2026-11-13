@@ -1,0 +1,24 @@
+divisões de 1º nível no GeoNames: 3833
+consulta de amostra: 0.4 s; 63 linhas
+consulta usada: SELECT ?gn ?pop ?time ?rank WHERE { VALUES ?gn { "3430657" "3433896" "2822542" "2838632" "2985244" "2988289" "1252881" "1253626" "1848649" "1848681" "2322907" "2324433" "2262961" "2263478" "4099753" "4138106" } ?item wdt:P1566 ?gn . ?item p:P1082 ?statement . ?statement ps:P1082 ?pop ; wikibase:rank ?rank ; pq:P585 ?time . FILTER(?rank != wikibase:DeprecatedRank) }
+
+== execuções
+geonames ok 0 None
+wikidata ok 11947 None
+regiões com população do Wikidata: 3105 de 3797
+países com regiões com população: 207
+pontos (observações) do Wikidata: 11947 ; lugares: 3105
+anos dos pontos mais recentes: [(2026, 99), (2025, 161), (2024, 355), (2023, 144), (2022, 319), (2021, 342), (2020, 546), (2019, 197), (2018, 70), (2017, 116), (2016, 87), (2015, 84)]
+Brasil no Wikidata (esperado 0): 0
+USA-CA [('USA-CA', 'California', 39538223, 2020, 'Wikidata')] [(2020, 39538223.0), (2016, 39250017.0), (2015, 39144818.0), (2010, 37253956.0)]
+USA-TX [('USA-TX', 'Texas', 29145505, 2020, 'Wikidata')] [(2020, 29145505.0), (2015, 27469114.0), (2010, 25145561.0), (2000, 20851820.0)]
+DEU-02 [('DEU-02', 'Bavaria', 13038724, 2022, 'Wikidata')] [(2022, 13038724.0), (2019, 13124737.0), (2016, 12930751.0), (2015, 12843514.0)]
+ARG-14 [('ARG-14', 'Misiones', 1278873, 2022, 'Wikidata')] [(2022, 1278873.0), (2015, 1189446.0), (2010, 1101593.0)]
+JPN-40 [('JPN-40', 'Tokyo', 14264798, 2022, 'Wikidata')] [(2022, 14264798.0), (2020, 14047594.0), (2015, 13513734.0), (2010, 13159388.0)]
+IND-16 [('IND-16', 'Maharashtra', 112372972, 2011, 'Wikidata')] [(2011, 112372972.0)]
+NGA-25 [('NGA-25', 'Anambra', 5527809, 2016, 'Wikidata')] [(2016, 5527809.0), (2006, 4177828.0)]
+FRA-A8 [] []
+PRT-11 [('PRT-11', 'Guarda', 39103, 2018, 'Wikidata')] [(2018, 39103.0)]
+maiores regiões: [('IND-36', 'Uttar Pradesh', 246270000, 2025), ('PAK-04', 'Punjab', 127688922, 2023), ('CHN-30', 'Guangdong', 126012510, 2020), ('IND-16', 'Maharashtra', 112372972, 2011), ('IND-34', 'Bihar', 103804637, 2011), ('CHN-25', 'Shandong', 101527453, 2020), ('CHN-09', 'Henan', 99365519, 2020), ('IND-28', 'West Bengal', 91276115, 2011)]
+menores populações (checar absurdos): [('MNP-085', 'Northern Islands', 5, 2020), ('UMI-300', 'Midway Islands', 14, 2014), ('ASM-040', 'Swains Island', 17, 2010), ('PLW-04', 'Hatohobei', 40, 2016), ('KIR-03', 'Phoenix Islands', 41, 2020), ('PLW-05', 'Kayangel', 54, 2015), ('BHS-18', 'Ragged Island', 70, 2010), ('MHL-110', 'Jabat Island', 84, 2011)]
+regiões novas (sem GeoNames-cidades): 43

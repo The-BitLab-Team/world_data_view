@@ -1,0 +1,16 @@
+AR.14	Misiones	Misiones	3430657
+AR.09	Formosa	Formosa	3433896
+DE.15	Thuringia	Thuringia	2822542
+DE.10	Schleswig-Holstein	Schleswig-Holstein	2838632
+FR.93	Provence-Alpes-Côte d'Azur	Provence-Alpes-Cote d'Azur	2985244
+FR.52	Pays de la Loire	Pays de la Loire	2988289
+IN.28	West Bengal	West Bengal	1252881
+IN.36	Uttar Pradesh	Uttar Pradesh	1253626
+JP.46	Yamanashi	Yamanashi	1848649
+JP.45	Yamaguchi	Yamaguchi	1848681
+NG.51	Sokoto	Sokoto	2322907
+NG.50	Rivers State	Rivers State	2324433
+PT.19	Setúbal	Setubal	2262961
+PT.18	Santarém	Santarem	2263478
+US.AR	Arkansas	Arkansas	4099753
+US.DC	District of Columbia	District of Columbia	4138106
