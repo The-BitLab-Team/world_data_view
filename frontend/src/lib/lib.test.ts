@@ -4,7 +4,7 @@ import { assignSlots, distinctTicks, nearestYear, tableRows, toIndex100, unionYe
 import { counterValue, periodStartMs } from "./counters";
 import { countryName, numericToIso3 } from "./countries";
 import { axisFormatter, describeValue, describeValueAt, formatsFor } from "./display";
-import { formatCompact, formatNumber, formatPercentChange } from "./format";
+import { formatCompact, formatNumber, formatPercentChange, listWithRest } from "./format";
 import { scaleLinear } from "d3-scale";
 import { quantileBins } from "./mapScale";
 
@@ -50,6 +50,16 @@ describe("format", () => {
     expect(formatPercentChange(0.93)).toBe("+0,9%");
     expect(formatPercentChange(-2.14)).toBe("−2,1%");
     expect(formatPercentChange(37.6)).toBe("+38%");
+  });
+});
+
+describe("listWithRest", () => {
+  it("lista tudo quando cabe e resume o excedente quando o catálogo cresce", () => {
+    expect(listWithRest([])).toBe("");
+    expect(listWithRest(["PIB"])).toBe("PIB");
+    expect(listWithRest(["PIB", "Inflação", "Gini"], 3)).toBe("PIB, Inflação, Gini");
+    expect(listWithRest(["a", "b", "c", "d", "e"], 3)).toBe("a, b, c e mais 2");
+    expect(listWithRest(["a", "b", "c", "d"], 3)).toBe("a, b, c e mais 1");
   });
 });
 
