@@ -10,6 +10,8 @@ Regras, para nunca inventar um número:
 * a média é ponderada pela população do próprio ano (ou do ano anterior mais próximo, até 5
   anos antes; sem isso, pela população mais recente);
 * o mundo da própria fonte (``WLD``) nunca é sobrescrito;
+* linhas de demonstração (``DEMO``) nunca entram na conta: um cálculo feito sobre dado sintético sairia como
+  "Derivado", sem o selo de demonstração, e pareceria real;
 * as linhas têm ``source`` começando por ``Derivado: `` e a interface as marca como calculadas.
 """
 
@@ -22,7 +24,7 @@ from sqlalchemy.orm import Session
 
 from app.collectors.base import ObservationRow
 from app.db.models import Observation, Place
-from app.indicators import AGG_POP_MEAN, AGG_SUM, INDICATORS
+from app.indicators import AGG_POP_MEAN, AGG_SUM, DEMO_SOURCE, INDICATORS
 from app.places import DERIVED_PREFIX, KIND_COUNTRY, WORLD
 
 COVERAGE_SUM = 0.95
@@ -35,7 +37,10 @@ def _population_tables(session: Session, countries: set[str]) -> tuple[dict[str,
     by_country: dict[str, dict[int, float]] = defaultdict(dict)
     rows = session.execute(
         select(Observation.place, Observation.year, Observation.value).where(
-            Observation.indicator == POPULATION, Observation.place.in_(countries), Observation.value > 0
+            Observation.indicator == POPULATION,
+            Observation.place.in_(countries),
+            Observation.value > 0,
+            Observation.source != DEMO_SOURCE,
         )
     )
     for place, year, value in rows:
@@ -116,7 +121,7 @@ def compute_aggregates(session: Session) -> int:
         sources: Counter[str] = Counter()
         for place, year, value, source in session.execute(
             select(Observation.place, Observation.year, Observation.value, Observation.source).where(
-                Observation.indicator == slug, Observation.place.in_(countries)
+                Observation.indicator == slug, Observation.place.in_(countries), Observation.source != DEMO_SOURCE
             )
         ):
             by_year[year][place] = value

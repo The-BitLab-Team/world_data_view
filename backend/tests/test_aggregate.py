@@ -76,6 +76,28 @@ def test_continents_and_world_are_derived_with_a_clear_source(world):
     assert ("CON-SA", 2021) not in gdp  # sem dado dos países em 2021
 
 
+def test_demo_rows_never_feed_the_aggregates(world):
+    """Soma sobre dado sintético sairia como "Derivado" (sem selo de demonstração) e pareceria real."""
+    with world() as session:
+        session.add_all(
+            [Observation(indicator="gdp", place=p, year=2020, value=v, source="DEMO") for p, v in {"AAA": 6.0, "BBB": 3.0, "CCC": 1.0}.items()]
+        )
+        session.commit()
+        compute_aggregates(session)
+        session.commit()
+        assert derived(session, "gdp") == {}
+
+        # Com dado real do mesmo indicador, só o real conta (o DEMO do mesmo país é ignorado).
+        session.add_all([Observation(indicator="gdp", place=p, year=2021, value=v, source="WorldBank") for p, v in {"AAA": 6.0, "BBB": 3.0, "CCC": 1.0}.items()])
+        session.commit()
+        compute_aggregates(session)
+        session.commit()
+        gdp = derived(session, "gdp")
+    # DDD (Europa) não informou: os 3 países da América do Sul cobrem 1000 de 1050 (95,2%) da população do mundo.
+    assert set(gdp) == {("CON-SA", 2021), ("WLD", 2021)}
+    assert gdp[("CON-SA", 2021)].value == 10.0 and gdp[("WLD", 2021)].value == 10.0
+
+
 def test_source_world_value_is_never_overwritten_and_missing_coverage_leaves_gaps(world):
     with world() as session:
         session.add_all(
