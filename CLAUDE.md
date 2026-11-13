@@ -52,6 +52,9 @@ Para adicionar um indicador, veja o passo a passo em [docs/arquitetura.md](docs/
 - Nesta fonte tipográfica, vírgula e ponto *tabulares* ficam largos. Números com `tabular-nums` passam por `<Num>` para os separadores voltarem à largura normal; a unidade fica fora do `tabular-nums`.
 - **`LineChart` mede o contêiner antes de desenhar o SVG.** Um SVG com largura inicial fixa estoura o grid no celular e a medição devolve o valor já inflado. O tooltip é medido e limitado às bordas (celular de 390 px).
 - Tailwind v4: tokens em `@theme inline` no `index.css`, tema por `data-theme` (claro/escuro, segue o sistema até a pessoa escolher).
+- **Banco Mundial: use o arquivo em massa** (`/v2/en/indicator/{código}?downloadformat=csv`, ~0,1 s). A API JSON paginada trava por 60–120 s em pedidos sem cache (a coleta levou 47 min) e recusa `NY.GDP.MKTP.PP.CD`; ela é só a reserva. Pedidos lentos vão por `map_ordered` (`collectors/base.py`): paralelo, resultado na ordem do catálogo, falha isolada vira aviso. Uma coleta completa leva ~3 min.
+- Um processo morto deixa a execução "running"; `mark_interrupted_runs` a fecha depois de 6 h. Não dependa de "running" para saber se há coleta ativa.
+- `Place.population` dos países e continentes só é preenchida pela etapa `aggregates`: ao rodar `collect --only …`, inclua `aggregates`.
 - Este ambiente de desenvolvimento costuma alcançar apenas `raw.githubusercontent.com` (nem Banco Mundial, NASA, IBGE ou GeoNames). Os coletores foram validados contra as fontes reais num runner do GitHub Actions (13/11/2026). Ao mexer neles, repita essa validação: uma branch descartável com um workflow que roda `python -m app.cli collect` e publica o relatório na própria branch (ou nas anotações do *check run*). Lembre de apagar a branch depois. Se `git push`/`gh` oscilar com 503, repita com laço que confere o código de saída; GraphQL é bloqueado, use `gh api` (REST).
 
 ## Fluxo para qualquer pedido
