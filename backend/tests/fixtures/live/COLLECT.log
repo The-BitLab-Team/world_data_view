@@ -15,3 +15,14 @@ WARNING Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=
 WARNING Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=60.0)")': /v2/country/all/indicator/SE.ADT.LITR.ZS?format=json&per_page=5000&page=4
 WARNING Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=60.0)")': /v2/country/all/indicator/SE.PRM.ENRR?format=json&per_page=5000&page=2
 WARNING Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=60.0)")': /v2/country/all/indicator/SE.PRM.ENRR?format=json&per_page=5000&page=3
+### geonames owid gistemp reference (início 14:49:58Z)
+INFO Coletor geonames: ok (0 linhas, 13 s)
+INFO Coletor owid: ok (89722 linhas, 8 s)
+INFO Coletor gistemp: ok (146 linhas, 0 s)
+INFO Coletor reference: ok (3 linhas, 0 s)
+geonames    ok              0 linhas  
+owid        ok          89722 linhas  
+gistemp     ok            146 linhas  
+reference   ok              3 linhas  
+pico de memória: 208928 KB
+### geonames owid gistemp reference duração: 22s (saída 0)
