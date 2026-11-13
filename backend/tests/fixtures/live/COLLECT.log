@@ -355,3 +355,8 @@ INFO Coletor worldbank: partial (511870 linhas, 2801 s)
 worldbank   partial    511870 linhas  gdp_ppp: Falha ao acessar https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.PP.CD: 400 Client Error: Bad Request for url: https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.PP.CD?format=json&per_page=5000&page=4
 pico de memória: 351036 KB
 ### worldbank duração: 2801s (saída 0)
+### aggregates (início 15:38:23Z)
+INFO Agregados: ok (9918 linhas)
+aggregates  ok           9918 linhas  
+pico de memória: 93064 KB
+### aggregates duração: 3s (saída 0)
