@@ -90,7 +90,7 @@ npm run dev                      # http://localhost:5173 (proxy para a API em :8
 Testes e verificações:
 
 ```bash
-cd backend  && python -m pytest             # 122 testes
+cd backend  && python -m pytest             # 139 testes
 cd backend  && ruff check app tests
 cd frontend && npm test && npm run build    # 49 testes, checagem de tipos e build
 ```
