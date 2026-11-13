@@ -4,8 +4,8 @@ owid       ok          89722 linhas | None
 gistemp    ok            146 linhas | None
 reference  ok              3 linhas | None
 ibge       ok         369958 linhas | None
-worldbank  ok         518926 linhas | None
-aggregates ok          10120 linhas | None
+worldbank  ok        1508159 linhas | None
+aggregates ok          19482 linhas | None
 
 == lugares por tipo
 {'kind': 'city', 'n': 71177, 'com_pop': 71105, 'sem_pai': 0}
@@ -18,91 +18,246 @@ regiões/cidades sem país: 0
 cidades com pai inexistente: 0
 
 == observações por indicador (lugares com dado, ano mais recente, linhas derivadas)
-total: 988875
+total: 1987270
+adolescent_fertility         lugares=  218 1960–2024 linhas=  14170 derivadas=0
 adult_literacy               lugares=  171 1970–2024 linhas=   1171 derivadas=0
+adult_mortality_female       lugares=  218 1960–2024 linhas=  14035 derivadas=0
+adult_mortality_male         lugares=  218 1960–2024 linhas=  14035 derivadas=0
+age_dependency               lugares=  218 1960–2025 linhas=  14358 derivadas=0
 agricultural_land_pct        lugares=  211 1961–2024 linhas=  12392 derivadas=0
+agriculture_value_added      lugares=  207 1960–2025 linhas=   9133 derivadas=0
+air_passengers               lugares=  192 1970–2023 linhas=   8191 derivadas=209
+alcohol_consumption          lugares=  194 2000–2020 linhas=   4038 derivadas=126
+aquaculture                  lugares=  223 1960–2024 linhas=  13302 derivadas=325
+arable_land_pct              lugares=  207 1961–2024 linhas=  12138 derivadas=0
+art_coverage                 lugares=  145 2000–2024 linhas=   3532 derivadas=0
+bachelor_attainment          lugares=  188 1970–2024 linhas=   1403 derivadas=0
+battle_deaths                lugares=  109 1989–2024 linhas=   1212 derivadas=0
 birth_rate                   lugares=  224 1960–2024 linhas=  14530 derivadas=390
 birth_rate_registry          lugares= 5598 2003–2024 linhas=  50711 derivadas=50711
+birth_registration           lugares=  181 2000–2022 linhas=    593 derivadas=0
 births_registered            lugares= 5598 2003–2024 linhas=  56312 derivadas=0
 broadband_subscriptions      lugares=  215 1998–2025 linhas=   4466 derivadas=115
+broadband_subscriptions_total lugares=  215 1998–2025 linhas=   4454 derivadas=103
+cereal_production            lugares=  189 1961–2024 linhas=  10912 derivadas=353
+cereal_yield                 lugares=  182 1961–2024 linhas=  10503 derivadas=0
+children_out_of_school       lugares=  209 1970–2025 linhas=   4667 derivadas=23
+clean_cooking_access         lugares=  199 2000–2024 linhas=   4975 derivadas=150
 co2_emissions                lugares=  227 1750–2025 linhas=  25052 derivadas=667
 co2_per_capita               lugares=  225 1750–2025 linhas=  24540 derivadas=710
+coal_electricity_share       lugares=  210 1990–2025 linhas=   6256 derivadas=0
+container_traffic            lugares=  173 2005–2024 linhas=   2287 derivadas=40
+control_of_corruption        lugares=  205 1996–2023 linhas=   4988 derivadas=0
+crop_production_index        lugares=  196 1961–2024 linhas=  11459 derivadas=0
+current_account_gdp          lugares=  200 1960–2025 linhas=   7773 derivadas=0
 death_rate                   lugares=  224 1960–2024 linhas=  14530 derivadas=390
+deaths_communicable          lugares=  186 2000–2021 linhas=   1116 derivadas=0
+deaths_noncommunicable       lugares=  186 2000–2021 linhas=   1116 derivadas=0
+diabetes_prevalence          lugares=  210 2000–2024 linhas=    431 derivadas=0
+dtp_immunization             lugares=  194 1980–2024 linhas=   8099 derivadas=0
 education_spending_gdp       lugares=  204 1970–2025 linhas=   5150 derivadas=0
+education_spending_gov       lugares=  202 1980–2025 linhas=   4584 derivadas=0
+electric_power_consumption   lugares=  156 1990–2025 linhas=   5455 derivadas=175
 electricity_access           lugares=  223 1990–2024 linhas=   6954 derivadas=180
+employment_agriculture       lugares=  188 1991–2025 linhas=   6566 derivadas=0
+employment_industry          lugares=  188 1991–2025 linhas=   6566 derivadas=0
+employment_services          lugares=  188 1991–2025 linhas=   6566 derivadas=0
+energy_imports_net           lugares=  146 1990–2024 linhas=   4651 derivadas=0
+energy_intensity             lugares=  202 2000–2022 linhas=   4508 derivadas=0
 energy_use_per_capita        lugares=  185 1990–2024 linhas=   5514 derivadas=175
 enrollment_primary           lugares=  210 1970–2025 linhas=   7550 derivadas=0
 enrollment_secondary         lugares=  209 1970–2025 linhas=   6335 derivadas=0
 enrollment_tertiary          lugares=  204 1970–2025 linhas=   5408 derivadas=0
+exchange_rate                lugares=  214 1960–2025 linhas=  12613 derivadas=0
 exports_gdp                  lugares=  195 1960–2025 linhas=   9085 derivadas=0
+external_debt                lugares=  123 1970–2025 linhas=   5944 derivadas=32
+fdi_inflows_gdp              lugares=  204 1970–2025 linhas=   9483 derivadas=0
 female_labor_participation   lugares=  188 1990–2025 linhas=   6754 derivadas=0
+female_population_pct        lugares=  224 1960–2025 linhas=  14784 derivadas=396
 fertility_rate               lugares=  218 1960–2024 linhas=  14138 derivadas=0
+fertilizer_use               lugares=  201 1961–2024 linhas=  10410 derivadas=0
+fish_capture                 lugares=  223 1960–2024 linhas=  13302 derivadas=325
+fixed_telephone              lugares=  220 1960–2025 linhas=  12179 derivadas=326
+food_insecurity              lugares=  162 2014–2024 linhas=   1317 derivadas=26
+food_production_index        lugares=  196 1961–2024 linhas=  11460 derivadas=0
 forest_area                  lugares=  221 1990–2025 linhas=   7724 derivadas=213
 forest_net_change            lugares=  221 1991–2025 linhas=   7503 derivadas=207
 forest_pct                   lugares=  215 1990–2024 linhas=   7302 derivadas=0
+fossil_electricity_share     lugares=  210 1990–2025 linhas=   6480 derivadas=0
+fossil_energy_share          lugares=  180 1960–2024 linhas=   5368 derivadas=0
+freshwater_per_capita        lugares=  190 1961–2022 linhas=  10808 derivadas=308
+freshwater_withdrawal        lugares=  178 1962–2022 linhas=   6179 derivadas=0
+gas_electricity_share        lugares=  210 1990–2025 linhas=   6329 derivadas=0
 gdp                          lugares=  221 1960–2025 linhas=  12138 derivadas=308
 gdp_brl                      lugares= 5598 2002–2023 linhas= 123082 derivadas=0
+gdp_deflator_inflation       lugares=  214 1961–2025 linhas=  11429 derivadas=0
 gdp_growth                   lugares=  215 1961–2025 linhas=  11473 derivadas=0
 gdp_per_capita               lugares=  221 1960–2025 linhas=  12182 derivadas=352
 gdp_per_capita_ppp           lugares=  210 1990–2025 linhas=   7272 derivadas=216
 gdp_ppp                      lugares=  210 1990–2025 linhas=   7258 derivadas=202
+ghg_emissions                lugares=  210 1970–2024 linhas=  11550 derivadas=330
 gini                         lugares=  171 1963–2025 linhas=   2434 derivadas=0
 global_temperature           lugares=    1 1880–2025 linhas=    146 derivadas=0
+gni                          lugares=  216 1960–2025 linhas=  11571 derivadas=271
+gni_per_capita               lugares=  214 1962–2025 linhas=  10980 derivadas=297
+government_consumption       lugares=  189 1960–2025 linhas=   8784 derivadas=0
 government_debt              lugares=  109 1970–2024 linhas=   1649 derivadas=0
+government_effectiveness     lugares=  205 1996–2023 linhas=   4964 derivadas=0
+government_expense           lugares=  162 1972–2024 linhas=   4482 derivadas=0
+government_health_spending   lugares=  194 2000–2024 linhas=   4571 derivadas=0
+government_revenue           lugares=  163 1972–2024 linhas=   4713 derivadas=0
 health_spending_gdp          lugares=  194 2000–2024 linhas=   4586 derivadas=0
+health_spending_per_capita   lugares=  200 2000–2024 linhas=   4727 derivadas=144
+high_tech_exports            lugares=  187 2007–2024 linhas=   2683 derivadas=0
+high_tech_exports_usd        lugares=  192 2007–2024 linhas=   2729 derivadas=33
+hiv_incidence                lugares=  148 1990–2024 linhas=   5089 derivadas=0
+hiv_prevalence               lugares=  154 1990–2024 linhas=   5303 derivadas=0
 homicides                    lugares=  202 1990–2023 linhas=   4170 derivadas=81
 hospital_beds                lugares=  208 1960–2023 linhas=   4838 derivadas=93
+household_consumption        lugares=  191 1960–2025 linhas=   8743 derivadas=0
+human_capital_index          lugares=  174 2010–2020 linhas=    601 derivadas=0
+hydro_electricity_share      lugares=  210 1990–2025 linhas=   6429 derivadas=0
+ict_goods_exports            lugares=  192 2000–2024 linhas=   3967 derivadas=0
+ict_service_exports          lugares=  191 1960–2025 linhas=   5367 derivadas=0
+idp_conflict                 lugares=   79 2009–2023 linhas=    823 derivadas=0
+idp_new_conflict             lugares=   71 2009–2023 linhas=    513 derivadas=0
+idp_new_disasters            lugares=  205 2008–2023 linhas=   1832 derivadas=43
 imports_gdp                  lugares=  195 1960–2025 linhas=   9094 derivadas=0
+income_share_bottom20        lugares=  171 1963–2025 linhas=   2434 derivadas=0
+income_share_top10           lugares=  171 1963–2025 linhas=   2434 derivadas=0
+industry_value_added         lugares=  209 1960–2025 linhas=   9090 derivadas=0
 infant_mortality             lugares=  197 1960–2024 linhas=  11865 derivadas=0
 inflation                    lugares=  194 1960–2025 linhas=   9196 derivadas=0
 internet_data_per_day        lugares=    1 2025–2025 linhas=      1 derivadas=0
 internet_users               lugares=  220 1990–2025 linhas=   6438 derivadas=193
+investment_gdp               lugares=  188 1960–2025 linhas=   8725 derivadas=0
 journal_articles             lugares=  204 1996–2023 linhas=   5712 derivadas=168
 labor_force                  lugares=  194 1990–2025 linhas=   6966 derivadas=212
 land_area                    lugares=  223 1961–2024 linhas=  12948 derivadas=322
+large_cities_pct             lugares=  127 1960–2025 linhas=   8382 derivadas=330
+largest_city_pct             lugares=  154 1960–2025 linhas=  10134 derivadas=0
 life_expectancy              lugares=  224 1960–2024 linhas=  14526 derivadas=390
 life_expectancy_female       lugares=  218 1960–2024 linhas=  14136 derivadas=0
 life_expectancy_male         lugares=  218 1960–2024 linhas=  14136 derivadas=0
+literacy_female              lugares=  172 1970–2024 linhas=   1180 derivadas=0
+literacy_male                lugares=  171 1970–2024 linhas=   1172 derivadas=0
+livestock_production_index   lugares=  195 1961–2024 linhas=  11421 derivadas=0
+lower_secondary_completion   lugares=  198 1970–2025 linhas=   4280 derivadas=0
+malaria_incidence            lugares=  108 2000–2024 linhas=   2655 derivadas=0
+male_labor_participation     lugares=  188 1990–2025 linhas=   6754 derivadas=0
+manufacturing_value_added    lugares=  205 1960–2025 linhas=   8282 derivadas=0
+marine_protected_areas       lugares=  175 2013–2025 linhas=   2236 derivadas=0
 maternal_mortality           lugares=  195 1985–2023 linhas=   7605 derivadas=0
 measles_immunization         lugares=  194 1980–2024 linhas=   7976 derivadas=0
+merchandise_exports          lugares=  214 1960–2025 linhas=  12338 derivadas=352
+merchandise_imports          lugares=  214 1960–2025 linhas=  12287 derivadas=352
+methane_emissions            lugares=  210 1970–2024 linhas=  11550 derivadas=330
 migrant_stock                lugares=  222 1990–2024 linhas=   1776 derivadas=48
 migrant_stock_pct            lugares=  217 1990–2024 linhas=   1736 derivadas=0
 military_spending            lugares=  167 1960–2025 linhas=   8253 derivadas=0
 mobile_subscriptions         lugares=  221 1960–2025 linhas=  10960 derivadas=317
+mobile_subscriptions_total   lugares=  221 1960–2025 linhas=  10976 derivadas=309
+ncd_mortality                lugares=  186 2000–2021 linhas=   4092 derivadas=0
+neonatal_mortality           lugares=  197 1960–2024 linhas=  10105 derivadas=0
 net_migration                lugares=  224 1960–2025 linhas=  14784 derivadas=396
+nitrous_oxide_emissions      lugares=  210 1970–2024 linhas=  11550 derivadas=330
+nuclear_electricity_share    lugares=  210 1990–2025 linhas=   6073 derivadas=0
+nurses_midwives              lugares=  205 1990–2023 linhas=   3464 derivadas=51
+oda_received                 lugares=  174 1960–2023 linhas=   9074 derivadas=103
+open_defecation              lugares=  221 2000–2024 linhas=   5225 derivadas=132
+out_of_pocket_health         lugares=  194 2000–2024 linhas=   4586 derivadas=0
+overweight_adults            lugares=  197 1975–2022 linhas=   6510 derivadas=0
+patent_applications          lugares=  165 1980–2024 linhas=   4334 derivadas=68
 physicians                   lugares=  215 1960–2023 linhas=   5429 derivadas=66
 pm25                         lugares=  207 1990–2023 linhas=   7038 derivadas=204
+political_stability          lugares=  205 1996–2023 linhas=   5025 derivadas=0
 population                   lugares= 5826 1750–2026 linhas= 182471 derivadas=1111
 population_0_14              lugares=  224 1960–2025 linhas=  14784 derivadas=396
+population_15_64             lugares=  224 1960–2025 linhas=  14784 derivadas=396
 population_65_plus           lugares=  224 1960–2025 linhas=  14784 derivadas=396
 population_density           lugares=  217 1961–2024 linhas=  12597 derivadas=0
 population_growth            lugares=  224 1961–2025 linhas=  14527 derivadas=389
+population_low_coast         lugares=  222 1990–2015 linhas=    666 derivadas=18
+poverty_gap                  lugares=  172 1963–2025 linhas=   2477 derivadas=0
+poverty_lmic                 lugares=  172 1963–2025 linhas=   2477 derivadas=0
 poverty_national             lugares=  161 1985–2025 linhas=   1185 derivadas=0
 poverty_rate                 lugares=  172 1963–2025 linhas=   2477 derivadas=0
+poverty_umic                 lugares=  172 1963–2025 linhas=   2477 derivadas=0
+power_losses                 lugares=  151 1960–2025 linhas=   5243 derivadas=0
+precipitation                lugares=  182 1961–2022 linhas=  10448 derivadas=0
+preprimary_enrollment        lugares=  208 1970–2022 linhas=   6165 derivadas=0
 primary_completion           lugares=  199 1970–2025 linhas=   5086 derivadas=0
 protected_areas              lugares=  214 2013–2025 linhas=   2759 derivadas=0
+pupil_teacher_primary        lugares=  207 1970–2019 linhas=   6065 derivadas=0
+pupil_teacher_secondary      lugares=  205 1970–2019 linhas=   4393 derivadas=0
 rd_spending_gdp              lugares=  157 1996–2024 linhas=   2495 derivadas=0
+refugees_hosted              lugares=  202 1960–2023 linhas=   7580 derivadas=189
+refugees_origin              lugares=  213 1960–2023 linhas=   7481 derivadas=181
+regulatory_quality           lugares=  205 1996–2023 linhas=   4966 derivadas=0
+remittances_gdp              lugares=  199 1970–2025 linhas=   7209 derivadas=0
+remittances_received         lugares=  204 1970–2025 linhas=   7368 derivadas=117
 renewable_electricity_share  lugares=  210 1990–2021 linhas=   5829 derivadas=0
 renewable_energy_share       lugares=  213 1990–2022 linhas=   6777 derivadas=0
+researchers_rd               lugares=  148 1996–2024 linhas=   2002 derivadas=23
+reserves                     lugares=  188 1960–2025 linhas=   9726 derivadas=238
+resource_rents               lugares=  215 1970–2021 linhas=   9287 derivadas=0
+road_deaths                  lugares=  197 2000–2019 linhas=   3809 derivadas=120
+rule_of_law                  lugares=  205 1996–2023 linhas=   5078 derivadas=0
 rural_population             lugares=  224 1960–2025 linhas=  14784 derivadas=396
+rural_population_total       lugares=  224 1960–2025 linhas=  14754 derivadas=396
 sanitation_basic             lugares=  221 2000–2024 linhas=   5331 derivadas=140
+sanitation_safely_managed    lugares=  151 2000–2024 linhas=   3684 derivadas=90
+savings_gdp                  lugares=  181 1960–2025 linhas=   6521 derivadas=0
+school_life_expectancy       lugares=  194 1994–2019 linhas=   2615 derivadas=0
+secure_servers               lugares=  222 2010–2024 linhas=   3297 derivadas=89
+services_value_added         lugares=  206 1960–2025 linhas=   8659 derivadas=0
+skilled_birth_attendance     lugares=  207 1980–2022 linhas=   2993 derivadas=0
 smartphones                  lugares=    1 2025–2025 linhas=      1 derivadas=0
 species_extinct              lugares=    1 2025–2025 linhas=      1 derivadas=0
+stunting                     lugares=  163 1983–2024 linhas=   1130 derivadas=0
+surface_area                 lugares=  223 1961–2024 linhas=  14095 derivadas=385
+survival_65_female           lugares=  218 1960–2024 linhas=  14170 derivadas=0
+survival_65_male             lugares=  218 1960–2024 linhas=  14170 derivadas=0
+tax_revenue_gdp              lugares=  162 1972–2024 linhas=   4737 derivadas=0
+tb_detection                 lugares=  209 2000–2024 linhas=   4959 derivadas=0
+threatened_birds             lugares=  216 2017–2022 linhas=    431 derivadas=0
+threatened_fish              lugares=  216 2017–2022 linhas=    431 derivadas=0
+threatened_mammals           lugares=  216 2017–2022 linhas=    431 derivadas=0
+threatened_plants            lugares=  216 2017–2022 linhas=    431 derivadas=0
+tobacco_use                  lugares=  167 2000–2024 linhas=   1503 derivadas=0
+tourism_arrivals             lugares=  210 1995–2020 linhas=   4793 derivadas=85
+tourism_receipts             lugares=  207 1995–2020 linhas=   4233 derivadas=52
+trade_gdp                    lugares=  195 1960–2025 linhas=   9085 derivadas=0
+tuberculosis_incidence       lugares=  215 2000–2024 linhas=   5332 derivadas=150
+uhc_index                    lugares=  193 2000–2021 linhas=   1351 derivadas=0
 under5_mortality             lugares=  197 1960–2024 linhas=  11896 derivadas=0
 undernourishment             lugares=  175 2001–2024 linhas=   4158 derivadas=144
 unemployment                 lugares=  188 1991–2025 linhas=   6566 derivadas=0
+unemployment_female          lugares=  188 1991–2025 linhas=   6566 derivadas=0
+unemployment_male            lugares=  188 1991–2025 linhas=   6566 derivadas=0
 urban_population             lugares=  224 1960–2025 linhas=  14784 derivadas=396
+urban_population_growth      lugares=  218 1961–2025 linhas=  14139 derivadas=0
+urban_population_total       lugares=  224 1960–2025 linhas=  14754 derivadas=396
+voice_accountability         lugares=  205 1996–2023 linhas=   5052 derivadas=0
+vulnerable_employment        lugares=  188 1991–2025 linhas=   6566 derivadas=0
+wasting                      lugares=  165 1983–2024 linhas=   1154 derivadas=0
 water_basic                  lugares=  221 2000–2024 linhas=   5371 derivadas=137
+water_safely_managed         lugares=  154 2000–2024 linhas=   3786 derivadas=45
+women_business_law           lugares=  190 1970–2023 linhas=  10260 derivadas=0
 women_in_parliament          lugares=  194 1997–2025 linhas=   5288 derivadas=0
+women_ministers              lugares=  194 2005–2025 linhas=   2642 derivadas=0
+youth_literacy               lugares=  173 1970–2024 linhas=   1320 derivadas=0
+youth_neet                   lugares=  183 1970–2025 linhas=   2572 derivadas=0
+youth_unemployment           lugares=  188 1991–2025 linhas=   6566 derivadas=0
 
 == fontes
-WorldBank                                          518926
+WorldBank                                          1507959
 IBGE (PIB dos Municípios)                          123082
 IBGE (estimativas)                                 123073
 OWID                                               89722
 IBGE (Registro Civil)                              56312
 Derivado: IBGE (registro civil ÷ população)        50711
-Derivado: WorldBank                                7632
+Derivado: WorldBank                                16994
 IBGE (Censo 2022)                                  5597
 IBGE (Censo 2010)                                  5592
 IBGE (Contagem 2007)                               5591
@@ -154,5 +309,226 @@ países com população em Place: 221 de 249
 continentes com população em Place: [('CON-OC', 47767239), ('CON-SA', 438101923), ('CON-NA', 613880314), ('CON-EU', 743802922), ('CON-AF', 1548136890), ('CON-AS', 4832530891)]
 indicadores do catálogo SEM nenhuma observação: []
 DEMO no banco: 0
-tamanho do banco (MB): 196.6
+tamanho do banco (MB): 385.4
 amostra WB países: {"indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"}, "country": {"id": "BR", "value": "Brazil"}, "countryiso3code": "BRA", "date": "2024", "value": 2185821610689.31, "unit": "", "obs_status": "", "decimal": 0}
+
+== agregação dos indicadores novos (linhas WLD da fonte x derivadas; continentes com dado)
+birth_rate                       agg=pop_mean países=218 continentes=6 mundo=2024 fonte
+death_rate                       agg=pop_mean países=218 continentes=6 mundo=2024 fonte
+fertility_rate                   agg=None     países=218 continentes=0 mundo=2024 fonte
+life_expectancy                  agg=pop_mean países=218 continentes=6 mundo=2024 fonte
+life_expectancy_female           agg=None     países=218 continentes=0 mundo=2024 fonte
+life_expectancy_male             agg=None     países=218 continentes=0 mundo=2024 fonte
+population_growth                agg=pop_mean países=218 continentes=6 mundo=2025 fonte
+population_0_14                  agg=pop_mean países=218 continentes=6 mundo=2025 fonte
+population_65_plus               agg=pop_mean países=218 continentes=6 mundo=2025 fonte
+urban_population                 agg=pop_mean países=218 continentes=6 mundo=2025 fonte
+rural_population                 agg=pop_mean países=218 continentes=6 mundo=2025 fonte
+population_density               agg=None     países=217 continentes=0 mundo=2023 fonte
+net_migration                    agg=sum      países=218 continentes=6 mundo=2025 fonte
+migrant_stock                    agg=sum      países=216 continentes=6 mundo=2024 fonte
+migrant_stock_pct                agg=None     países=217 continentes=0 mundo=2024 fonte
+population_15_64                 agg=pop_mean países=218 continentes=6 mundo=2025 fonte
+age_dependency                   agg=None     países=218 continentes=0 mundo=2025 fonte
+female_population_pct            agg=pop_mean países=218 continentes=6 mundo=2025 fonte
+urban_population_total           agg=sum      países=218 continentes=6 mundo=2025 fonte
+adolescent_fertility             agg=None     países=218 continentes=0 mundo=2024 fonte
+survival_65_male                 agg=None     países=218 continentes=0 mundo=2024 fonte
+survival_65_female               agg=None     países=218 continentes=0 mundo=2024 fonte
+urban_population_growth          agg=None     países=218 continentes=0 mundo=2025 fonte
+rural_population_total           agg=sum      países=218 continentes=6 mundo=2025 fonte
+largest_city_pct                 agg=None     países=154 continentes=0 mundo=2025 fonte
+large_cities_pct                 agg=pop_mean países=122 continentes=5 mundo=2025 fonte
+birth_registration               agg=None     países=181 continentes=0 mundo=2018 fonte
+gdp                              agg=sum      países=215 continentes=6 mundo=2025 fonte
+gdp_per_capita                   agg=pop_mean países=215 continentes=6 mundo=2025 fonte
+gdp_growth                       agg=None     países=215 continentes=0 mundo=2025 fonte
+gdp_ppp                          agg=sum      países=204 continentes=6 mundo=2025 fonte
+gdp_per_capita_ppp               agg=pop_mean países=204 continentes=6 mundo=2025 fonte
+inflation                        agg=None     países=194 continentes=0 mundo=2025 fonte
+unemployment                     agg=None     países=188 continentes=0 mundo=2025 fonte
+labor_force                      agg=sum      países=188 continentes=6 mundo=2025 fonte
+female_labor_participation       agg=None     países=188 continentes=0 mundo=2025 fonte
+exports_gdp                      agg=None     países=195 continentes=0 mundo=2025 fonte
+imports_gdp                      agg=None     países=195 continentes=0 mundo=2025 fonte
+government_debt                  agg=None     países=109 continentes=0 mundo=sem mundo
+military_spending                agg=None     países=167 continentes=0 mundo=2025 fonte
+gni_per_capita                   agg=pop_mean países=208 continentes=6 mundo=2025 fonte
+agriculture_value_added          agg=None     países=207 continentes=0 mundo=2025 fonte
+industry_value_added             agg=None     países=209 continentes=0 mundo=2025 fonte
+services_value_added             agg=None     países=206 continentes=0 mundo=2024 fonte
+trade_gdp                        agg=None     países=195 continentes=0 mundo=2025 fonte
+current_account_gdp              agg=None     países=200 continentes=0 mundo=sem mundo
+investment_gdp                   agg=None     países=188 continentes=0 mundo=2024 fonte
+savings_gdp                      agg=None     países=181 continentes=0 mundo=2024 fonte
+tax_revenue_gdp                  agg=None     países=162 continentes=0 mundo=2024 fonte
+fdi_inflows_gdp                  agg=None     países=204 continentes=0 mundo=2025 fonte
+remittances_received             agg=sum      países=199 continentes=5 mundo=2025 fonte
+reserves                         agg=sum      países=183 continentes=5 mundo=2017 derivado
+youth_unemployment               agg=None     países=188 continentes=0 mundo=2025 fonte
+vulnerable_employment            agg=None     países=188 continentes=0 mundo=2025 fonte
+employment_agriculture           agg=None     países=188 continentes=0 mundo=2025 fonte
+tourism_arrivals                 agg=sum      países=204 continentes=6 mundo=2019 fonte
+tourism_receipts                 agg=sum      países=204 continentes=3 mundo=2019 fonte
+gni                              agg=sum      países=210 continentes=6 mundo=2025 fonte
+manufacturing_value_added        agg=None     países=205 continentes=0 mundo=2025 fonte
+remittances_gdp                  agg=None     países=199 continentes=0 mundo=2025 fonte
+employment_industry              agg=None     países=188 continentes=0 mundo=2025 fonte
+employment_services              agg=None     países=188 continentes=0 mundo=2025 fonte
+unemployment_female              agg=None     países=188 continentes=0 mundo=2025 fonte
+unemployment_male                agg=None     países=188 continentes=0 mundo=2025 fonte
+male_labor_participation         agg=None     países=188 continentes=0 mundo=2025 fonte
+household_consumption            agg=None     países=191 continentes=0 mundo=2024 fonte
+government_consumption           agg=None     países=189 continentes=0 mundo=2024 fonte
+gdp_deflator_inflation           agg=None     países=214 continentes=0 mundo=2025 fonte
+exchange_rate                    agg=None     países=214 continentes=0 mundo=sem mundo
+government_revenue               agg=None     países=163 continentes=0 mundo=2024 fonte
+government_expense               agg=None     países=162 continentes=0 mundo=2022 fonte
+resource_rents                   agg=None     países=215 continentes=0 mundo=2021 fonte
+oda_received                     agg=sum      países=171 continentes=3 mundo=2023 fonte
+external_debt                    agg=sum      países=122 continentes=1 mundo=sem mundo
+merchandise_exports              agg=sum      países=208 continentes=6 mundo=2025 fonte
+merchandise_imports              agg=sum      países=208 continentes=6 mundo=2025 fonte
+youth_neet                       agg=None     países=183 continentes=0 mundo=sem mundo
+infant_mortality                 agg=None     países=197 continentes=0 mundo=2024 fonte
+under5_mortality                 agg=None     países=197 continentes=0 mundo=2024 fonte
+maternal_mortality               agg=None     países=195 continentes=0 mundo=2023 fonte
+health_spending_gdp              agg=None     países=194 continentes=0 mundo=2023 fonte
+physicians                       agg=pop_mean países=209 continentes=6 mundo=2022 fonte
+hospital_beds                    agg=pop_mean países=202 continentes=6 mundo=2021 fonte
+measles_immunization             agg=None     países=194 continentes=0 mundo=2024 fonte
+undernourishment                 agg=pop_mean países=169 continentes=6 mundo=2024 fonte
+water_basic                      agg=pop_mean países=215 continentes=6 mundo=2024 fonte
+sanitation_basic                 agg=pop_mean países=215 continentes=6 mundo=2024 fonte
+hiv_prevalence                   agg=None     países=154 continentes=0 mundo=2024 fonte
+tuberculosis_incidence           agg=pop_mean países=209 continentes=6 mundo=2024 fonte
+malaria_incidence                agg=None     países=108 continentes=0 mundo=2024 fonte
+stunting                         agg=None     países=163 continentes=0 mundo=sem mundo
+neonatal_mortality               agg=None     países=197 continentes=0 mundo=2024 fonte
+adult_mortality_female           agg=None     países=218 continentes=0 mundo=2024 fonte
+adult_mortality_male             agg=None     países=218 continentes=0 mundo=2024 fonte
+ncd_mortality                    agg=None     países=186 continentes=0 mundo=2021 fonte
+dtp_immunization                 agg=None     países=194 continentes=0 mundo=2024 fonte
+skilled_birth_attendance         agg=None     países=207 continentes=0 mundo=2019 fonte
+road_deaths                      agg=pop_mean países=191 continentes=6 mundo=2019 fonte
+food_insecurity                  agg=pop_mean países=158 continentes=4 mundo=2024 fonte
+health_spending_per_capita       agg=pop_mean países=194 continentes=6 mundo=2023 fonte
+water_safely_managed             agg=pop_mean países=152 continentes=2 mundo=2024 fonte
+sanitation_safely_managed        agg=pop_mean países=147 continentes=4 mundo=2024 fonte
+tobacco_use                      agg=None     países=167 continentes=0 mundo=2024 fonte
+alcohol_consumption              agg=pop_mean países=188 continentes=6 mundo=2020 fonte
+nurses_midwives                  agg=pop_mean países=199 continentes=6 mundo=2022 fonte
+open_defecation                  agg=pop_mean países=215 continentes=6 mundo=2024 fonte
+wasting                          agg=None     países=165 continentes=0 mundo=2024 fonte
+out_of_pocket_health             agg=None     países=194 continentes=0 mundo=2023 fonte
+diabetes_prevalence              agg=None     países=210 continentes=0 mundo=2024 fonte
+overweight_adults                agg=None     países=197 continentes=0 mundo=2016 fonte
+hiv_incidence                    agg=None     países=148 continentes=0 mundo=2024 fonte
+deaths_communicable              agg=None     países=186 continentes=0 mundo=2021 fonte
+deaths_noncommunicable           agg=None     países=186 continentes=0 mundo=2021 fonte
+government_health_spending       agg=None     países=194 continentes=0 mundo=2023 fonte
+uhc_index                        agg=None     países=193 continentes=0 mundo=2021 fonte
+tb_detection                     agg=None     países=209 continentes=0 mundo=2024 fonte
+art_coverage                     agg=None     países=145 continentes=0 mundo=2024 fonte
+adult_literacy                   agg=pop_mean países=171 continentes=0 mundo=2024 fonte
+enrollment_primary               agg=None     países=210 continentes=0 mundo=2024 fonte
+enrollment_secondary             agg=None     países=209 continentes=0 mundo=2024 fonte
+enrollment_tertiary              agg=None     países=204 continentes=0 mundo=2024 fonte
+primary_completion               agg=None     países=199 continentes=0 mundo=2024 fonte
+education_spending_gdp           agg=None     países=204 continentes=0 mundo=2023 fonte
+rd_spending_gdp                  agg=None     países=157 continentes=0 mundo=2023 fonte
+journal_articles                 agg=sum      países=198 continentes=6 mundo=2023 fonte
+youth_literacy                   agg=None     países=173 continentes=0 mundo=2024 fonte
+lower_secondary_completion       agg=None     países=198 continentes=0 mundo=2024 fonte
+children_out_of_school           agg=sum      países=205 continentes=4 mundo=sem mundo
+researchers_rd                   agg=pop_mean países=146 continentes=2 mundo=2020 fonte
+patent_applications              agg=sum      países=161 continentes=4 mundo=2024 fonte
+literacy_female                  agg=None     países=172 continentes=0 mundo=2024 fonte
+literacy_male                    agg=None     países=171 continentes=0 mundo=2024 fonte
+pupil_teacher_primary            agg=None     países=207 continentes=0 mundo=2018 fonte
+pupil_teacher_secondary          agg=None     países=205 continentes=0 mundo=2018 fonte
+education_spending_gov           agg=None     países=202 continentes=0 mundo=2023 fonte
+school_life_expectancy           agg=None     países=194 continentes=0 mundo=2019 fonte
+human_capital_index              agg=None     países=174 continentes=0 mundo=sem mundo
+bachelor_attainment              agg=None     países=188 continentes=0 mundo=sem mundo
+preprimary_enrollment            agg=None     países=208 continentes=0 mundo=2020 fonte
+electricity_access               agg=pop_mean países=217 continentes=6 mundo=2024 fonte
+renewable_energy_share           agg=None     países=213 continentes=0 mundo=2020 fonte
+renewable_electricity_share      agg=None     países=210 continentes=0 mundo=2021 fonte
+energy_use_per_capita            agg=pop_mean países=180 continentes=5 mundo=2024 fonte
+electric_power_consumption       agg=pop_mean países=151 continentes=5 mundo=2024 fonte
+fossil_energy_share              agg=None     países=180 continentes=0 mundo=2024 fonte
+clean_cooking_access             agg=pop_mean países=193 continentes=6 mundo=2024 fonte
+energy_intensity                 agg=None     países=202 continentes=0 mundo=2021 fonte
+energy_imports_net               agg=None     países=146 continentes=0 mundo=2023 fonte
+air_passengers                   agg=sum      países=186 continentes=6 mundo=2023 fonte
+fossil_electricity_share         agg=None     países=210 continentes=0 mundo=2023 fonte
+coal_electricity_share           agg=None     países=210 continentes=0 mundo=2025 fonte
+gas_electricity_share            agg=None     países=210 continentes=0 mundo=2025 fonte
+nuclear_electricity_share        agg=None     países=210 continentes=0 mundo=2025 fonte
+hydro_electricity_share          agg=None     países=210 continentes=0 mundo=2025 fonte
+power_losses                     agg=None     países=151 continentes=0 mundo=2023 fonte
+container_traffic                agg=sum      países=169 continentes=4 mundo=2024 fonte
+forest_area                      agg=sum      países=215 continentes=6 mundo=2025 derivado
+forest_pct                       agg=None     países=215 continentes=0 mundo=2023 fonte
+agricultural_land_pct            agg=None     países=211 continentes=0 mundo=2023 fonte
+land_area                        agg=sum      países=217 continentes=6 mundo=2024 derivado
+protected_areas                  agg=None     países=214 continentes=0 mundo=2025 fonte
+pm25                             agg=pop_mean países=201 continentes=6 mundo=2023 fonte
+ghg_emissions                    agg=sum      países=204 continentes=6 mundo=2024 fonte
+methane_emissions                agg=sum      países=204 continentes=6 mundo=2024 fonte
+freshwater_withdrawal            agg=None     países=178 continentes=0 mundo=2022 fonte
+freshwater_per_capita            agg=pop_mean países=184 continentes=6 mundo=2022 fonte
+marine_protected_areas           agg=None     países=175 continentes=0 mundo=2025 fonte
+arable_land_pct                  agg=None     países=207 continentes=0 mundo=2023 fonte
+cereal_yield                     agg=None     países=182 continentes=0 mundo=2023 fonte
+food_production_index            agg=None     países=196 continentes=0 mundo=2024 fonte
+threatened_mammals               agg=None     países=216 continentes=0 mundo=2017 fonte
+threatened_birds                 agg=None     países=216 continentes=0 mundo=2017 fonte
+threatened_plants                agg=None     países=216 continentes=0 mundo=2017 fonte
+nitrous_oxide_emissions          agg=sum      países=204 continentes=6 mundo=2024 fonte
+threatened_fish                  agg=None     países=216 continentes=0 mundo=2017 fonte
+surface_area                     agg=sum      países=217 continentes=6 mundo=2024 derivado
+fertilizer_use                   agg=None     países=201 continentes=0 mundo=2023 fonte
+precipitation                    agg=None     países=182 continentes=0 mundo=sem mundo
+population_low_coast             agg=pop_mean países=216 continentes=6 mundo=2015 fonte
+cereal_production                agg=sum      países=183 continentes=6 mundo=2024 fonte
+crop_production_index            agg=None     países=196 continentes=0 mundo=2024 fonte
+livestock_production_index       agg=None     países=195 continentes=0 mundo=2024 fonte
+fish_capture                     agg=sum      países=217 continentes=6 mundo=2024 fonte
+aquaculture                      agg=sum      países=217 continentes=6 mundo=2024 fonte
+internet_users                   agg=pop_mean países=214 continentes=6 mundo=2025 fonte
+mobile_subscriptions             agg=pop_mean países=215 continentes=6 mundo=2025 fonte
+broadband_subscriptions          agg=pop_mean países=209 continentes=6 mundo=2025 fonte
+secure_servers                   agg=pop_mean países=216 continentes=6 mundo=2024 fonte
+fixed_telephone                  agg=pop_mean países=214 continentes=6 mundo=2025 fonte
+high_tech_exports                agg=None     países=187 continentes=0 mundo=2024 fonte
+mobile_subscriptions_total       agg=sum      países=215 continentes=6 mundo=2025 fonte
+broadband_subscriptions_total    agg=sum      países=209 continentes=6 mundo=2025 fonte
+ict_goods_exports                agg=None     países=192 continentes=0 mundo=2024 fonte
+ict_service_exports              agg=None     países=191 continentes=0 mundo=2025 fonte
+high_tech_exports_usd            agg=sum      países=187 continentes=5 mundo=2023 fonte
+poverty_rate                     agg=None     países=172 continentes=0 mundo=2024 fonte
+poverty_national                 agg=None     países=161 continentes=0 mundo=sem mundo
+gini                             agg=None     países=171 continentes=0 mundo=sem mundo
+homicides                        agg=pop_mean países=197 continentes=5 mundo=2023 fonte
+women_in_parliament              agg=None     países=194 continentes=0 mundo=2025 fonte
+income_share_top10               agg=None     países=171 continentes=0 mundo=sem mundo
+income_share_bottom20            agg=None     países=171 continentes=0 mundo=sem mundo
+women_business_law               agg=None     países=190 continentes=0 mundo=2023 fonte
+refugees_hosted                  agg=sum      países=196 continentes=6 mundo=2023 fonte
+refugees_origin                  agg=sum      países=207 continentes=6 mundo=2023 fonte
+battle_deaths                    agg=sum      países=109 continentes=0 mundo=sem mundo
+control_of_corruption            agg=None     países=205 continentes=0 mundo=sem mundo
+government_effectiveness         agg=None     países=205 continentes=0 mundo=sem mundo
+political_stability              agg=None     países=205 continentes=0 mundo=sem mundo
+regulatory_quality               agg=None     países=205 continentes=0 mundo=sem mundo
+rule_of_law                      agg=None     países=205 continentes=0 mundo=sem mundo
+voice_accountability             agg=None     países=205 continentes=0 mundo=sem mundo
+poverty_lmic                     agg=None     países=172 continentes=0 mundo=2024 fonte
+poverty_umic                     agg=None     países=172 continentes=0 mundo=2024 fonte
+poverty_gap                      agg=None     países=172 continentes=0 mundo=2024 fonte
+idp_conflict                     agg=sum      países= 79 continentes=0 mundo=sem mundo
+idp_new_conflict                 agg=sum      países= 71 continentes=0 mundo=sem mundo
+idp_new_disasters                agg=sum      países=200 continentes=5 mundo=2023 fonte
+women_ministers                  agg=None     países=194 continentes=0 mundo=2025 fonte
