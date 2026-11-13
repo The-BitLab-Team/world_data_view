@@ -17,9 +17,11 @@ def note(*a):
     line = " ".join(str(x) for x in a)
     rep.append(line)
     print(line, flush=True)
+    with open(os.path.join(OUT, "REPORT.txt"), "a", encoding="utf-8") as fh:
+        fh.write(line + "\n")
 
 
-def get(url, timeout=180):
+def get(url, timeout=40):
     t = time.time()
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout) as r:
         data = r.read()
@@ -75,6 +77,22 @@ def geonames():
 
 
 # ---------------------------------------------------------------- IBGE
+def ibge_reach():
+    for url in (
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados",
+        "https://apisidra.ibge.gov.br/values/t/6579/n1/all/v/9324/p/last",
+        "https://ftp.ibge.gov.br/Estimativas_de_Populacao/",
+        "https://www.ibge.gov.br/",
+    ):
+        t = time.time()
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=25) as r:
+                body = r.read(300)
+                note(f"IBGE ok {r.status} {time.time() - t:.1f}s {url} :: {body[:80]!r}")
+        except Exception as exc:  # noqa: BLE001
+            note(f"IBGE FALHOU {time.time() - t:.1f}s {url} :: {type(exc).__name__}: {exc}")
+
+
 def ibge():
     est = get("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
     save("ibge_estados.json", est)
@@ -128,21 +146,27 @@ def worldbank():
     note("reais:", len(countries), "| agregados:", len(aggs), "| exemplos agregados:", sorted(aggs)[:12])
     save("worldbank_country_meta_sample.json", json.dumps([head, rows[:30]], ensure_ascii=False))
 
-    table = []
-    for code in CANDIDATES:
+    from concurrent.futures import ThreadPoolExecutor
+
+    def probe_code(code):
         try:
             url = f"https://api.worldbank.org/v2/country/all/indicator/{code}?format=json&per_page=1000&mrnev=1"
-            data = json.loads(get(url, timeout=90))
+            t = time.time()
+            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
+                data = json.loads(r.read())
+            dt = time.time() - t
             if not isinstance(data, list) or len(data) < 2 or not data[1]:
-                table.append(f"{code:<22} SEM DADOS ({str(data)[:120]})")
-                continue
+                return f"{code:<22} SEM DADOS ({str(data)[:120]})"
             recs = [r for r in data[1] if r["countryiso3code"] in countries and r["value"] is not None]
             years = [int(r["date"]) for r in recs]
             name = data[1][0]["indicator"]["value"]
             med = int(statistics.median(years)) if years else "-"
-            table.append(f"{code:<22} paises={len(recs):>3} mediana_ano={med} | {name[:80]}")
+            return f"{code:<22} paises={len(recs):>3} mediana_ano={med} {dt:.0f}s | {name[:80]}"
         except Exception as exc:  # noqa: BLE001
-            table.append(f"{code:<22} ERRO {type(exc).__name__}: {str(exc)[:100]}")
+            return f"{code:<22} ERRO {type(exc).__name__}: {str(exc)[:100]}"
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        table = list(pool.map(probe_code, CANDIDATES))
     note("\n".join(table))
 
     url = "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?format=json&per_page=20000&date=2020:2023"
@@ -151,7 +175,6 @@ def worldbank():
     save("worldbank_all_countries_sample.json", json.dumps([full[0], full[1][:30]], ensure_ascii=False))
 
 
-step("GeoNames", geonames)
+step("IBGE alcance", ibge_reach)
 step("IBGE", ibge)
 step("Banco Mundial", worldbank)
-save("REPORT.txt", "\n".join(rep))
