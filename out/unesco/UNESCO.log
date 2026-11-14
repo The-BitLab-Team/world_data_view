@@ -1,0 +1,13 @@
+INFO Coletor unesco: ok (23503 linhas, 5 s)
+unesco      ok          23503 linhas  
+### unesco duracao: 6s
+Observações: 23503
+Lugares: city 65612, continent 6, country 247, region 3754, world 1
+  world_heritage_cultural  UNESCO            5820 pontos (até 2026)
+  world_heritage_in_danger UNESCO             174 pontos (até 2026)
+  world_heritage_inscriptions UNESCO              49 pontos (até 2026)
+  world_heritage_mixed     UNESCO            5820 pontos (até 2026)
+  world_heritage_natural   UNESCO            5820 pontos (até 2026)
+  world_heritage_sites     UNESCO            5820 pontos (até 2026)
+  run #2 unesco ok 23503 linhas 2026-11-14 14:10:33.010711
+  run #1 geonames ok 0 linhas 2026-11-14 14:10:27.116802
