@@ -434,3 +434,56 @@ def test_worldbank_collector_falls_back_to_the_paged_api_when_the_bulk_download_
     assert "usando a API paginada" in caplog.text
     forest_calls = [u for u in http.calls if "AG.LND.FRST.K2" in u]
     assert "downloadformat=csv" in forest_calls[0]  # o download em massa vem primeiro
+
+
+# ------------------------------------------- Banco Mundial: séries arquivadas não são dado
+def archived_zip(code: str = "SP.DYN.CBRT.IN") -> bytes:
+    """Mesmo formato, mas da base "WDI Database Archives" (DS57), como o serviço real devolve
+    para séries retiradas do WDI: ela mistura todas as versões já publicadas e os valores saem
+    somados (governança "de −2,5 a 2,5" veio com 25; refugiados no mundo, com 263 milhões)."""
+    text = fixture_text("worldbank_bulk_birth_rate_sample.csv").replace(
+        '"Data Source","World Development Indicators",', '"Data Source","WDI Database Archives",'
+    )
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr(f"API_{code}_DS57_en_csv_v2_76040.csv", text)
+    return buffer.getvalue()
+
+
+def test_worldbank_bulk_rejects_the_archives_database():
+    from app.collectors.worldbank import ArchivedSeriesError
+
+    with pytest.raises(ArchivedSeriesError, match="Archives"):
+        parse_bulk_zip(archived_zip(), "birth_rate", "SP.DYN.CBRT.IN", {"BRA", "WLD"})
+    # Bases temáticas com uma só versão (educação, gênero, saúde) continuam valendo.
+    rows = parse_bulk_zip(
+        bulk_zip(member="API_SP.DYN.CBRT.IN_DS14_en_csv_v2_1.csv"), "birth_rate", "SP.DYN.CBRT.IN", {"BRA", "WLD"}
+    )
+    assert rows
+
+
+def test_worldbank_collector_does_not_fall_back_to_the_api_for_an_archived_series():
+    http = _wb_http(bytes_by_code={"SP.DYN.CBRT.IN": archived_zip()})
+    batch = WorldBankCollector().collect(http)
+
+    assert not [o for o in batch.observations if o.indicator == "birth_rate"]
+    assert any("birth_rate" in w and "Archives" in w for w in batch.warnings)
+    # A API paginada devolveria as mesmas versões misturadas: nem é consultada.
+    assert not [u for u in http.calls if "country/all/indicator/SP.DYN.CBRT.IN" in str(u)]
+
+
+def test_collect_all_drops_observations_of_indicators_that_left_the_catalog(session_factory):
+    from app.collectors.runner import collect_all
+
+    with session_factory() as session:
+        upsert_observations(
+            session,
+            [
+                ObservationRow("rule_of_law", "BRA", 2023, -3.39, "World Bank"),  # saiu do catálogo
+                ObservationRow("birth_rate", "BRA", 2023, 12.1, "World Bank"),
+            ],
+        )
+        session.commit()
+    collect_all(session_factory, FakeHttp(), only=["aggregates"])
+    with session_factory() as session:
+        assert set(session.scalars(select(Observation.indicator)).all()) == {"birth_rate"}

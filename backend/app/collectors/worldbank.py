@@ -126,6 +126,10 @@ def derive_net_change(forest_rows: list[ObservationRow]) -> list[ObservationRow]
     return derived
 
 
+class ArchivedSeriesError(CollectorError):
+    """A série saiu do WDI e só existe em "WDI Database Archives" (ver ``parse_bulk_zip``)."""
+
+
 def parse_bulk_zip(data: bytes, slug: str, code: str, allowed: set[str]) -> list[ObservationRow]:
     """Interpreta o zip do download em massa: ``API_{código}_DS2_en_csv_v2_*.csv`` dentro dele.
 
@@ -142,6 +146,14 @@ def parse_bulk_zip(data: bytes, slug: str, code: str, allowed: set[str]) -> list
         raise CollectorError(f"Banco Mundial: o zip de {slug} não tem o CSV de dados esperado ({archive.namelist()}).")
     lines = archive.read(names[0]).decode("utf-8-sig").splitlines()
     start = next((i for i, line in enumerate(lines) if line.startswith('"Country Name"')), None)
+    # Séries retiradas do WDI continuam baixáveis, mas de "WDI Database Archives" (DS57): um arquivo
+    # com todas as versões já publicadas, cujos valores saem somados (escore de governança "de −2,5 a
+    # 2,5" com 25; refugiados no mundo com 263 milhões). Isso não é dado: melhor ficar sem.
+    preamble = " ".join(lines[: start or 4])
+    if "Archives" in preamble or "_DS57_" in names[0].upper():
+        raise ArchivedSeriesError(
+            f"Banco Mundial: {slug} ({code}) só existe em WDI Database Archives, que mistura versões; ignorado."
+        )
     if start is None:
         raise CollectorError(f"Banco Mundial: o CSV de {slug} não tem o cabeçalho de dados.")
     reader = csv.reader(lines[start:])
@@ -206,6 +218,8 @@ class WorldBankCollector(Collector):
         try:
             rows = parse_bulk_zip(http.get_bytes(BULK_URL.format(code=code)), slug, code, allowed)
             how = "download em massa"
+        except ArchivedSeriesError:
+            raise  # a API paginada devolveria as mesmas versões misturadas
         except CollectorError as exc:
             log.warning("Banco Mundial %s: download em massa falhou (%s); usando a API paginada", slug, exc)
             rows = cls._fetch_paged(http, slug, code, allowed)
