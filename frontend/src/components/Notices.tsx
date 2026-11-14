@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Indicator, Status } from "../api/types";
+import { listWithRest } from "../lib/format";
 
 function Notice({ title, children, role }: { title: string; children: ReactNode; role?: "alert" | "status" }) {
   return (
@@ -54,7 +55,7 @@ export function Notices({ apiDown, status, indicators }: Props) {
       {demo.length > 0 && (
         <Notice title="Alguns números são de demonstração" role="status">
           <p>
-            {demo.join(", ")} usam dados sintéticos, que <strong className="font-semibold">não são reais</strong>. Rode{" "}
+            {listWithRest(demo)} usam dados sintéticos, que <strong className="font-semibold">não são reais</strong>. Rode{" "}
             <Code>python -m app.cli collect</Code> para trocá-los pelos dados das fontes.
           </p>
         </Notice>

@@ -8,7 +8,8 @@ De onde vem cada número, com que grau de confiança, e o que fazer para atualiz
 |---|---|---|---|
 | [GeoNames](https://www.geonames.org/) (`countryInfo`, `admin1CodesASCII`, `cities5000`) | Países (capital, área, moeda, idiomas, continente), estados/regiões e cidades com 5.000+ habitantes | ~250 países, regiões e cidades de todo o mundo, **exceto cidades do Brasil** | ✅ Executado contra o servidor real |
 | [IBGE, API SIDRA](https://apisidra.ibge.gov.br) | População (estimativas anuais, contagem 2007, censos 2010 e 2022), nascidos vivos, PIB, área | Brasil, 27 UFs e 5.571 municípios | ✅ Executado contra o servidor real |
-| [Banco Mundial, API v2](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392) | 64 indicadores (demografia, economia, saúde, educação, energia, ambiente, tecnologia, social) | Todos os países, mundo (`WLD`) e faixa de renda de cada país | ✅ Executado contra o servidor real |
+| [Banco Mundial, arquivo em massa](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392) | 219 indicadores (demografia, economia, saúde, educação, energia, ambiente, tecnologia, social, governança) | Todos os países, mundo (`WLD`) e faixa de renda de cada país | ✅ Executado contra o servidor real |
+| [Wikidata, consulta SPARQL](https://query.wikidata.org/) | População de estados e regiões **fora do Brasil**, com a data de cada censo ou estimativa | 3.105 de 3.797 regiões, 207 países | ✅ Executado contra o servidor real |
 | [Our World in Data, `co2-data`](https://github.com/owid/co2-data) | População, emissões de CO₂, CO₂ per capita | Mundo e ~220 países, de 1750 em diante | ✅ Executado contra o servidor real |
 | [NASA GISTEMP v4](https://data.giss.nasa.gov/gistemp/) | Anomalia da temperatura global | Mundo, anual | ✅ Executado contra o servidor real |
 | Agregados (`services/aggregate.py`) | Continentes e, quando a fonte não traz, o mundo | Soma ou média ponderada dos países | 🧮 Calculado, marcado como *calculado* |
@@ -22,7 +23,8 @@ De onde vem cada número, com que grau de confiança, e o que fazer para atualiz
 | Mundo e continentes | série anual (OWID; continentes somados dos países) | sim, quando a cobertura dos países permite (veja [Agregados](arquitetura.md#agregados-continentes-e-mundo)) |
 | Países | série anual (OWID; Banco Mundial para os demais indicadores) | sim |
 | Estados e municípios do **Brasil** | estimativas e censos do IBGE | população, nascimentos, taxa de natalidade e PIB |
-| Estados/regiões e cidades de **outros países** | instantâneo do GeoNames, sem ano de referência | não há |
+| Estados/regiões de **outros países** | pontos datados do Wikidata (censos e estimativas), quando existem | só população |
+| Cidades de **outros países** | instantâneo do GeoNames, sem ano de referência | não há |
 
 Isso é uma limitação da cobertura aberta e gratuita, não da plataforma: o modelo aceita séries para qualquer lugar assim que houver uma fonte confiável por país.
 
@@ -32,18 +34,20 @@ O ambiente de desenvolvimento só alcança `raw.githubusercontent.com`, então o
 
 | Etapa | Resultado | Tempo |
 |---|---|---|
-| GeoNames | ok: 248 países, 3.754 regiões e 65.606 cidades com 5.000+ habitantes (fora do Brasil) | 18 s |
-| OWID | ok, 89.722 linhas (população e CO₂, 1750–2025) | 10 s |
-| NASA GISTEMP + referência | ok, 146 + 3 linhas | 1 s |
-| IBGE | ok, 369.958 linhas, em 5.598 lugares (27 UFs e 5.571 municípios) | 99 s |
-| Banco Mundial | ok, 518.926 linhas, os 64 indicadores | 52 s |
-| Agregados | ok, 10.120 linhas calculadas | 3 s |
+| GeoNames | ok: 249 países, 3.781 regiões e 71.177 cidades com 5.000+ habitantes (inclui os municípios brasileiros do IBGE) | ~18 s |
+| OWID, NASA GISTEMP e referência | ok: 89.722 + 146 + 3 linhas | ~9 s |
+| IBGE | ok, 369.958 linhas, em 5.598 lugares (27 UFs e 5.571 municípios) | 74 s |
+| Banco Mundial | ok, 1.508.159 linhas, os 219 indicadores | 155 s |
+| Wikidata | ok, 11.947 pontos de população em 3.105 regiões de 207 países | 15 s |
+| Agregados | ok, 19.482 linhas calculadas | 6 s |
 
-O banco resultante tem **249 países, 3.781 regiões, 71.177 cidades**, cerca de **1 milhão de observações e 197 MB** (SQLite), e o pico de memória da coleta foi de ~265 MB. Conferências feitas no resultado:
+O banco resultante tem **249 países, 3.781 regiões, 71.177 cidades**, cerca de **2 milhões de observações e 385 MB** (SQLite). Conferências feitas no resultado:
 
 - a soma da população dos 6 continentes dá 99,91% da população mundial da OWID em 2025 (8,224 de 8,232 bilhões);
-- todos os 75 indicadores do catálogo têm ao menos uma observação; nenhuma linha `DEMO` entrou no banco;
+- todos os 230 indicadores do catálogo têm ao menos uma observação; nenhuma linha `DEMO` entrou no banco;
+- nenhum indicador sem regra de agregação ganhou valor de continente, e as somas e médias só aparecem onde os países informantes passam do limiar de cobertura (por isso `external_debt`, que só existe para países de renda baixa e média, só tem a África);
 - Joinville (`BRA-4209102`): 673.980 habitantes (estimativa IBGE 2026), 7.257 nascidos vivos registrados em 2024; Santa Catarina: 8.312.759;
+- Califórnia (`USA-CA`): 39.538.223 em 2020, Baviera (`DEU-02`): 13.038.724 em 2022 e Tóquio (`JPN-40`): 14.264.798 em 2022, todos pelo Wikidata; nenhuma região do Brasil veio do Wikidata (o IBGE cobre o país);
 - PIB do Brasil em 2023 pelo IBGE: R$ 10,9 trilhões; PIB mundial do Banco Mundial em 2025: US$ 118 trilhões; expectativa de vida mundial em 2024: 73,5 anos;
 - os únicos países sem continente são a Antártida (sem habitantes fixos, fora do modelo); as Ilhas do Canal, que existem só no Banco Mundial, foram atribuídas à Europa.
 
@@ -51,13 +55,14 @@ O banco resultante tem **249 países, 3.781 regiões, 71.177 cidades**, cerca de
 
 - **Banco Mundial pelo arquivo em massa.** A primeira versão consultava a API JSON paginada. Pedidos sem cache dessa API ficam parados por 60 a 120 s: com 6 pedidos em paralelo a coleta ainda levou **47 minutos**, e em série passou do limite de 40 minutos e foi cancelada. O arquivo em massa (um zip de ~80 KB por indicador) responde em ~0,1 s (alguns, uma vez, em ~70 a 100 s enquanto o servidor gera o arquivo). A API paginada ficou como reserva por indicador. Um indicador (`gdp_ppp`, `NY.GDP.MKTP.PP.CD`) só voltava erro 400 pela API JSON e só existe pelo arquivo em massa.
 - **IBGE em paralelo.** Os ~60 pedidos municipais (um por ano e tabela) rodam 4 por vez; a fonte inteira leva menos de 2 minutos.
+- **Códigos conferidos antes de entrar no catálogo.** Cada código novo do Banco Mundial foi baixado do arquivo em massa antes de ser cadastrado; códigos que não existem (o download devolve uma página de erro) ou que têm poucos países ou dados velhos demais foram descartados. Ficaram de fora, por exemplo, trabalho infantil (`SL.TLF.0714.ZS`, só 100 países e nada depois de 2016), linhas férreas (`IS.RRS.TOTL.KM`) e prevalência de contraceptivos (`SP.DYN.CONU.ZS`, quase tudo antes de 2013).
 - **Coletas interrompidas** ficam como "running" para sempre se o processo morrer; a próxima coleta as marca como erro depois de 6 horas.
 
 Para repetir a verificação no seu ambiente:
 
 ```bash
 cd backend
-python -m app.cli collect         # ~3 min com rede boa; o log mostra a duração de cada fonte
+python -m app.cli collect         # ~6 min com rede boa; o log mostra a duração de cada fonte
 python -m app.cli status          # nenhuma fonte deve estar "error"
 ```
 
@@ -100,21 +105,34 @@ Um coletor único baixa todos os países de cada indicador do catálogo que tenh
 
 | Categoria | Indicadores (código do Banco Mundial) |
 |---|---|
-| População | natalidade `SP.DYN.CBRT.IN`, mortalidade `SP.DYN.CDRT.IN`, fecundidade `SP.DYN.TFRT.IN`, expectativa de vida total/feminina/masculina `SP.DYN.LE00.*`, crescimento `SP.POP.GROW`, faixas etárias `SP.POP.0014.TO.ZS` e `SP.POP.65UP.TO.ZS`, urbana/rural, densidade, migração líquida e estoque de migrantes |
-| Economia | PIB (US$ correntes e PPC), PIB per capita, crescimento, inflação, desemprego, força de trabalho, participação feminina, exportações, importações, dívida do governo, gasto militar |
-| Saúde | mortalidade infantil e de menores de 5 anos, mortalidade materna, gasto em saúde, médicos, leitos, vacinação contra sarampo, subnutrição, água e saneamento básicos |
-| Educação | alfabetização de adultos, matrículas (primário, secundário, superior), conclusão do primário, gasto em educação e em P&D, artigos científicos |
-| Energia | acesso à eletricidade, parcela de renováveis (final e elétrica), uso de energia per capita |
-| Planeta | área florestal (e % do território, variação anual derivada), terras agrícolas, área total, áreas protegidas, PM2,5 |
-| Tecnologia | usuários de internet, assinaturas de celular e banda larga |
-| Social | pobreza (US$ 3 por dia e linha nacional), Gini, homicídios, mulheres no parlamento |
+| População (27) | natalidade `SP.DYN.CBRT.IN`, mortalidade `SP.DYN.CDRT.IN`, fecundidade total e na adolescência, expectativa de vida e sobrevivência até os 65 anos por sexo, crescimento, faixas etárias e razão de dependência, mulheres na população, urbana/rural (em % e em pessoas), cidades de mais de 1 milhão, maior cidade, registro de nascimentos, densidade, migração líquida, estoque de migrantes |
+| Economia (50) | PIB (US$ correntes, PPC e per capita), RNB, crescimento, inflação (preços ao consumidor e deflator), setores no PIB e no emprego, consumo das famílias e do governo, investimento, poupança, comércio, conta corrente, câmbio, reservas, receita, despesa, dívida e impostos do governo, dívida externa, remessas, ajuda ao desenvolvimento, investimento estrangeiro, desemprego (total, feminino, masculino, jovem), emprego vulnerável, jovens fora da escola e do trabalho, participação na força de trabalho, mercadorias exportadas e importadas, turismo, gasto militar |
+| Saúde (40) | mortalidade infantil, neonatal, de menores de 5 anos, adulta (por sexo) e materna, causas de morte, gasto em saúde (% do PIB, público, per capita e do próprio bolso), médicos, enfermeiros e parteiras, leitos, índice de cobertura de serviços, vacinas (sarampo, DTP), HIV (prevalência, incidência, tratamento), tuberculose (incidência e detecção), malária, diabetes, sobrepeso, tabaco, álcool, nanismo e desnutrição aguda infantil, subnutrição, insegurança alimentar, partos assistidos, água e saneamento (básicos e geridos com segurança), defecação a céu aberto, mortes no trânsito |
+| Educação (22) | alfabetização (adultos, jovens, por sexo), matrículas por nível e na pré-escola, conclusão do primário e do fundamental II, alunos por professor, anos esperados de estudo, Índice de Capital Humano, ensino superior completo, gasto em educação (% do PIB e do gasto público) e em P&D, pesquisadores, patentes, artigos científicos, crianças fora da escola |
+| Energia e infraestrutura (17) | acesso à eletricidade e a combustíveis limpos para cozinhar, renováveis (final e elétrica), fósseis, carvão, gás, nuclear e hidrelétrica na eletricidade, consumo de energia e de eletricidade per capita, intensidade energética, importação líquida de energia, perdas na rede, passageiros aéreos, contêineres nos portos |
+| Planeta (28) | área florestal (e % do território, variação anual derivada), terras agrícolas e aráveis, área total e de terra, áreas protegidas e marinhas protegidas, PM2,5, gases de efeito estufa (total, metano, óxido nitroso), água doce (retirada e per capita), precipitação, população em áreas costeiras baixas, produção de cereais, índices de produção agrícola e pecuária, produtividade de cereais, fertilizantes, pesca e aquicultura, espécies ameaçadas (mamíferos, aves, peixes, plantas) |
+| Tecnologia (11) | usuários de internet, celulares e banda larga (por habitante e total), telefonia fixa, servidores seguros, exportações de alta tecnologia e de TIC |
+| Social (24) | pobreza (US$ 3, 4,20 e 8,30 por dia, e linha nacional), hiato de pobreza, Gini, renda dos 10% mais ricos e dos 20% mais pobres, homicídios, mortes em conflitos, refugiados acolhidos e por origem, deslocados internos, mulheres no parlamento e em ministérios, igualdade jurídica das mulheres, seis indicadores de governança (WGI) |
 
 Pontos de atenção:
 
 - O coletor lê a lista de países da API para descartar agregados do próprio Banco Mundial (regiões e grupos de renda); só entram países reais e o mundo. Dele também sai a **faixa de renda** e a **região** de cada país, gravadas na ficha.
 - Um indicador pode ter anos sem valor; eles são descartados. Se uma série falhar, o coletor registra aviso, mantém as demais e a execução fica `partial`.
 - Nem todo país reporta todo indicador; a cobertura varia muito (pobreza, Gini e mortalidade materna são esparsas). A interface mostra "sem dados" em vez de preencher lacunas.
+- Cada série traz o ano do **seu** último dado: pesquisas domiciliares (nanismo, pobreza, partos assistidos) e indicadores de uma única edição (mortes por poluição de 2019, espécies ameaçadas de 2017 a 2022) não são anuais. O mapa mostra o valor mais próximo do ano escolhido e o ano aparece na tela; não compare países de anos muito diferentes sem olhar a tabela.
+- Várias séries são publicadas pelo Banco Mundial a partir de outros órgãos (OMS, UNESCO, OIT, FAO, UIT, IUCN, ACNUR, IDMC, UCDP, EDGAR/Comissão Europeia); o campo `source` de cada indicador cita quem é a origem.
+- **Indicadores de governança** (corrupção, eficácia do governo, estabilidade política, qualidade regulatória, Estado de direito, voz e prestação de contas) são *percepções* agregadas de várias pesquisas, num escore de −2,5 a 2,5; não são contagens.
+- Algumas séries só existem para países de renda baixa e média (dívida externa e ajuda recebida); nos continentes elas só aparecem se os países informantes cobrirem quase toda a população.
 - Os dados do Banco Mundial Open Data são CC BY 4.0; confira os termos atuais.
+
+### Wikidata (população de estados e regiões fora do Brasil)
+
+- **Como:** o `admin1CodesASCII.txt` do GeoNames traz o `geonameid` de cada divisão de 1º nível (3.833 divisões; o Brasil é pulado). O Wikidata liga o mesmo número à divisão (propriedade P1566) e guarda a população (P1082) com a data de referência (P585). O coletor faz uma consulta SPARQL por lote de 150 divisões (`query.wikidata.org/sparql`, dois lotes ao mesmo tempo) e leva cerca de 15 s.
+- **O que entra:** só pontos **com data**, de 1950 em diante, e que não estejam marcados como obsoletos no Wikidata. População sem ano nunca ganha um ano inventado.
+- **Conflitos:** se o mesmo ano tem dois valores diferentes, vale o de rank *preferido*; se são dois normais, o ano é **descartado** em vez de escolhido (2.550 casos na coleta real; Schleswig-Holstein, por exemplo, tem 2.927.542 e 2.953.270 para 2022, então o ponto mais recente dele é 2018).
+- **Resultado:** 3.105 das 3.797 regiões têm ao menos um ponto (11.947 pontos, 207 países); 43 regiões só existem por causa do Wikidata (sem nenhuma cidade de 5.000 habitantes no GeoNames). Cada região mostra o ponto mais recente em `places.population` com ano e fonte `Wikidata`, e a série completa em `observations`.
+- **Confiança:** o Wikidata é uma base colaborativa, e os valores citam censos e institutos de estatística, mas ninguém os revisa país a país. A interface mostra *Wikidata (base colaborativa)* ao lado dos pontos. Os dados são CC0.
+- **Lacunas:** 692 regiões não têm nenhum ponto datado e válido no Wikidata, e a série de uma região costuma ter só os anos de censo. Não é uma série anual como a do IBGE para o Brasil.
 
 ### Our World in Data (CO₂ e população)
 
@@ -170,4 +188,4 @@ As fontes anuais mudam pouco, então uma coleta diária já é mais do que sufic
 
 ## Fontes do desenho original ainda não integradas
 
-ONU/UNESCO/UNHCR (migrações detalhadas), NOAA, IUCN (Lista Vermelha), IMDb/TMDb/MusicBrainz (cultura; a categoria *Cultura & História* ainda está sem indicadores), IDC e GSMA (relatórios pagos), além de séries por estado e cidade de outros países (Eurostat, US Census, INEGI e equivalentes, cada um com formato e licença próprios). Entram no [roadmap](../README.md#-roadmap); várias não têm API aberta equivalente ou exigem chave e termos próprios.
+ONU/UNESCO (fluxos migratórios entre países), NOAA, IUCN (Lista Vermelha), IMDb/TMDb/MusicBrainz (cultura; a categoria *Cultura & História* ainda está sem indicadores), IDC e GSMA (relatórios pagos), além de séries por estado e cidade de outros países (Eurostat, US Census, INEGI e equivalentes, cada um com formato e licença próprios). Entram no [roadmap](../README.md#-roadmap); várias não têm API aberta equivalente ou exigem chave e termos próprios.

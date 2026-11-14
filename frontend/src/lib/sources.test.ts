@@ -7,6 +7,7 @@ describe("sourceLabel", () => {
     expect(sourceLabel("OWID")).toBe("Our World in Data");
     expect(sourceLabel("IBGE (estimativas)")).toBe("IBGE (estimativas)");
     expect(sourceLabel("reference")).toBe("Valor de referência");
+    expect(sourceLabel("Wikidata")).toBe("Wikidata (base colaborativa)");
   });
 
   it("marca o que o projeto calculou e o que é demonstração", () => {
@@ -34,6 +35,8 @@ describe("needsSourceNote", () => {
     expect(needsSourceNote("Banco Mundial", [["Derivado: Banco Mundial"]])).toBe(true);
     expect(needsSourceNote("Banco Mundial", [["DEMO"]])).toBe(true);
     expect(needsSourceNote("Banco Mundial", [["WorldBank"], ["GeoNames"]])).toBe(true);
+    // população de um estado fora do Brasil vem do Wikidata, que a fonte geral do indicador não descreve
+    expect(needsSourceNote("Our World in Data (UN WPP); IBGE no Brasil", [["Wikidata"]])).toBe(true);
   });
 
   it("não pede a nota quando não há série", () => {

@@ -37,3 +37,12 @@ export function formatPercentChange(pct: number): string {
 export function formatYear(year: number): string {
   return String(year);
 }
+
+/**
+ * "PIB, Inflação, Gini e mais 7": mostra os primeiros `max` nomes e conta o resto. Com centenas de
+ * indicadores, uma lista completa num aviso ocuparia a tela inteira.
+ */
+export function listWithRest(names: string[], max = 6): string {
+  if (names.length <= max) return names.join(", ");
+  return `${names.slice(0, max).join(", ")} e mais ${names.length - max}`;
+}

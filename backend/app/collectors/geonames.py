@@ -104,7 +104,7 @@ def parse_admin1(text: str) -> dict[str, str]:
     return names
 
 
-def _clean_code(code: str) -> str:
+def clean_code(code: str) -> str:
     return re.sub(r"[^A-Z0-9]", "", code.upper())[:12]
 
 
@@ -128,7 +128,7 @@ def parse_cities(
         except ValueError:
             continue
         parent = iso3
-        code = _clean_code(cols[10])
+        code = clean_code(cols[10])
         if code:
             rid = region_id(iso3, code)
             if rid not in regions:

@@ -31,11 +31,11 @@ flowchart TD
 
 | Caminho | Responsabilidade |
 |---|---|
-| `indicators.py` | **Catálogo**: 75 indicadores em 9 categorias (slug, nome, unidade, descrição, fonte, `kind` medido ou estimativa, casas decimais, se tem série por lugar, código do Banco Mundial e regra de agregação). É a fonte da verdade que a API e a interface leem. |
+| `indicators.py` | **Catálogo**: 230 indicadores em 9 categorias (slug, nome, unidade, descrição, fonte, `kind` medido ou estimativa, casas decimais, se tem série por lugar, código do Banco Mundial e regra de agregação). É a fonte da verdade que a API e a interface leem. |
 | `places.py` | Tipos de lugar, identificadores (`WLD`, `CON-SA`, `BRA`, `BRA-SC`, `BRA-4209102`, `GEO-…`), continentes, as 27 UFs e a normalização de busca (minúsculas, sem acento). |
 | `db/models.py` | `Place` (lugar, hierarquia, população mais recente e ficha), `Observation` (indicador, lugar, ano, valor, fonte, `fetched_at`; único por indicador+lugar+ano), `CollectorRun`. |
 | `db/session.py` | Engine/sessões. SQLite com WAL por padrão, PostgreSQL via `WDV_DATABASE_URL`. `init_db` também migra bancos antigos (coluna `country` → `place`, tabela `countries` → `places`) e semeia o mundo e os continentes. |
-| `collectors/` | Um coletor por fonte: `geonames`, `owid`, `worldbank`, `ibge`, `gistemp`, `reference`. `collect()` é **puro** (recebe um cliente HTTP, devolve linhas, lugares e avisos) e por isso é testável com fakes. `runner.py` persiste com *upsert*, registra a execução em `collector_runs` e **nunca propaga exceção**: falha de rede vira aviso e as demais fontes seguem. Depois de todos, roda a etapa `aggregates`. |
+| `collectors/` | Um coletor por fonte: `geonames`, `owid`, `worldbank`, `ibge`, `wikidata`, `gistemp`, `reference`. `collect()` é **puro** (recebe um cliente HTTP, devolve linhas, lugares e avisos) e por isso é testável com fakes. `runner.py` persiste com *upsert*, registra a execução em `collector_runs` e **nunca propaga exceção**: falha de rede vira aviso e as demais fontes seguem. Depois de todos, roda a etapa `aggregates`. |
 | `services/series.py` | Consultas: séries (com as fontes de cada uma), últimos pontos, valores por país, anos disponíveis. |
 | `services/places.py` | Busca, trilha do mundo até o lugar, filhos, métricas de um lugar e rankings. |
 | `services/aggregate.py` | Continentes (e o mundo, quando a fonte não traz) calculados a partir dos países; veja [Agregados](#agregados-continentes-e-mundo). |
@@ -69,12 +69,12 @@ Todo dado pertence a um lugar. Identificadores curtos e legíveis; a hierarquia 
 | mundo | `WLD` | semeado |
 | continente | `CON-AF`, `CON-AS`, `CON-EU`, `CON-NA`, `CON-SA`, `CON-OC` | semeado (a Antártida não tem habitantes fixos e fica de fora) |
 | país | ISO 3166-1 alfa-3 (`BRA`) | GeoNames (`countryInfo`), com capital, área, moeda, idiomas; Banco Mundial acrescenta faixa de renda |
-| estado/região | `BRA-SC` (UFs do IBGE), `USA-CA` (divisão administrativa de 1º nível do GeoNames, só as que têm ao menos uma cidade) | IBGE; GeoNames |
+| estado/região | `BRA-SC` (UFs do IBGE), `USA-CA` (divisão administrativa de 1º nível do GeoNames; nascem das cidades de 5.000+ habitantes ou, quando só o Wikidata tem a população, da própria divisão) | IBGE; GeoNames (nome e hierarquia); Wikidata (população) |
 | cidade | `BRA-4209102` (município do IBGE), `GEO-5128581` (GeoNames) | IBGE (5.571 municípios); GeoNames `cities5000` (cidades com mais de 5.000 habitantes) |
 
 `Place.population` guarda o **último valor conhecido** de cada lugar (com ano e fonte) para listar e ranquear sem varrer `observations`. Nas cidades do GeoNames ele é um instantâneo **sem ano de referência**, e a interface diz isso. O Brasil vem inteiro do IBGE (o GeoNames pula as cidades brasileiras) para não duplicar municípios.
 
-Fora do Brasil só há série histórica de países, continentes e mundo; estados e cidades de outros países têm população (instantâneo) e ficha, não séries.
+Fora do Brasil há série histórica completa só para países, continentes e mundo. Estados e regiões de outros países têm a população que o Wikidata registra, com a data de cada censo ou estimativa (poucos pontos por região, não uma série anual); cidades de outros países têm população (instantâneo do GeoNames) e ficha.
 
 #### Agregados: continentes e mundo
 
@@ -92,7 +92,8 @@ Continentes não têm fonte própria: `services/aggregate.py` os calcula a parti
 1. Cadastre-o em `app/indicators.py`. Para um indicador do Banco Mundial use o auxiliar `_wb(slug, código, nome, categoria, unidade, descrição, ...)`: o coletor `worldbank` já o baixa para todos os países. Passe `agg=AGG_SUM` ou `AGG_POP_MEAN` se o continente puder ser somado ou ponderado por população.
 2. Para outra fonte, faça um coletor existente emiti-lo, ou crie um novo em `collectors/` e registre-o em `COLLECTORS` (`runner.py`).
 3. Se o valor **mundial** pedir escala diferente na tela (bilhões, milhões), ajuste `OVERRIDES` em `frontend/src/lib/display.ts`. Lugares usam a unidade da fonte (veja `mapFormat`).
-4. Adicione fixture e teste em `backend/tests/` (`test_collectors.py` para o Banco Mundial e a OWID).
+4. Antes de cadastrar um código do Banco Mundial, baixe `https://api.worldbank.org/v2/en/indicator/{código}?downloadformat=csv` (num runner com internet; veja [verificação real](fontes-de-dados.md#como-as-fontes-foram-verificadas)) e confira país a país: quantos países têm dado, o último ano e se o mundo vem na fonte. Descarte o que for esparso ou antigo.
+5. Adicione fixture e teste em `backend/tests/` (`test_collectors.py` para o Banco Mundial e a OWID); `test_catalog.py` confere unicidade, categoria e coerência da agregação.
 
 A interface descobre categorias e indicadores pela API; não há lista a atualizar no frontend além do texto de apresentação de cada categoria.
 
