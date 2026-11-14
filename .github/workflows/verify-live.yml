@@ -9,44 +9,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  wikidata:
+  unesco-probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-    env:
-      WDV_DATABASE_URL: sqlite:////tmp/live.db
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: results
-      - uses: actions/checkout@v4
-        with:
-          ref: feat/mais-indicadores
-          path: code
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: pip install -r code/backend/requirements.txt
-      - name: GeoNames (cria países e regiões)
-        working-directory: code/backend
-        continue-on-error: true
-        run: python -m app.cli collect --only geonames 2>&1 | tail -5
-      - name: Wikidata
-        working-directory: code/backend
-        continue-on-error: true
-        run: |
-          mkdir -p ../../results/backend/tests/fixtures/live
-          start=$(date +%s)
-          python -m app.cli collect --only wikidata 2>&1 | tee ../../results/backend/tests/fixtures/live/WIKIDATA.log
-          echo "### wikidata duração: $(( $(date +%s) - start ))s" | tee -a ../../results/backend/tests/fixtures/live/WIKIDATA.log
-      - name: Amostras e relatório
-        if: always()
-        working-directory: .
-        run: python results/probe/wikidata_sample.py 2>&1 | tee results/backend/tests/fixtures/live/WIKIDATA_REPORT.txt
+      - run: pip install requests
+      - run: python probe/unesco_probe.py out/unesco
       - name: Publica o resultado na própria branch
         if: always()
-        working-directory: results
         run: |
           git config user.name verify-bot && git config user.email verify-bot@users.noreply.github.com
-          git add -f backend/tests/fixtures/live
-          git commit -m "Resultado do Wikidata" || echo "nada a commitar"
+          git add -f out/unesco
+          git commit -m "Resultado da sonda UNESCO" || echo "nada a commitar"
           git push origin HEAD:tmp/verify-live-sources
