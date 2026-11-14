@@ -58,7 +58,7 @@ O banco resultante tem **249 países, 3.781 regiões, 71.177 cidades**, cerca de
 - **Códigos conferidos antes de entrar no catálogo.** Cada código novo do Banco Mundial foi baixado do arquivo em massa antes de ser cadastrado; códigos que não existem (o download devolve uma página de erro) ou que têm poucos países ou dados velhos demais foram descartados. Ficaram de fora, por exemplo, trabalho infantil (`SL.TLF.0714.ZS`, só 100 países e nada depois de 2016), linhas férreas (`IS.RRS.TOTL.KM`) e prevalência de contraceptivos (`SP.DYN.CONU.ZS`, quase tudo antes de 2013).
 - **Coletas interrompidas** ficam como "running" para sempre se o processo morrer; a próxima coleta as marca como erro depois de 6 horas.
 
-Para repetir a verificação no seu ambiente:
+O passo a passo para repetir a verificação num runner real está em [verificacao-real.md](verificacao-real.md). Para repetir no seu ambiente, se ele alcança as fontes:
 
 ```bash
 cd backend
