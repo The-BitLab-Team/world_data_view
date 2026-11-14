@@ -25,6 +25,7 @@ from app.collectors.gistemp import GistempCollector
 from app.collectors.ibge import IbgeCollector
 from app.collectors.owid import OwidCollector
 from app.collectors.reference import ReferenceCollector
+from app.collectors.unesco import UnescoCollector
 from app.collectors.wikidata import WikidataCollector
 from app.collectors.worldbank import WorldBankCollector
 from app.db.models import CollectorRun, Observation, Place
@@ -45,6 +46,7 @@ COLLECTORS: dict[str, Collector] = {
         IbgeCollector(),
         WikidataCollector(),
         GistempCollector(),
+        UnescoCollector(),
         ReferenceCollector(),
     )
 }

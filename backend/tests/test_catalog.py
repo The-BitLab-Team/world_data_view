@@ -62,4 +62,7 @@ def test_catalog_grew_beyond_the_first_release():
     # 75 indicadores no primeiro lançamento; a ampliação com o arquivo em massa do Banco Mundial os supera.
     assert len(INDICATORS) > 200
     per_category = Counter(i.category for i in _INDICATORS)
-    assert all(per_category[c] >= 10 for c in per_category)
+    # Cultura depende de fontes próprias (UNESCO), sem o volume do arquivo em massa do Banco Mundial.
+    minimum = {"cultura": 5}
+    assert all(per_category[c] >= minimum.get(c, 10) for c in per_category)
+    assert set(per_category) == {c.id for c in CATEGORIES}  # nenhuma categoria vazia

@@ -65,6 +65,9 @@ CATEGORIES: tuple[Category, ...] = (
 )
 
 
+_UNESCO_URL = "https://data.unesco.org/explore/dataset/whc001/"
+
+
 def _wb(
     slug: str,
     code: str,
@@ -740,6 +743,84 @@ _INDICATORS: tuple[Indicator, ...] = (
         "Novos deslocamentos internos causados por desastres no ano", agg=AGG_SUM, source="Banco Mundial / IDMC"),
     _wb("women_ministers", "SG.GEN.MNST.ZS", "Mulheres em cargos ministeriais", "social", "% dos cargos",
         "Parcela dos cargos de ministro ocupada por mulheres", decimals=1),
+    # --- Cultura & História: contagens feitas sobre a Lista do Patrimônio Mundial (sem agg: um sítio
+    # transfronteiriço conta em mais de um país, e a soma dos países o contaria duas vezes) ---
+    Indicator(
+        slug="world_heritage_sites",
+        name="Sítios do Patrimônio Mundial",
+        category="cultura",
+        unit="sítios",
+        description=(
+            "Sítios hoje inscritos na Lista do Patrimônio Mundial da UNESCO, acumulados pelo ano de inscrição. "
+            "Um sítio transfronteiriço conta em cada país e uma só vez no mundo."
+        ),
+        source="UNESCO",
+        source_url=_UNESCO_URL,
+        per_country=True,
+    ),
+    Indicator(
+        slug="world_heritage_cultural",
+        name="Patrimônio Mundial cultural",
+        category="cultura",
+        unit="sítios",
+        description=(
+            "Sítios culturais hoje na Lista do Patrimônio Mundial da UNESCO, acumulados pelo ano de inscrição. "
+            "Um sítio transfronteiriço conta em cada país e uma só vez no mundo."
+        ),
+        source="UNESCO",
+        source_url=_UNESCO_URL,
+        per_country=True,
+    ),
+    Indicator(
+        slug="world_heritage_natural",
+        name="Patrimônio Mundial natural",
+        category="cultura",
+        unit="sítios",
+        description=(
+            "Sítios naturais hoje na Lista do Patrimônio Mundial da UNESCO, acumulados pelo ano de inscrição. "
+            "Um sítio transfronteiriço conta em cada país e uma só vez no mundo."
+        ),
+        source="UNESCO",
+        source_url=_UNESCO_URL,
+        per_country=True,
+    ),
+    Indicator(
+        slug="world_heritage_mixed",
+        name="Patrimônio Mundial misto",
+        category="cultura",
+        unit="sítios",
+        description=(
+            "Sítios mistos (culturais e naturais) hoje na Lista do Patrimônio Mundial da UNESCO, acumulados pelo ano "
+            "de inscrição. Um sítio transfronteiriço conta em cada país e uma só vez no mundo."
+        ),
+        source="UNESCO",
+        source_url=_UNESCO_URL,
+        per_country=True,
+    ),
+    Indicator(
+        slug="world_heritage_inscriptions",
+        name="Novas inscrições no Patrimônio Mundial",
+        category="cultura",
+        unit="sítios por ano",
+        description=(
+            "Sítios inscritos na Lista do Patrimônio Mundial da UNESCO em cada ano (entre os que continuam na Lista)."
+        ),
+        source="UNESCO",
+        source_url=_UNESCO_URL,
+    ),
+    Indicator(
+        slug="world_heritage_in_danger",
+        name="Patrimônio Mundial em perigo",
+        category="cultura",
+        unit="sítios",
+        description=(
+            "Sítios que estão hoje na Lista do Patrimônio Mundial em Perigo. A fonte não traz o histórico de quem já "
+            "saiu dessa lista, então há só o retrato atual, com o ano da sessão mais recente."
+        ),
+        source="UNESCO",
+        source_url=_UNESCO_URL,
+        per_country=True,
+    ),
 )
 
 INDICATORS: dict[str, Indicator] = {i.slug: i for i in _INDICATORS}

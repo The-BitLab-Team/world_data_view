@@ -19,7 +19,7 @@ def test_openapi_documents_public_api(client):
 def test_categories_count_indicators(client):
     cats = {c["id"]: c["indicator_count"] for c in client.get(f"{API}/categories").json()}
     assert cats["populacao"] >= 15 and cats["economia"] >= 10 and cats["saude"] >= 8
-    assert cats["cultura"] == 0  # cultura: ainda sem indicadores (roadmap)
+    assert cats["cultura"] == 6  # Patrimônio Mundial (UNESCO)
     assert sum(cats.values()) == len(client.get(f"{API}/indicators").json())
 
 
