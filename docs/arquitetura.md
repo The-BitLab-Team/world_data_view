@@ -31,7 +31,7 @@ flowchart TD
 
 | Caminho | Responsabilidade |
 |---|---|
-| `indicators.py` | **Catálogo**: 236 indicadores em 9 categorias (slug, nome, unidade, descrição, fonte, `kind` medido ou estimativa, casas decimais, se tem série por lugar, código do Banco Mundial e regra de agregação). É a fonte da verdade que a API e a interface leem. |
+| `indicators.py` | **Catálogo**: 225 indicadores em 9 categorias (slug, nome, unidade, descrição, fonte, `kind` medido ou estimativa, casas decimais, se tem série por lugar, código do Banco Mundial e regra de agregação). É a fonte da verdade que a API e a interface leem. |
 | `places.py` | Tipos de lugar, identificadores (`WLD`, `CON-SA`, `BRA`, `BRA-SC`, `BRA-4209102`, `GEO-…`), continentes, as 27 UFs e a normalização de busca (minúsculas, sem acento). |
 | `db/models.py` | `Place` (lugar, hierarquia, população mais recente e ficha), `Observation` (indicador, lugar, ano, valor, fonte, `fetched_at`; único por indicador+lugar+ano), `CollectorRun`. |
 | `db/session.py` | Engine/sessões. SQLite com WAL por padrão, PostgreSQL via `WDV_DATABASE_URL`. `init_db` também migra bancos antigos (coluna `country` → `place`, tabela `countries` → `places`) e semeia o mundo e os continentes. |
