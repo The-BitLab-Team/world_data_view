@@ -1,6 +1,6 @@
 # World Data View: guia para quem desenvolve aqui
 
-Plataforma de dados globais, do mundo ao município: backend FastAPI + SQLite/PostgreSQL, frontend React + Vite. Todo dado pertence a um *lugar* (mundo, continente, país, estado/região, cidade) e a um indicador do catálogo (230, em 9 categorias; a de Cultura ainda está vazia). Documentação em português; código, identificadores e mensagens de commit seguem o que já existe no repositório (comentários e textos de interface em pt-BR).
+Plataforma de dados globais, do mundo ao município: backend FastAPI + SQLite/PostgreSQL, frontend React + Vite. Todo dado pertence a um *lugar* (mundo, continente, país, estado/região, cidade) e a um indicador do catálogo (236, em 9 categorias). Documentação em português; código, identificadores e mensagens de commit seguem o que já existe no repositório (comentários e textos de interface em pt-BR).
 
 ## Comandos
 
@@ -32,7 +32,7 @@ Antes de entregar qualquer mudança: `pytest` + `ruff check` no backend e `npm t
 
 - `backend/app/indicators.py`: catálogo de indicadores e categorias (fonte da verdade; a interface lê da API). `_wb(...)` cadastra indicador do Banco Mundial só com o código.
 - `backend/app/places.py`: tipos de lugar, identificadores (`WLD`, `CON-SA`, `BRA`, `BRA-SC`, `BRA-4209102`, `GEO-…`), continentes e UFs.
-- `backend/app/collectors/`: um coletor por fonte (`geonames`, `ibge`, `worldbank`, `wikidata`, `owid`, `gistemp`, `reference`) + `runner.py` (persistência por *upsert*; roda `aggregates` ao final).
+- `backend/app/collectors/`: um coletor por fonte (`geonames`, `ibge`, `worldbank`, `wikidata`, `owid`, `gistemp`, `unesco`, `reference`) + `runner.py` (persistência por *upsert*; roda `aggregates` ao final).
 - `backend/app/services/`: `series`, `places`, `aggregate`, `live`, `facts`, `demo`, `cache`.
 - `backend/app/api/routes.py`: rotas `/api/v1` (`/places`, `/places/search`, `/places/{id}`, `/places/{id}/children`, `/indicators/{slug}/ranking`, `/history?place=`…).
 - `frontend/src/lib/`: funções puras (formatação pt-BR por nível, escalas, normalização, `places.ts`, `sources.ts`). É onde os testes do frontend vivem; mantenha a lógica aqui e os componentes finos.
@@ -55,6 +55,8 @@ Para adicionar um indicador, veja o passo a passo em [docs/arquitetura.md](docs/
 - **Banco Mundial: use o arquivo em massa** (`/v2/en/indicator/{código}?downloadformat=csv`, ~0,1 s). A API JSON paginada trava por 60–120 s em pedidos sem cache (a coleta levou 47 min) e recusa `NY.GDP.MKTP.PP.CD`; ela é só a reserva. Pedidos lentos vão por `map_ordered` (`collectors/base.py`): paralelo, resultado na ordem do catálogo, falha isolada vira aviso. Uma coleta completa leva ~6 min.
 - **Indicador novo do Banco Mundial: valide o código no arquivo em massa antes de cadastrar.** Código inexistente devolve uma página de erro no lugar do zip; alguns existem mas têm poucos países ou param em 2016 (descartamos trabalho infantil, linhas férreas e contraceptivos por isso). Escolha `agg` por indicador: soma só para quantidades absolutas, média ponderada só para taxas por habitante ou % da população; % do PIB, índices e razões ficam sem `agg`. `tests/test_catalog.py` pega o erro mais comum.
 - **Wikidata só para regiões fora do Brasil.** Entram só pontos datados (P585) e não obsoletos; dois valores diferentes no mesmo ano descartam o ano em vez de escolher um. A fonte gravada é `Wikidata` e a interface a mostra como *base colaborativa*. O Brasil continua com o IBGE.
+- **UNESCO (Patrimônio Mundial): o coletor conta as linhas da Lista** (`data.unesco.org`, conjunto `whc001`, com `select=` para não baixar 24 MB). Um sítio transfronteiriço conta em cada país e uma vez no mundo, então o mundo é contado no coletor e os indicadores ficam sem `agg`. A Lista em Perigo não traz histórico de saídas: é um ponto só, nunca reconstrua a série.
+- **Contagens pequenas repetem quantis no mapa.** `quantileBins` descarta as classes vazias; a legenda usa `bins.colors`, não a rampa inteira.
 - Um processo morto deixa a execução "running"; `mark_interrupted_runs` a fecha depois de 6 h. Não dependa de "running" para saber se há coleta ativa.
 - `Place.population` dos países e continentes só é preenchida pela etapa `aggregates`: ao rodar `collect --only …`, inclua `aggregates`.
 - Este ambiente de desenvolvimento costuma alcançar apenas `raw.githubusercontent.com` (nem Banco Mundial, NASA, IBGE ou GeoNames). Os coletores foram validados contra as fontes reais num runner do GitHub Actions (13/11/2026). Ao mexer neles, repita essa validação seguindo [docs/verificacao-real.md](docs/verificacao-real.md) (branch descartável + workflow que roda `python -m app.cli collect` e publica o relatório na própria branch). Lembre de apagar a branch depois e **nunca aceitar o PR que o GitHub sugere para ela**.

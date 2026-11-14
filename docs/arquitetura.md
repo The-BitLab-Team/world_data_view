@@ -31,11 +31,11 @@ flowchart TD
 
 | Caminho | Responsabilidade |
 |---|---|
-| `indicators.py` | **Catálogo**: 230 indicadores em 9 categorias (slug, nome, unidade, descrição, fonte, `kind` medido ou estimativa, casas decimais, se tem série por lugar, código do Banco Mundial e regra de agregação). É a fonte da verdade que a API e a interface leem. |
+| `indicators.py` | **Catálogo**: 236 indicadores em 9 categorias (slug, nome, unidade, descrição, fonte, `kind` medido ou estimativa, casas decimais, se tem série por lugar, código do Banco Mundial e regra de agregação). É a fonte da verdade que a API e a interface leem. |
 | `places.py` | Tipos de lugar, identificadores (`WLD`, `CON-SA`, `BRA`, `BRA-SC`, `BRA-4209102`, `GEO-…`), continentes, as 27 UFs e a normalização de busca (minúsculas, sem acento). |
 | `db/models.py` | `Place` (lugar, hierarquia, população mais recente e ficha), `Observation` (indicador, lugar, ano, valor, fonte, `fetched_at`; único por indicador+lugar+ano), `CollectorRun`. |
 | `db/session.py` | Engine/sessões. SQLite com WAL por padrão, PostgreSQL via `WDV_DATABASE_URL`. `init_db` também migra bancos antigos (coluna `country` → `place`, tabela `countries` → `places`) e semeia o mundo e os continentes. |
-| `collectors/` | Um coletor por fonte: `geonames`, `owid`, `worldbank`, `ibge`, `wikidata`, `gistemp`, `reference`. `collect()` é **puro** (recebe um cliente HTTP, devolve linhas, lugares e avisos) e por isso é testável com fakes. `runner.py` persiste com *upsert*, registra a execução em `collector_runs` e **nunca propaga exceção**: falha de rede vira aviso e as demais fontes seguem. Depois de todos, roda a etapa `aggregates`. |
+| `collectors/` | Um coletor por fonte: `geonames`, `owid`, `worldbank`, `ibge`, `wikidata`, `gistemp`, `unesco`, `reference`. `collect()` é **puro** (recebe um cliente HTTP, devolve linhas, lugares e avisos) e por isso é testável com fakes. `runner.py` persiste com *upsert*, registra a execução em `collector_runs` e **nunca propaga exceção**: falha de rede vira aviso e as demais fontes seguem. Depois de todos, roda a etapa `aggregates`. |
 | `services/series.py` | Consultas: séries (com as fontes de cada uma), últimos pontos, valores por país, anos disponíveis. |
 | `services/places.py` | Busca, trilha do mundo até o lugar, filhos, métricas de um lugar e rankings. |
 | `services/aggregate.py` | Continentes (e o mundo, quando a fonte não traz) calculados a partir dos países; veja [Agregados](#agregados-continentes-e-mundo). |
