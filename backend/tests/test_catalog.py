@@ -66,3 +66,13 @@ def test_catalog_grew_beyond_the_first_release():
     minimum = {"cultura": 5}
     assert all(per_category[c] >= minimum.get(c, 10) for c in per_category)
     assert set(per_category) == {c.id for c in CATEGORIES}  # nenhuma categoria vazia
+
+
+def test_series_archived_by_the_world_bank_stay_out_of_the_catalog():
+    # Retiradas do WDI: o download em massa só as traz de "WDI Database Archives", que soma todas as
+    # versões já publicadas (auditoria de 14/11/2026). Só voltam com uma fonte própria e validada.
+    archived = {
+        "CC.EST", "GE.EST", "PV.EST", "RQ.EST", "RL.EST", "VA.EST",
+        "SG.LAW.INDX", "SH.UHC.SRVS.CV.XD", "SM.POP.REFG", "SM.POP.REFG.OR", "VC.IDP.TOCV",
+    }  # fmt: skip
+    assert not archived & set(WB_INDICATORS.values())

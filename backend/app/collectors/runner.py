@@ -29,7 +29,7 @@ from app.collectors.unesco import UnescoCollector
 from app.collectors.wikidata import WikidataCollector
 from app.collectors.worldbank import WorldBankCollector
 from app.db.models import CollectorRun, Observation, Place
-from app.indicators import DEMO_SOURCE
+from app.indicators import DEMO_SOURCE, INDICATORS
 from app.places import search_key
 from app.services.aggregate import compute_aggregates
 
@@ -170,6 +170,22 @@ def drop_superseded_demo(session: Session, rows: Iterable[ObservationRow]) -> No
         session.execute(delete(Observation).where(Observation.indicator.in_(real), Observation.source == DEMO_SOURCE))
 
 
+def drop_retired_indicators(session_factory: sessionmaker[Session]) -> int:
+    """Apaga observações de indicadores que saíram do catálogo.
+
+    Um indicador só sai quando a fonte deixa de ser confiável (ex.: séries que o Banco Mundial
+    arquivou e passou a devolver com valores somados). Deixar essas linhas no banco as manteria
+    disponíveis para quem lê a tabela direto.
+    """
+    with session_factory() as session:
+        result = session.execute(delete(Observation).where(Observation.indicator.not_in(INDICATORS)))
+        session.commit()
+    removed = result.rowcount or 0
+    if removed:
+        log.info("Removidas %d observações de indicadores que saíram do catálogo", removed)
+    return removed
+
+
 def persist_batch(session: Session, batch: CollectedBatch) -> int:
     drop_superseded_demo(session, batch.observations)
     if batch.places:
@@ -270,6 +286,7 @@ def collect_all(
     if unknown:
         raise ValueError(f"Coletores desconhecidos: {unknown}. Disponíveis: {list(ALL_STEPS)}")
     mark_interrupted_runs(session_factory)
+    drop_retired_indicators(session_factory)
     # Os agregados dependem dos países já gravados: sempre por último, em qualquer ordem pedida.
     runs = [run_collector(session_factory, COLLECTORS[n], http) for n in names if n != AGGREGATES]
     if AGGREGATES in names:

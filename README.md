@@ -2,7 +2,7 @@
 
 **World Data View** é uma plataforma interativa que reúne dados quantitativos sobre o mundo e a humanidade e os mostra em contadores ao vivo, gráficos e mapas. O objetivo é dar a estudantes, professores, jornalistas e curiosos um lugar claro, honesto e citável para olhar os números do planeta.
 
-> **Estado atual: MVP funcional, com lugares.** Backend, API pública e painel estão implementados e testados. Além do mundo e dos países, a plataforma navega por **continentes, estados e cidades**, com 236 indicadores. Alguns números são estimativas, calculados ou de demonstração, e a interface sinaliza cada caso; a seção [Estado dos dados](#-estado-dos-dados) detalha o que é o quê.
+> **Estado atual: MVP funcional, com lugares.** Backend, API pública e painel estão implementados e testados. Além do mundo e dos países, a plataforma navega por **continentes, estados e cidades**, com 225 indicadores. Alguns números são estimativas, calculados ou de demonstração, e a interface sinaliza cada caso; a seção [Estado dos dados](#-estado-dos-dados) detalha o que é o quê.
 
 ---
 
@@ -24,12 +24,12 @@
 |---|---|---|
 | 📊 **População & Demografia** (30) | População, natalidade, mortalidade, fecundidade (total e na adolescência), expectativa de vida e sobrevivência até os 65 anos por sexo, crescimento, faixas etárias, razão de dependência, urbana/rural (em % e em pessoas), maiores cidades, registro de nascimentos, migração líquida e estoque de migrantes; nascimentos e taxa de natalidade do registro civil (Brasil) | OWID, Banco Mundial, IBGE |
 | 💰 **Economia & Trabalho** (51) | PIB (nominal, PPC e per capita), RNB, crescimento, inflação, setores da economia (renda e emprego), comércio de bens e serviços, investimento, poupança, conta corrente, câmbio, reservas, dívida pública e externa, impostos, remessas, ajuda ao desenvolvimento, desemprego por sexo e entre jovens, trabalho vulnerável, turismo, gasto militar; PIB municipal (Brasil) | Banco Mundial, IBGE |
-| 🏥 **Saúde** (40) | Mortalidade infantil, neonatal, de menores de 5 anos, adulta e materna; gasto em saúde (público, per capita e do próprio bolso), médicos, enfermeiros, leitos, cobertura de serviços; vacinação, HIV, tuberculose, malária, diabetes, tabaco, álcool, subnutrição, nanismo, insegurança alimentar, água, saneamento, mortes no trânsito e por grupos de causas | Banco Mundial |
+| 🏥 **Saúde** (39) | Mortalidade infantil, neonatal, de menores de 5 anos, adulta e materna; gasto em saúde (público, per capita e do próprio bolso), médicos, enfermeiros, leitos; vacinação, HIV, tuberculose, malária, diabetes, tabaco, álcool, subnutrição, nanismo, insegurança alimentar, água, saneamento, mortes no trânsito e por grupos de causas | Banco Mundial |
 | 🎓 **Educação & Ciência** (22) | Alfabetização (total, jovens, por sexo), matrículas por nível, conclusão por ciclo, alunos por professor, anos esperados de estudo, capital humano, adultos com ensino superior, gasto em educação e P&D, pesquisadores, patentes, artigos científicos, crianças fora da escola | Banco Mundial |
 | ⚡ **Energia & Infraestrutura** (17) | Acesso à eletricidade e a combustíveis limpos para cozinhar, consumo de eletricidade e de energia, intensidade energética, renováveis, fósseis, carvão, gás, nuclear e hidrelétrica na geração, perdas na rede, importação de energia, passageiros aéreos, contêineres | Banco Mundial |
 | 🌍 **Planeta & Natureza** (33) | CO₂, metano e óxido nitroso, temperatura global, florestas, terras agrícolas e aráveis, áreas protegidas (terrestres e marinhas), poluição do ar, água doce, precipitação, população em áreas costeiras baixas, produção de cereais, índices agrícolas e pecuários, pesca, aquicultura, fertilizantes, espécies ameaçadas e extintas | OWID, NASA GISTEMP, Banco Mundial, IUCN (estimativa) |
 | 📱 **Tecnologia & Internet** (13) | Usuários de internet, celulares e banda larga (por habitante e total), telefonia fixa, servidores seguros, exportações de alta tecnologia e de TIC; smartphones e dados por dia (estimativas) | Banco Mundial, estimativas editoriais |
-| ⚠️ **Impactos Sociais** (24) | Pobreza (extrema, nacional e em três linhas), hiato de pobreza, Gini, participação dos mais ricos e dos mais pobres na renda, homicídios, mortes em conflitos, refugiados, deslocados internos, mulheres no parlamento e em ministérios, igualdade jurídica das mulheres, seis indicadores de governança (corrupção, Estado de direito, estabilidade política etc.) | Banco Mundial |
+| ⚠️ **Impactos Sociais** (14) | Pobreza (extrema, nacional e em três linhas), hiato de pobreza, Gini, participação dos mais ricos e dos mais pobres na renda, homicídios, mortes em conflitos, novos deslocamentos internos (por conflito e por desastres), mulheres no parlamento e em ministérios | Banco Mundial |
 | 📚 **Cultura & História** (6) | Sítios do Patrimônio Mundial (total, culturais, naturais e mistos, acumulados pelo ano de inscrição), novas inscrições por ano e sítios em perigo. Livros, filmes e línguas seguem sem fonte aberta simples | UNESCO |
 
 Cobertura por nível: países, continentes e mundo têm séries históricas de todos os indicadores acima; estados e municípios do **Brasil** têm população, nascimentos, natalidade e PIB; estados/regiões de **outros países** têm população com ano de referência quando o Wikidata registra censos ou estimativas datadas (3.105 de 3.797 regiões, 207 países); cidades de outros países têm população (um instantâneo do GeoNames, sem ano de referência) e ficha. Veja a tabela completa em [docs/fontes-de-dados.md](docs/fontes-de-dados.md#o-que-existe-em-cada-nível).
@@ -83,14 +83,14 @@ npm install
 npm run dev                      # http://localhost:5173 (proxy para a API em :8000)
 ```
 
-> A coleta completa baixa o GeoNames, os 5.571 municípios do IBGE, a população de regiões do Wikidata e 219 indicadores do Banco Mundial para ~220 países: leva cerca de 6 minutos com boa rede (medido num runner real em 13/11/2026) e gera um banco SQLite de ~385 MB. Para mexer só na interface, `python -m app.cli collect --only geonames owid aggregates` (menos de 1 minuto) e `seed-demo` bastam.
+> A coleta completa baixa o GeoNames, os 5.571 municípios do IBGE, a população de regiões do Wikidata e 208 indicadores do Banco Mundial para ~220 países: leva cerca de 6 minutos com boa rede (medido num runner real em 13/11/2026) e gera um banco SQLite de ~385 MB. Para mexer só na interface, `python -m app.cli collect --only geonames owid aggregates` (menos de 1 minuto) e `seed-demo` bastam.
 >
 > Se `collect` não alcançar alguma fonte (rede bloqueada, fonte fora do ar), a execução termina com aviso, registra o erro e segue com as demais. O painel mostra quais fontes falharam e, se você usou `seed-demo`, marca claramente tudo o que é demonstração.
 
 Testes e verificações:
 
 ```bash
-cd backend  && python -m pytest             # 163 testes
+cd backend  && python -m pytest             # 167 testes
 cd backend  && ruff check app tests
 cd frontend && npm test && npm run build    # 51 testes, checagem de tipos e build
 ```
@@ -101,7 +101,7 @@ Configuração por variáveis `WDV_*`: veja [backend/.env.example](backend/.env.
 
 Esta plataforma existe para ser confiável, então vale ser explícito:
 
-- ✅ **Dados reais:** população e emissões de CO₂ (mundo e ~220 países) do Our World in Data; 219 indicadores por país do Banco Mundial; população, nascimentos e PIB de UFs e municípios do IBGE; população datada de estados e regiões de outros países do Wikidata; sítios do Patrimônio Mundial contados na Lista oficial da UNESCO; lugares e fichas do GeoNames.
+- ✅ **Dados reais:** população e emissões de CO₂ (mundo e ~220 países) do Our World in Data; 208 indicadores por país do Banco Mundial; população, nascimentos e PIB de UFs e municípios do IBGE; população datada de estados e regiões de outros países do Wikidata; sítios do Patrimônio Mundial contados na Lista oficial da UNESCO; lugares e fichas do GeoNames.
 - 🧮 **Calculados:** continentes (e o mundo, onde a fonte não traz) são somas ou médias ponderadas dos países, só quando os países informantes cobrem quase toda a população do grupo. A interface os marca como *calculado*.
 - 📍 **Populações de cidades fora do Brasil** vêm do GeoNames como instantâneo, **sem ano de referência**, e podem diferir de censos oficiais.
 - 🤝 **Populações de estados e regiões fora do Brasil** vêm do Wikidata, uma base colaborativa que cita censos e institutos de estatística. Só entram pontos com data e não obsoletos; quando dois valores diferentes disputam o mesmo ano, o ano é descartado em vez de escolhido. Cada região mostra o ano do ponto mais recente e a interface a marca como *Wikidata (base colaborativa)*.
@@ -115,11 +115,12 @@ Fontes, licenças e como cada número é obtido: [docs/fontes-de-dados.md](docs/
 ## 🗺 Roadmap
 
 - **Fase 1 — MVP** ✅ coleta de fontes abertas, banco, API e dashboard com contadores, gráficos, mapa e comparação.
-- **Fase 1.5 — Lugares e métricas** ✅ continentes, estados e cidades, busca, página por lugar, Brasil em detalhe (IBGE) e 236 indicadores em 9 categorias.
+- **Fase 1.5 — Lugares e métricas** ✅ continentes, estados e cidades, busca, página por lugar, Brasil em detalhe (IBGE) e 225 indicadores em 9 categorias.
 - **Fase 2 — Beta**
   - Substituir os dados de demonstração por coleta real em produção (os coletores já foram validados contra as fontes).
   - Dar fonte citável às estimativas de referência.
   - Séries históricas completas de estados e cidades de outros países (Eurostat, US Census e equivalentes, país a país); hoje as regiões têm só os censos e estimativas que o Wikidata registra.
+  - Trazer de volta, de fontes próprias, o que o Banco Mundial arquivou: refugiados e deslocados (ACNUR, IDMC), governança (WGI), igualdade jurídica das mulheres (WBL) e cobertura de serviços de saúde (OMS).
   - Mais indicadores de Cultura & História (hoje só o Patrimônio Mundial), fluxos migratórios entre países, projeções populacionais (ONU/WPP) e "quantas pessoas já viveram".
   - Limite de requisições e chaves opcionais para a API pública.
 - **Fase 3 — Lançamento**
