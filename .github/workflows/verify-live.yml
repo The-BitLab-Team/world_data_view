@@ -9,20 +9,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  unesco-probe:
+  unesco:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    env:
+      WDV_DATABASE_URL: sqlite:////tmp/live.db
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: results
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/cultura-unesco
+          path: code
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: pip install requests
-      - run: python probe/unesco_probe.py out/unesco
-      - name: Publica o resultado na própria branch
+      - run: pip install -r code/backend/requirements.txt
+      - name: GeoNames e UNESCO
+        working-directory: code/backend
+        continue-on-error: true
+        run: |
+          mkdir -p ../../results/out/unesco
+          python -m app.cli collect --only geonames 2>&1 | tail -3
+          start=$(date +%s)
+          python -m app.cli collect --only unesco 2>&1 | tee ../../results/out/unesco/UNESCO.log
+          echo "### unesco duracao: $(( $(date +%s) - start ))s" | tee -a ../../results/out/unesco/UNESCO.log
+          python -m app.cli status 2>&1 | tail -15 | tee -a ../../results/out/unesco/UNESCO.log
+          sqlite3 /tmp/live.db "select indicator, count(*), count(distinct place), min(year), max(year) from observations where source='UNESCO' group by 1; select indicator, place, year, value from observations where source='UNESCO' and place in ('WLD','BRA','ITA') and year=(select max(year) from observations where source='UNESCO') order by 1,2;" | tee ../../results/out/unesco/UNESCO_REPORT.txt
+      - name: Publica o resultado na propria branch
         if: always()
+        working-directory: results
         run: |
           git config user.name verify-bot && git config user.email verify-bot@users.noreply.github.com
           git add -f out/unesco
-          git commit -m "Resultado da sonda UNESCO" || echo "nada a commitar"
+          git commit -m "Resultado da UNESCO" || echo "nada a commitar"
           git push origin HEAD:tmp/verify-live-sources
