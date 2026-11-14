@@ -12,6 +12,7 @@ De onde vem cada número, com que grau de confiança, e o que fazer para atualiz
 | [Wikidata, consulta SPARQL](https://query.wikidata.org/) | População de estados e regiões **fora do Brasil**, com a data de cada censo ou estimativa | 3.105 de 3.797 regiões, 207 países | ✅ Executado contra o servidor real |
 | [Our World in Data, `co2-data`](https://github.com/owid/co2-data) | População, emissões de CO₂, CO₂ per capita | Mundo e ~220 países, de 1750 em diante | ✅ Executado contra o servidor real |
 | [NASA GISTEMP v4](https://data.giss.nasa.gov/gistemp/) | Anomalia da temperatura global | Mundo, anual | ✅ Executado contra o servidor real |
+| [UNESCO, Lista do Patrimônio Mundial](https://data.unesco.org/explore/dataset/whc001/) | Sítios do Patrimônio Mundial: total, por categoria, novas inscrições e em perigo | Mundo e 173 países, de 1978 em diante | ✅ Executado contra o servidor real |
 | Agregados (`services/aggregate.py`) | Continentes e, quando a fonte não traz, o mundo | Soma ou média ponderada dos países | 🧮 Calculado, marcado como *calculado* |
 | [`reference_estimates.json`](../backend/app/data/reference_estimates.json) | Smartphones, dados da internet por dia, espécies extintas | Mundo, um valor | ⚠️ Estimativas sem fonte citável ainda |
 | `seed-demo` | Qualquer indicador sem dados | Mundo | 🎭 Sintético, **não são dados reais** |
@@ -44,7 +45,7 @@ O ambiente de desenvolvimento só alcança `raw.githubusercontent.com`, então o
 O banco resultante tem **249 países, 3.781 regiões, 71.177 cidades**, cerca de **2 milhões de observações e 385 MB** (SQLite). Conferências feitas no resultado:
 
 - a soma da população dos 6 continentes dá 99,91% da população mundial da OWID em 2025 (8,224 de 8,232 bilhões);
-- todos os 230 indicadores do catálogo têm ao menos uma observação; nenhuma linha `DEMO` entrou no banco;
+- todos os 230 indicadores que o catálogo tinha nessa data têm ao menos uma observação; nenhuma linha `DEMO` entrou no banco;
 - nenhum indicador sem regra de agregação ganhou valor de continente, e as somas e médias só aparecem onde os países informantes passam do limiar de cobertura (por isso `external_debt`, que só existe para países de renda baixa e média, só tem a África);
 - Joinville (`BRA-4209102`): 673.980 habitantes (estimativa IBGE 2026), 7.257 nascidos vivos registrados em 2024; Santa Catarina: 8.312.759;
 - Califórnia (`USA-CA`): 39.538.223 em 2020, Baviera (`DEU-02`): 13.038.724 em 2022 e Tóquio (`JPN-40`): 14.264.798 em 2022, todos pelo Wikidata; nenhuma região do Brasil veio do Wikidata (o IBGE cobre o país);
@@ -146,6 +147,18 @@ Pontos de atenção:
 
 Tabela `GLB.Ts+dSST.csv`: anomalia anual (coluna `J-D`) da temperatura média global em relação à média de **1951–1980**, em °C. Só existe para o mundo. Anos sem dado (`***`) são ignorados. O GISS pede citação: *GISTEMP Team, GISS Surface Temperature Analysis (GISTEMP), version 4. NASA Goddard Institute for Space Studies.* (confira o texto de citação vigente na página do projeto).
 
+### UNESCO (Patrimônio Mundial)
+
+Portal de dados abertos da UNESCO, conjunto `whc001` (CC BY-SA 4.0): uma linha por sítio da Lista do Patrimônio Mundial, com ano de inscrição, categoria (cultural, natural ou misto) e países. O coletor pede só os campos que usa (`select=`; o export completo tem 24 MB) e **conta** as linhas. Não há estimativa.
+
+- **Série acumulada:** sítios *hoje na Lista*, pelo ano de inscrição, de 1978 em diante. Os poucos sítios retirados da Lista não constam do conjunto e por isso não aparecem em nenhum ano.
+- **Sítios transfronteiriços** contam em cada um dos seus países e uma única vez no mundo. Por isso o mundo é contado direto da Lista (a soma dos países passa do total) e os continentes ficam sem dado, em vez de receber uma soma com sítios repetidos.
+- **Sítios em perigo:** a fonte só diz quando cada sítio *atual* entrou na Lista em Perigo, sem o histórico de quem já saiu. O indicador é um único ponto, com o ano da sessão mais recente do Comitê presente nos dados; a série cresce com as coletas futuras.
+- **País sem sítio** não tem linha (fica "sem dado", não zero): a Lista não diz quais países são partes da Convenção. A Cidade Velha de Jerusalém não é atribuída a um Estado e entra só no mundo.
+- **Novas inscrições por ano** existem só para o mundo; 2020 aparece com zero porque a sessão foi adiada.
+
+Validação real em 14/11/2026 (runner do GitHub): 1.273 sítios, 173 países, 23.503 linhas em 5 s.
+
 ### Continentes e mundo calculados
 
 Detalhados em [arquitetura](arquitetura.md#agregados-continentes-e-mundo). Em resumo: soma (população, PIB, emissões...) ou média ponderada pela população (expectativa de vida, urbanização, acesso a água...), só com cobertura mínima dos países; a fonte do ponto é `Derivado: …` e a tela mostra *calculado*. O que não faz sentido agregar (Gini, razões, mortalidade infantil por mil nascidos) fica sem valor nos continentes.
@@ -188,4 +201,4 @@ As fontes anuais mudam pouco, então uma coleta diária já é mais do que sufic
 
 ## Fontes do desenho original ainda não integradas
 
-ONU/UNESCO (fluxos migratórios entre países), NOAA, IUCN (Lista Vermelha), IMDb/TMDb/MusicBrainz (cultura; a categoria *Cultura & História* ainda está sem indicadores), IDC e GSMA (relatórios pagos), além de séries por estado e cidade de outros países (Eurostat, US Census, INEGI e equivalentes, cada um com formato e licença próprios). Entram no [roadmap](../README.md#-roadmap); várias não têm API aberta equivalente ou exigem chave e termos próprios.
+ONU/UNESCO (fluxos migratórios entre países), NOAA, IUCN (Lista Vermelha), IMDb/TMDb/MusicBrainz (cultura além do Patrimônio Mundial: livros, filmes, música, línguas), IDC e GSMA (relatórios pagos), além de séries por estado e cidade de outros países (Eurostat, US Census, INEGI e equivalentes, cada um com formato e licença próprios). Entram no [roadmap](../README.md#-roadmap); várias não têm API aberta equivalente ou exigem chave e termos próprios.

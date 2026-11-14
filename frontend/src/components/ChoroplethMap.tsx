@@ -121,7 +121,7 @@ export function ChoroplethMap({ values, formatValue, formatTick, highlight, onPi
       {bins && (
         <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2" aria-label="Legenda do mapa">
           <div className="grid w-full max-w-md grid-cols-3 gap-x-2 gap-y-3 sm:grid-cols-6">
-            {RAMP.map((color, i) => (
+            {bins.colors.map((color, i) => (
               <div key={color}>
                 <span className="mb-1 block h-2.5 rounded-sm" style={{ background: color }} aria-hidden="true" />
                 <span className="whitespace-nowrap text-xs text-ink-2">
