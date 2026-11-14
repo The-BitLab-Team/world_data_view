@@ -191,6 +191,20 @@ describe("mapScale", () => {
     expect(bins.colorFor(values[0])).toBe("a");
     expect(bins.colorFor(values.at(-1)!)).toBe("f");
   });
+
+  it("contagens pequenas e repetidas não geram classes vazias nem rótulos duplicados", () => {
+    // Sítios do Patrimônio Mundial: dezenas de países com 1 ou 2 sítios e poucos com muitos.
+    const values = [...Array(40).fill(1), ...Array(20).fill(2), 3, 4, 5, 9, 30, 62];
+    const colors = ["a", "b", "c", "d", "e", "f"];
+    const bins = quantileBins(values, colors);
+    expect(new Set(bins.lowerBounds).size).toBe(bins.lowerBounds.length);
+    expect(bins.colors).toHaveLength(bins.lowerBounds.length);
+    expect(bins.lowerBounds[0]).toBe(1);
+    // toda classe da legenda tem pelo menos um país, e toda cor usada está na legenda
+    const used = new Set(values.map(bins.colorFor));
+    expect([...used].sort()).toEqual([...bins.colors].sort());
+    expect(bins.colorFor(62)).toBe("f");
+  });
 });
 
 describe("formatação por nível (mundo × lugar)", () => {

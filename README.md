@@ -2,7 +2,7 @@
 
 **World Data View** é uma plataforma interativa que reúne dados quantitativos sobre o mundo e a humanidade e os mostra em contadores ao vivo, gráficos e mapas. O objetivo é dar a estudantes, professores, jornalistas e curiosos um lugar claro, honesto e citável para olhar os números do planeta.
 
-> **Estado atual: MVP funcional, com lugares.** Backend, API pública e painel estão implementados e testados. Além do mundo e dos países, a plataforma navega por **continentes, estados e cidades**, com 230 indicadores. Alguns números são estimativas, calculados ou de demonstração, e a interface sinaliza cada caso; a seção [Estado dos dados](#-estado-dos-dados) detalha o que é o quê.
+> **Estado atual: MVP funcional, com lugares.** Backend, API pública e painel estão implementados e testados. Além do mundo e dos países, a plataforma navega por **continentes, estados e cidades**, com 236 indicadores. Alguns números são estimativas, calculados ou de demonstração, e a interface sinaliza cada caso; a seção [Estado dos dados](#-estado-dos-dados) detalha o que é o quê.
 
 ---
 
@@ -30,11 +30,11 @@
 | 🌍 **Planeta & Natureza** (33) | CO₂, metano e óxido nitroso, temperatura global, florestas, terras agrícolas e aráveis, áreas protegidas (terrestres e marinhas), poluição do ar, água doce, precipitação, população em áreas costeiras baixas, produção de cereais, índices agrícolas e pecuários, pesca, aquicultura, fertilizantes, espécies ameaçadas e extintas | OWID, NASA GISTEMP, Banco Mundial, IUCN (estimativa) |
 | 📱 **Tecnologia & Internet** (13) | Usuários de internet, celulares e banda larga (por habitante e total), telefonia fixa, servidores seguros, exportações de alta tecnologia e de TIC; smartphones e dados por dia (estimativas) | Banco Mundial, estimativas editoriais |
 | ⚠️ **Impactos Sociais** (24) | Pobreza (extrema, nacional e em três linhas), hiato de pobreza, Gini, participação dos mais ricos e dos mais pobres na renda, homicídios, mortes em conflitos, refugiados, deslocados internos, mulheres no parlamento e em ministérios, igualdade jurídica das mulheres, seis indicadores de governança (corrupção, Estado de direito, estabilidade política etc.) | Banco Mundial |
-| 📚 **Cultura & História** | *Ainda sem indicadores* (livros, filmes, línguas: sem fonte aberta simples) | — |
+| 📚 **Cultura & História** (6) | Sítios do Patrimônio Mundial (total, culturais, naturais e mistos, acumulados pelo ano de inscrição), novas inscrições por ano e sítios em perigo. Livros, filmes e línguas seguem sem fonte aberta simples | UNESCO |
 
 Cobertura por nível: países, continentes e mundo têm séries históricas de todos os indicadores acima; estados e municípios do **Brasil** têm população, nascimentos, natalidade e PIB; estados/regiões de **outros países** têm população com ano de referência quando o Wikidata registra censos ou estimativas datadas (3.105 de 3.797 regiões, 207 países); cidades de outros países têm população (um instantâneo do GeoNames, sem ano de referência) e ficha. Veja a tabela completa em [docs/fontes-de-dados.md](docs/fontes-de-dados.md#o-que-existe-em-cada-nível).
 
-Ainda fora do escopo implementado: estimativa de quantas pessoas já viveram, projeções populacionais, fotos tiradas na história, séries completas de cidades fora do Brasil e a categoria Cultura. Estão no [roadmap](#-roadmap).
+Ainda fora do escopo implementado: estimativa de quantas pessoas já viveram, projeções populacionais, fotos tiradas na história, séries completas de cidades fora do Brasil e, na Cultura, tudo além do Patrimônio Mundial (livros, filmes, línguas). Estão no [roadmap](#-roadmap).
 
 ## 🏗 Arquitetura
 
@@ -90,9 +90,9 @@ npm run dev                      # http://localhost:5173 (proxy para a API em :8
 Testes e verificações:
 
 ```bash
-cd backend  && python -m pytest             # 155 testes
+cd backend  && python -m pytest             # 163 testes
 cd backend  && ruff check app tests
-cd frontend && npm test && npm run build    # 50 testes, checagem de tipos e build
+cd frontend && npm test && npm run build    # 51 testes, checagem de tipos e build
 ```
 
 Configuração por variáveis `WDV_*`: veja [backend/.env.example](backend/.env.example).
@@ -101,11 +101,11 @@ Configuração por variáveis `WDV_*`: veja [backend/.env.example](backend/.env.
 
 Esta plataforma existe para ser confiável, então vale ser explícito:
 
-- ✅ **Dados reais:** população e emissões de CO₂ (mundo e ~220 países) do Our World in Data; 219 indicadores por país do Banco Mundial; população, nascimentos e PIB de UFs e municípios do IBGE; população datada de estados e regiões de outros países do Wikidata; lugares e fichas do GeoNames.
+- ✅ **Dados reais:** população e emissões de CO₂ (mundo e ~220 países) do Our World in Data; 219 indicadores por país do Banco Mundial; população, nascimentos e PIB de UFs e municípios do IBGE; população datada de estados e regiões de outros países do Wikidata; sítios do Patrimônio Mundial contados na Lista oficial da UNESCO; lugares e fichas do GeoNames.
 - 🧮 **Calculados:** continentes (e o mundo, onde a fonte não traz) são somas ou médias ponderadas dos países, só quando os países informantes cobrem quase toda a população do grupo. A interface os marca como *calculado*.
 - 📍 **Populações de cidades fora do Brasil** vêm do GeoNames como instantâneo, **sem ano de referência**, e podem diferir de censos oficiais.
 - 🤝 **Populações de estados e regiões fora do Brasil** vêm do Wikidata, uma base colaborativa que cita censos e institutos de estatística. Só entram pontos com data e não obsoletos; quando dois valores diferentes disputam o mesmo ano, o ano é descartado em vez de escolhido. Cada região mostra o ano do ponto mais recente e a interface a marca como *Wikidata (base colaborativa)*.
-- ✅ **Verificado contra os servidores reais** (em 13/11/2026, num runner do GitHub): GeoNames, IBGE, Banco Mundial, Wikidata, NASA GISTEMP e OWID. Rode `python -m app.cli collect` e `status` no seu ambiente para repetir.
+- ✅ **Verificado contra os servidores reais** (em 13/11/2026, num runner do GitHub): GeoNames, IBGE, Banco Mundial, Wikidata, NASA GISTEMP e OWID; a UNESCO em 14/11/2026. Rode `python -m app.cli collect` e `status` no seu ambiente para repetir.
 - ⚠️ **Estimativas:** smartphones, dados da internet por dia e espécies extintas vêm de [`reference_estimates.json`](backend/app/data/reference_estimates.json). São valores editoriais herdados do projeto original e **ainda precisam de uma fonte citável** cada um. Aparecem com o selo *estimativa*.
 - 🎭 **Demonstração:** `seed-demo` gera séries sintéticas só para os indicadores que não têm nenhum dado, para a interface poder ser avaliada. Tudo que vem delas carrega o selo *demonstração*, inclusive a curiosidade do dia e os contadores. **Não são dados reais.**
 - 🔢 **Contadores:** são projeções de taxas anuais, não medições instantâneas.
@@ -115,12 +115,12 @@ Fontes, licenças e como cada número é obtido: [docs/fontes-de-dados.md](docs/
 ## 🗺 Roadmap
 
 - **Fase 1 — MVP** ✅ coleta de fontes abertas, banco, API e dashboard com contadores, gráficos, mapa e comparação.
-- **Fase 1.5 — Lugares e métricas** ✅ continentes, estados e cidades, busca, página por lugar, Brasil em detalhe (IBGE) e 230 indicadores em 8 categorias (Cultura segue sem indicadores).
+- **Fase 1.5 — Lugares e métricas** ✅ continentes, estados e cidades, busca, página por lugar, Brasil em detalhe (IBGE) e 236 indicadores em 9 categorias.
 - **Fase 2 — Beta**
   - Substituir os dados de demonstração por coleta real em produção (os coletores já foram validados contra as fontes).
   - Dar fonte citável às estimativas de referência.
   - Séries históricas completas de estados e cidades de outros países (Eurostat, US Census e equivalentes, país a país); hoje as regiões têm só os censos e estimativas que o Wikidata registra.
-  - Categoria Cultura & História, fluxos migratórios entre países, projeções populacionais (ONU/WPP) e "quantas pessoas já viveram".
+  - Mais indicadores de Cultura & História (hoje só o Patrimônio Mundial), fluxos migratórios entre países, projeções populacionais (ONU/WPP) e "quantas pessoas já viveram".
   - Limite de requisições e chaves opcionais para a API pública.
 - **Fase 3 — Lançamento**
   - Visualizações avançadas, mais histórico, publicação (frontend estático + API) e versão mobile/PWA.

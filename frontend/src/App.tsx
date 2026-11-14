@@ -22,7 +22,7 @@ const BLURBS: Record<string, string> = {
   energia: "Eletricidade, fontes de energia e infraestrutura.",
   planeta: "Clima, emissões de carbono e cobertura florestal.",
   tecnologia: "Aparelhos e dados. Aqui os números são estimativas, não medições.",
-  cultura: "Livros, filmes e línguas.",
+  cultura: "Patrimônio Mundial da UNESCO: sítios culturais, naturais e em perigo.",
   social: "Pobreza, desigualdade e acesso a serviços básicos.",
 };
 
