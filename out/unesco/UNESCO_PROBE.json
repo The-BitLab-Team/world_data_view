@@ -1,0 +1,32 @@
+{
+ "whc_xml": {
+  "status": 200,
+  "type": "text/xml;charset=UTF-8",
+  "bytes": 2501664,
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<query columns=\"216\" rows=\"1273\"><row><http_url>https://whc.unesco.org/en/list/1133</http_url><dossier>1133quinquies</dossier><id_number>1133</id_number><unique_number>2513</unique_number><image_url>https://whc.unesco.org/uploads/sites/site_1133.jpg</image_url><iso_code>al,at,ba,be,bg,ch,cz,de,es,fr,hr,it,mk,pl,ro,si,sk,ua</iso_code><justification></justification><geolocations><poi><latitude>38.1320000000</latitude><longitude>15.9610000000</longitude><iso2>it</iso2></poi><poi><latitude>39.8970000000</latitude><longitude>16.1970000000</longitude><iso2>it<"
+ },
+ "whc_json": {
+  "status": 200,
+  "type": "text/html;charset=UTF-8",
+  "bytes": 470217,
+  "head": "<!DOCTYPE html>\r\n<!--\r\nBuilding Peace in the minds of men and women\r\nConstruire la paix dans l'esprit des hommes et des femmes\r\nConstruir la paz en la mente de los hombres y de las mujeres\r\nНести мир в сознание мужчин и женщин\r\nبناء السلام في عقول الرجال والنساء\r\n于人之思想中构建和平\r\n-->\r\n<html  lang=\"en\"  style=\"height:100%;\" id=\"htmlEl\">\r\n\t<head><script type=\"e4be7c1b0ec69aa835e19a65-text/javascript\">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\r\nnew Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagNa"
+ },
+ "ods_meta": {
+  "status": 200,
+  "type": "application/json; charset=utf-8",
+  "bytes": 33096,
+  "head": "{\"visibility\": \"domain\", \"fields\": [{\"name\": \"name_en\", \"description\": null, \"annotations\": {}, \"label\": \"Name (English)\", \"type\": \"text\", \"label_en\": \"Name (English)\", \"label_fr\": \"Nom (anglais)\", \"label_es\": \"Nombre (ingl\\u00e9s)\", \"label_ar\": \"\\u0627\\u0644\\u0627\\u0633\\u0645 \\u0628\\u0627\\u0644\\u0625\\u0646\\u062c\\u0644\\u064a\\u0632\\u064a\\u0629\", \"description_en\": null, \"description_fr\": null, \"description_es\": null, \"description_ar\": null}, {\"name\": \"name_fr\", \"description\": null, \"annotations\": {}, \"label\": \"Name (French)\", \"type\": \"text\", \"label_en\": \"Name (French)\", \"label_fr\": \"Nom (fran\\u0"
+ },
+ "ods_export": {
+  "status": 200,
+  "type": "application/json; charset=utf-8",
+  "bytes": 24698121,
+  "head": "[{\"name_en\": \"Beaches of the D-Day Landings, Normandy, 1944\", \"name_fr\": \"Les Plages du D\\u00e9barquement, Normandie, 1944\", \"name_es\": \"Las Playas del Desembarco, Normand\\u00eda, 1944\", \"name_ru\": \"\\u041f\\u043b\\u044f\\u0436\\u0438 \\u0432\\u044b\\u0441\\u0430\\u0434\\u043a\\u0438 \\u0432 \\u041d\\u043e\\u0440\\u043c\\u0430\\u043d\\u0434\\u0438\\u0438, 1944 \\u0433\\u043e\\u0434\", \"name_ar\": \"\\u0634\\u0648\\u0627\\u0637\\u0626 \\u0625\\u0646\\u0632\\u0627\\u0644 \\u0627\\u0644\\u062d\\u0644\\u0641\\u0627\\u0621 \\u0641\\u064a \\u0646\\u0648\\u0631\\u0645\\u0627\\u0646\\u062f\\u064a \\u0639\\u0627\\u0645 1944\", \"name_zh\": \"1944\\u5e74\\u8bfa\\u66f"
+ },
+ "ods_search": {
+  "status": 200,
+  "type": "application/json; charset=utf-8",
+  "bytes": 114447,
+  "head": "{\"total_count\": 5, \"results\": [{\"visibility\": \"domain\", \"fields\": [{\"name\": \"id\", \"description\": null, \"annotations\": {}, \"label\": \"Record ID\", \"type\": \"int\", \"label_en\": \"Record ID\", \"label_fr\": \"Identifiant de l'enregistrement\", \"label_es\": \"Identificador del registro\", \"label_ar\": \"\\u0645\\u0639\\u0631\\u0651\\u0641 \\u0627\\u0644\\u0633\\u062c\\u0644\", \"description_en\": null, \"description_fr\": null, \"description_es\": null, \"description_ar\": null}, {\"name\": \"uuid\", \"description\": null, \"annotations\": {\"id\": true}, \"label\": \"UUID\", \"type\": \"text\", \"label_en\": \"UUID\", \"label_fr\": \"UUID\", \"label_es\": \""
+ }
+}
